@@ -3,6 +3,7 @@
 """
 import unittest
 import logging
+from mock import Mock
 
 from nselib.bases import AbstractBaseExchange
 from nselib import Nse
@@ -50,7 +51,10 @@ class BaseClass(unittest.TestCase):
             'f': 10.0,
             'g': 1000.10,
             'h': True,
-            'i': None
+            'i': None,
+            'j': u'10',
+            'k': u'10.0',
+            'l': u'1,000.10'
         }
 
         expected_dict = {
@@ -62,10 +66,47 @@ class BaseClass(unittest.TestCase):
             'f': 10.0,
             'g': 1000.10,
             'h': True,
-            'i': None
+            'i': None,
+            'j': 10,
+            'k': 10.0,
+            'l': 1000.10
         }
         ret_dict = self.nse.clean_server_response(test_dict)
         self.assertDictEqual(ret_dict, expected_dict)
+
+    def test_get_stock_codes(self):
+        sq = self.nse.get_stock_codes()
+        self.assertIsNotNone(sq)
+        self.assertIsInstance(sq, dict)
+
+# TODO: use mock and create one test where response contains a blank line
+# TODO: use mock and create one test where response doesnt contain a csv
+# TODO: use mock and create one test where return is null
+# TODO: test the cache feature
+
+    def test_negative_get_quote(self):
+        wrong_code = 'inf'
+        self.assertIsNone(self.nse.get_quote(wrong_code))
+
+    def test_get_quote(self):
+        code = 'infy'
+        self.assertIsInstance(self.nse.get_quote(code), dict)
+
+    def test_is_valid_code(self):
+        code = 'infy'
+        self.assertTrue(self.nse.is_valid_code(code))
+
+    def test_negative_is_valid_code(self):
+        wrong_code = 'in'
+        self.assertFalse(self.nse.is_valid_code(wrong_code))
+
+    def test_get_top_gainers(self):
+        res = self.nse.get_top_gainers()
+        self.assertIsInstance(res, list)
+
+    def test_get_top_losers(self):
+            res = self.nse.get_top_losers()
+            self.assertIsInstance(res, list)
 
 if __name__ == '__main__':
     unittest.main()
