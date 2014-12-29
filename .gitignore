@@ -6,6 +6,9 @@ __pycache__/
 *.so
 
 .idea/
+.coverage
+.ropeproject/
+*~
 
 # Distribution / packaging
 .Python

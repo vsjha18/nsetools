@@ -3,6 +3,7 @@
 """
 import unittest
 import logging
+import json
 from mock import Mock
 
 from nselib.bases import AbstractBaseExchange
@@ -12,7 +13,7 @@ import re
 log = logging.getLogger('nse')
 logging.basicConfig(level=logging.DEBUG)
 
-class BaseClass(unittest.TestCase):
+class TestCoreAPIs(unittest.TestCase):
     def setUp(self):
         self.nse = Nse()
 
@@ -105,8 +106,24 @@ class BaseClass(unittest.TestCase):
         self.assertIsInstance(res, list)
 
     def test_get_top_losers(self):
-            res = self.nse.get_top_losers()
-            self.assertIsInstance(res, list)
+        res = self.nse.get_top_losers()
+        self.assertIsInstance(res, list)
+
+    def test_render_response(self):
+        d = {'fname':'vivek', 'lname':'jha'}
+        resp_dict = self.nse.render_response('dict', d)
+        resp_json = self.nse.render_response('json', d)
+        # in case of dict, response should be a python dict
+        self.assertIsInstance(resp_dict, dict)
+        # in case of json, response should be a json string
+        self.assertIsInstance(resp_json, str)
+        # and on reconstruction it should become same as original dict
+        self.assertDictEqual(d, json.loads(resp_json))
+        # and anything appart from json and dict should raise an error
+        with self.assertRaises(Exception):
+            self.nse.render_response('list', d)
+
+
 
 if __name__ == '__main__':
     unittest.main()
