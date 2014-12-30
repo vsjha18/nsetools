@@ -27,7 +27,7 @@ from urllib2 import build_opener, HTTPCookieProcessor, Request
 from urllib import urlencode
 from cookielib import CookieJar
 import ast
-from nselib.bases import AbstractBaseExchange
+from nsetools.bases import AbstractBaseExchange
 import re
 import json
 

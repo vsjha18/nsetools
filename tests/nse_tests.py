@@ -5,8 +5,8 @@ import unittest
 import logging
 import json
 from mock import Mock
-from nselib.bases import AbstractBaseExchange
-from nselib import Nse
+from nsetools.bases import AbstractBaseExchange
+from nsetools import Nse
 import re
 
 log = logging.getLogger('nse')
