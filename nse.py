@@ -139,7 +139,7 @@ class Nse(AbstractBaseExchange):
                     for item in res_dict['data']]
         return res_list
 
-    def get_advances_declines(self, ret_type='dict'):
+    def get_advances_declines(self, ret_type='default'):
         """
         :return: a list of dictionaries with advance decline data
         :raises: URLError, HTTPError
@@ -153,17 +153,34 @@ class Nse(AbstractBaseExchange):
                      for item in resp_dict['data']]
         return self.render_response(ret_type, resp_list)
 
-    def is_valid_index(self, code):
+    def get_index_list(self, ret_type='default'):
+        """
+        params:
+            ret_type: dict | json
+        returns: a list | json of index codes
+        """
         url = self.index_url
         req = Request(url, None, self.headers)
         # raises URLError or HTTPError
         resp = self.opener.open(req)
         resp_list = json.load(resp)['data']
-        # extract index codes from the above response
         index_list = [str(item['name']) for item in resp_list]
+        return self.render_response(ret_type, index_list)
+
+    def is_valid_index(self, code):
+        """
+        returns: True | Flase , based on whether code is valid
+        """
+        index_list = self.get_index_list()
         return True if code.upper() in index_list else False
 
-    def get_index_quote(self, code, ret_type='dict'):
+    def get_index_quote(self, code, ret_type='default'):
+        """
+        params:
+            code : string index code
+            ret_type: dict | json
+        returns: a dict | json quote for the given index
+        """
         url = self.index_url
         if self.is_valid_index(code):
             req = Request(url, None, self.headers)
@@ -240,10 +257,10 @@ class Nse(AbstractBaseExchange):
     def render_response(self, ret_type, data):
         if ret_type == 'json':
             return json.dumps(data)
-        elif ret_type == 'dict':
+        elif ret_type == 'default':
             return data
         else:
-            raise Exception("only 'dict' and 'json' return types are supported")
+            raise Exception("only 'default' and 'json' return types are supported")
 
     def __str__(self):
         """
@@ -258,6 +275,8 @@ if __name__ == '__main__':
     print nse.get_index_quote('cnx nifty')
     print nse.get_index_quote('cnx nifty', ret_type='json')
     print nse.get_index_quote('cx nifty')
+    print nse.get_index_list()
+    print nse.get_index_list(ret_type='json')
 
     # print json.dumps(nse.get_quote('INFY'))
     # TODO: get_indices

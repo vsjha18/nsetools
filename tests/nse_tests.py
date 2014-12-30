@@ -110,7 +110,7 @@ class TestCoreAPIs(unittest.TestCase):
 
     def test_render_response(self):
         d = {'fname':'vivek', 'lname':'jha'}
-        resp_dict = self.nse.render_response('dict', d)
+        resp_dict = self.nse.render_response('default', d)
         resp_json = self.nse.render_response('json', d)
         # in case of dict, response should be a python dict
         self.assertIsInstance(resp_dict, dict)
@@ -156,6 +156,15 @@ class TestCoreAPIs(unittest.TestCase):
         # with lower case code
         code = 'cnx nifty'
         self.assertIsInstance(self.nse.get_index_quote(code), dict)
+
+    def test_get_index_list(self):
+        index_list = self.nse.get_index_list()
+        index_list_json = self.nse.get_index_list(ret_type='json')
+        self.assertIsInstance(index_list, list)
+        # test json response type
+        self.assertIsInstance(index_list_json, str)
+        # reconstruct list from json and match
+        self.assertListEqual(index_list, json.loads(index_list_json))
 
 if __name__ == '__main__':
     unittest.main()
