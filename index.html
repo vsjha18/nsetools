@@ -3,34 +3,31 @@
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+
     <title>nsetools by vsjha18</title>
   </head>
 
   <body>
-    <div id="container">
+    <header>
       <div class="inner">
+        <h1>nsetools</h1>
+        <h2>Real Time Data Library for National Stock Exchange (NSE, India)</h2>
+        <a href="https://github.com/vsjha18/nsetools" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
 
-        <header>
-          <h1>nsetools</h1>
-          <h2>Real Time Data Library for National Stock Exchange (NSE, India)</h2>
-        </header>
-
-        <section id="downloads" class="clearfix">
-          <a href="https://github.com/vsjha18/nsetools/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/vsjha18/nsetools/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
-          <a href="https://github.com/vsjha18/nsetools" id="view-on-github" class="button"><span>View on GitHub</span></a>
-        </section>
-
-        <hr>
-
-        <section id="main_content">
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
           <h1>
 <a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction.</h1>
 
@@ -68,24 +65,113 @@
 </blockquote>
 
 <h1>
-<a id="basic-usage-and-object-creation" class="anchor" href="#basic-usage-and-object-creation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Basic Usage and Object Creation</h1>
+<a id="api-walkthrough--examples" class="anchor" href="#api-walkthrough--examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>API Walkthrough &amp; Examples</h1>
 
-<pre><code>&gt;&gt;&gt; from nsetools import Nse
-&gt;&gt;&gt; nse = Nse()
+<p>I will be using ipython interpreter for demonstrations.</p>
+
+<h2>
+<a id="basic-usage-and-object-creation" class="anchor" href="#basic-usage-and-object-creation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Basic Usage and Object Creation</h2>
+
+<pre><code>In [7]: from nsetools import Nse
+In [8]: nse = Nse()
 </code></pre>
 
 <blockquote>
 <p>The constructor requires absolutely no setup information. The class is self contained and you can get going straight away.</p>
 </blockquote>
+
+<h2>
+<a id="getting-first-live-quote" class="anchor" href="#getting-first-live-quote" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting first live quote</h2>
+
+<p>Assume that we want to fetch the live quote for <em>Infosys Technology</em></p>
+
+<pre><code>In [9]: nse.get_quote('infy')
+Out[9]: 
+{'adhocMargin': None,
+ 'applicableMargin': 12.5,
+ 'averagePrice': 1966.45,
+ 'bcEndDate': None,
+ 'bcStartDate': None,
+ 'buyPrice1': 1966.35,
+ 'buyPrice2': None,
+ 'buyPrice3': None,
+ 'buyPrice4': None,
+ 'buyPrice5': None,
+ 'buyQuantity1': 102.0,
+ 'buyQuantity2': None,
+ 'buyQuantity3': None,
+ 'buyQuantity4': None,
+ 'buyQuantity5': None,
+ 'change': 9.1,
+ 'closePrice': 1966.35,
+ 'cm_adj_high_dt': '01-DEC-14',
+ 'cm_adj_low_dt': '30-MAY-14',
+ 'cm_ffm': 189881.81,
+ 'companyName': 'Infosys Limited',
+ 'css_status_desc': 'Listed',
+ 'dayHigh': 1975.0,
+ 'dayLow': 1956.8,
+ 'deliveryQuantity': 827058.0,
+ 'deliveryToTradedQuantity': 71.29,
+ 'exDate': '02-DEC-14',
+ 'extremeLossMargin': 5.0,
+ 'faceValue': 5.0,
+ 'high52': 2201.1,
+ 'indexVar': None,
+ 'isinCode': 'INE009A01021',
+ 'lastPrice': 1966.9,
+ 'low52': 1440.0,
+ 'marketType': 'N',
+ 'ndEndDate': None,
+ 'ndStartDate': None,
+ 'open': 1962.25,
+ 'pChange': 0.46,
+ 'previousClose': 1957.8,
+ 'priceBand': 'No Band',
+ 'pricebandlower': 1762.05,
+ 'pricebandupper': 2153.55,
+ 'purpose': 'BONUS 1:1',
+ 'quantityTraded': 1160138.0,
+ 'recordDate': '03-DEC-14',
+ 'secDate': '30DEC2014',
+ 'securityVar': 5.24,
+ 'sellPrice1': None,
+ 'sellPrice2': None,
+ 'sellPrice3': None,
+ 'sellPrice4': None,
+ 'sellPrice5': None,
+ 'sellQuantity1': None,
+ 'sellQuantity2': None,
+ 'sellQuantity3': None,
+ 'sellQuantity4': None,
+ 'sellQuantity5': None,
+ 'series': 'EQ',
+ 'symbol': 'INFY',
+ 'totalBuyQuantity': 102.0,
+ 'totalSellQuantity': None,
+ 'totalTradedValue': 22813.53,
+ 'totalTradedVolume': 1160138.0,
+ 'varMargin': 7.5}
+</code></pre>
         </section>
 
-        <footer>
-          nsetools is maintained by <a href="https://github.com/vsjha18">vsjha18</a><br>
-          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
-        </footer>
+        <aside id="sidebar">
+          <a href="https://github.com/vsjha18/nsetools/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/vsjha18/nsetools/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
 
-        
+          <p class="repo-owner"><a href="https://github.com/vsjha18/nsetools"></a> is maintained by <a href="https://github.com/vsjha18">vsjha18</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
       </div>
     </div>
+
+  
   </body>
 </html>
