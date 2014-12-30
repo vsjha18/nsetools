@@ -16,6 +16,10 @@ class TestCoreAPIs(unittest.TestCase):
     def setUp(self):
         self.nse = Nse()
 
+    def test_string_representation(self):
+        self.assertEqual(str(self.nse) ,
+                         "Driver Class for National Stock Exchange (NSE)")
+
     def test_instantiate_abs_class(self):
         class Exchange(AbstractBaseExchange): pass
         with self.assertRaises(TypeError):

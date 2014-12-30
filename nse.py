@@ -197,6 +197,7 @@ class Nse(AbstractBaseExchange):
                     search_flag = True
                     break
             return self.render_response(ret_type, item) if search_flag else None
+
     def nse_headers(self):
         """
         Builds right set of headers for requesting http://nseindia.com
@@ -269,14 +270,9 @@ class Nse(AbstractBaseExchange):
         """
         return 'Driver Class for National Stock Exchange (NSE)'
 
-if __name__ == '__main__':
+if __name__ == '__main__': # pragma: no cover
     nse = Nse()
     import json
-    print nse.get_index_quote('cnx nifty')
-    print nse.get_index_quote('cnx nifty', ret_type='json')
-    print nse.get_index_quote('cx nifty')
-    print nse.get_index_list()
-    print nse.get_index_list(ret_type='json')
 
     # print json.dumps(nse.get_quote('INFY'))
     # TODO: get_indices
