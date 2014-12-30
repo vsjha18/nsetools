@@ -5,7 +5,6 @@ import unittest
 import logging
 import json
 from mock import Mock
-
 from nselib.bases import AbstractBaseExchange
 from nselib import Nse
 import re
@@ -123,7 +122,40 @@ class TestCoreAPIs(unittest.TestCase):
         with self.assertRaises(Exception):
             self.nse.render_response('list', d)
 
+    def test_advances_declines(self):
+        resp = self.nse.get_advances_declines()
+        # it should be a list of dictionaries
+        self.assertIsInstance(resp, list)
+        # get the json version
+        resp_json = self.nse.get_advances_declines(ret_type='json')
+        self.assertIsInstance(resp_json, str)
+        # load the json response and it should have same number of
+        # elements as in case of first response
+        self.assertEqual(len(resp), len(json.loads(resp_json)))
 
+    def test_is_valid_index(self):
+        code = 'CNX NIFTY'
+        self.assertTrue(self.nse.is_valid_index(code))
+        # test with invalid string
+        code = 'some junk stuff'
+        self.assertFalse(self.nse.is_valid_index(code))
+        # test with lower case
+        code = 'cnx nifty'
+        self.assertTrue(self.nse.is_valid_index(code))
+
+    def test_get_index_quote(self):
+        code = 'CNX NIFTY'
+        self.assertIsInstance(self.nse.get_index_quote(code), dict)
+        # with json response
+        self.assertIsInstance(self.nse.get_index_quote(code, ret_type='json'),
+                              str)
+        # with wrong code
+        code = 'wrong code'
+        self.assertIsNone(self.nse.get_index_quote(code))
+
+        # with lower case code
+        code = 'cnx nifty'
+        self.assertIsInstance(self.nse.get_index_quote(code), dict)
 
 if __name__ == '__main__':
     unittest.main()

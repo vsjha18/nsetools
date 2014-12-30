@@ -47,6 +47,8 @@ class Nse(AbstractBaseExchange):
         self.top_gainer_url = 'http://www.nseindia.com/live_market/dynaContent/live_analysis/gainers/niftyGainers1.json'
         self.top_loser_url = 'http://www.nseindia.com/live_market/dynaContent/live_analysis/losers/niftyLosers1.json'
         self.advances_declines_url = 'http://www.nseindia.com/common/json/indicesAdvanceDeclines.json'
+        self.index_url="http://www.nseindia.com/homepage/Indices1.json"
+
     def get_stock_codes(self, cached=True):
         """
         returns a dictionary with key as stock code and value as stock name.
@@ -133,7 +135,8 @@ class Nse(AbstractBaseExchange):
         res = self.opener.open(req)
         res_dict = json.load(res)
         # clean the output and make appropriate type conversions
-        res_list = [self.clean_server_response(item) for item in res_dict['data']]
+        res_list = [self.clean_server_response(item)
+                    for item in res_dict['data']]
         return res_list
 
     def get_advances_declines(self, ret_type='dict'):
@@ -146,10 +149,37 @@ class Nse(AbstractBaseExchange):
         # raises URLError or HTTPError
         resp = self.opener.open(req)
         resp_dict = json.load(resp)
-        resp_list = [self.clean_server_response(item) for item in resp_dict['data']]
+        resp_list = [self.clean_server_response(item)
+                     for item in resp_dict['data']]
         return self.render_response(ret_type, resp_list)
 
+    def is_valid_index(self, code):
+        url = self.index_url
+        req = Request(url, None, self.headers)
+        # raises URLError or HTTPError
+        resp = self.opener.open(req)
+        resp_list = json.load(resp)['data']
+        # extract index codes from the above response
+        index_list = [str(item['name']) for item in resp_list]
+        return True if code.upper() in index_list else False
 
+    def get_index_quote(self, code, ret_type='dict'):
+        url = self.index_url
+        if self.is_valid_index(code):
+            req = Request(url, None, self.headers)
+            # raises HTTPError and URLError
+            resp = self.opener.open(req)
+            resp_list = json.load(resp)['data']
+            # this is list of dictionaries
+            resp_list = [self.clean_server_response(item)
+                         for item in resp_list]
+            # search the right list element to return
+            search_flag = False
+            for item in resp_list:
+                if item['name'] == code.upper():
+                    search_flag = True
+                    break
+            return self.render_response(ret_type, item) if search_flag else None
     def nse_headers(self):
         """
         Builds right set of headers for requesting http://nseindia.com
@@ -191,6 +221,11 @@ class Nse(AbstractBaseExchange):
         :param resp_dict:
         :return: dict with all above substitution
         """
+        # change all the keys from unicode to string
+        d = {}
+        for key, value in resp_dict.iteritems():
+            d[str(key)] = value
+        resp_dict = d
         for key, value in resp_dict.iteritems():
             if type(value) is str or type(value) is unicode:
                 if re.match('-', value):
@@ -198,6 +233,8 @@ class Nse(AbstractBaseExchange):
                 elif re.search(r'^[0-9,.]+$', value):
                     # replace , to '', and type cast to int
                     resp_dict[key] = float(re.sub(',', '', value))
+                else:
+                    resp_dict[key] = str(value)
         return resp_dict
 
     def render_response(self, ret_type, data):
@@ -218,10 +255,9 @@ class Nse(AbstractBaseExchange):
 if __name__ == '__main__':
     nse = Nse()
     import json
-    print type(nse.get_advances_declines())
-    print '\n\n\n'
-    print type(nse.get_advances_declines(ret_type='json'))
-
+    print nse.get_index_quote('cnx nifty')
+    print nse.get_index_quote('cnx nifty', ret_type='json')
+    print nse.get_index_quote('cx nifty')
 
     # print json.dumps(nse.get_quote('INFY'))
     # TODO: get_indices
