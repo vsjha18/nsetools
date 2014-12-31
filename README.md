@@ -1,7 +1,7 @@
 nsetools
 ========
 
-Realtime Data From National Stock Exchange (India)
+Python library for extracting realtime data from National Stock Exchange (India)
 
 Introduction.
 ============
