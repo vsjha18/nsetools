@@ -133,8 +133,8 @@ This is true with **NSE** as well. This is how we will get quote for *CNX NIFTY*
 >>> 
  
 
-But How do I Know All The Stock Codes?
---------------------------------------
+List of Traded Stock Codes & Names
+----------------------------------
 
 This is very trivial in general, if you are browsing manually. But there is a way to get it 
 programatically as well. 
@@ -163,7 +163,186 @@ programatically as well.
     Output has been truncated for better legibility. This is a dictionary with more that thousand 
     entries.
 
-But How About Index Codes
--------------------------
+List of Index Codes
+-------------------
 
-You dont't always need a stock code. At times knowing the index 
+Similar to above, there is a way to get the list of *codes* of all the traded indices.
+Unlike in previous section, the return type is list.
+
+>>> index_codes = nse.get_index_list()
+>>> pprint(index_codes)
+['CNX NIFTY Pre Open',
+ 'CNX NIFTY',
+ 'CNX NIFTY JUNIOR',
+ 'LIX 15',
+ 'BANK NIFTY',
+ 'INDIA VIX',
+ 'CNX 100',
+ 'CNX 500',
+ 'CNX MIDCAP',
+ 'NIFTY MIDCAP 50',
+ 'CNX INFRA',
+ 'CNX REALTY',
+ 'CNX ENERGY',
+ 'CNX FMCG',
+ 'CNX MNC',
+ 'CNX PHARMA',
+ 'CNX PSE',
+ 'CNX PSU BANK',
+ 'CNX SERVICE',
+ 'CNX IT',
+ 'CNX SMALLCAP',
+ 'CNX 200',
+ 'CNX AUTO',
+ 'CNX MEDIA',
+ 'CNX METAL',
+ 'CNX DIVIDEND OPPT',
+ 'CNX COMMODITIES',
+ 'CNX CONSUMPTION',
+ 'CPSE INDEX',
+ 'CNX FINANCE',
+ 'NI15',
+ 'NIFTY TR 2X LEV',
+ 'NIFTY PR 2X LEV',
+ 'NIFTY TR 1X INV',
+ 'NIFTY PR 1X INV']
+>>> 
+
+Advances Declines
+-----------------
+
+Advances Declines is a very important feature which, in a brief snapshot, tells 
+you the story of a trading day.
+
+Advances Declines
+    It containes the number of rising stocks, falling stocks and unchanged stocks 
+    in a given trading day, per index. 
+
+The following API would return the list of dictionaries containing stats for 
+every index.
+
+>>> adv_dec = nse.get_advances_declines()
+>>> pprint(adv_dec)
+[{'advances': 43.0, 'declines': 7.0, 'indice': 'CNX NIFTY', 'unchanged': 0.0},
+ {'advances': 35.0,
+  'declines': 15.0,
+  'indice': 'CNX NIFTY JUNIOR',
+  'unchanged': 0.0},
+ {'advances': 17.0, 'declines': 3.0, 'indice': 'CNX IT', 'unchanged': 0.0},
+ {'advances': 10.0, 'declines': 2.0, 'indice': 'BANK NIFTY', 'unchanged': 0.0},
+ {'advances': 41.0,
+  'declines': 9.0,
+  'indice': 'NIFTY MIDCAP 50',
+  'unchanged': 0.0},
+ {'advances': 19.0, 'declines': 4.0, 'indice': 'CNX INFRA', 'unchanged': 0.0},
+ {'advances': 7.0, 'declines': 3.0, 'indice': 'CNX REALTY', 'unchanged': 0.0},
+ {'advances': 7.0, 'declines': 3.0, 'indice': 'CNX ENERGY', 'unchanged': 0.0},
+ {'advances': 11.0, 'declines': 4.0, 'indice': 'CNX FMCG', 'unchanged': 0.0},
+ {'advances': 11.0, 'declines': 4.0, 'indice': 'CNX MNC', 'unchanged': 0.0},
+ {'advances': 8.0, 'declines': 2.0, 'indice': 'CNX PHARMA', 'unchanged': 0.0},
+ {'advances': 12.0, 'declines': 8.0, 'indice': 'CNX PSE', 'unchanged': 0.0},
+ {'advances': 8.0,
+  'declines': 4.0,
+  'indice': 'CNX PSU BANK',
+  'unchanged': 0.0},
+ {'advances': 27.0,
+  'declines': 3.0,
+  'indice': 'CNX SERVICE',
+  'unchanged': 0.0},
+ {'advances': 23.0,
+  'declines': 7.0,
+  'indice': 'CNX COMMODITIES',
+  'unchanged': 0.0},
+ {'advances': 20.0,
+  'declines': 10.0,
+  'indice': 'CNX CONSUMPTION',
+  'unchanged': 0.0},
+ {'advances': 13.0,
+  'declines': 2.0,
+  'indice': 'CNX FINANCE',
+  'unchanged': 0.0},
+ {'advances': 9.0, 'declines': 6.0, 'indice': 'CNX AUTO', 'unchanged': 0.0},
+ {'advances': 30.0,
+  'declines': 20.0,
+  'indice': 'CNX DIVIDEND OPPT',
+  'unchanged': 0.0},
+ {'advances': 4.0, 'declines': 7.0, 'indice': 'CNX MEDIA', 'unchanged': 0.0},
+ {'advances': 10.0, 'declines': 5.0, 'indice': 'CNX METAL', 'unchanged': 0.0},
+ {'advances': 14.0, 'declines': 1.0, 'indice': 'LIX 15', 'unchanged': 0.0},
+ {'advances': 6.0, 'declines': 4.0, 'indice': 'CPSE INDEX', 'unchanged': 0.0},
+ {'advances': 11.0, 'declines': 4.0, 'indice': 'NI15', 'unchanged': 0.0},
+ {'advances': 38.0,
+  'declines': 11.0,
+  'indice': 'CNX NIFTY Pre Open',
+  'unchanged': 1.0}]
+>>> 
+
+Top Losers & Gainers
+---------------------
+
+The following two APIs provides list of top losing and gaining stocks for the last 
+trading session. 
+
+>>> top_gainers = nse.get_top_gainers() 
+>>>
+>>> pprint(top_gainers)
+[{'highPrice': 1176.95,
+  'lastCorpAnnouncement': 'Annual General Meeting / Dividend - Rs 14/- Per Share',
+  'lastCorpAnnouncementDate': '04-Jul-2014',
+  'lowPrice': 1125.35,
+  'ltp': 1171.05,
+  'netPrice': 4.19,
+  'openPrice': 1127.3,
+  'previousPrice': 1124.0,
+  'series': 'EQ',
+  'symbol': 'HDFC',
+  'tradedQuantity': 2019816.0,
+  'turnoverInLakhs': 23428.25},
+.
+.
+.
+.
+{'highPrice': 1539.0,
+  'lastCorpAnnouncement': 'Annual General Meeting / Dividend - Rs 14.25/- Per Share',
+  'lastCorpAnnouncementDate': '13-Aug-2014',
+  'lowPrice': 1501.5,
+  'ltp': 1537.0,
+  'netPrice': 2.27,
+  'openPrice': 1501.5,
+  'previousPrice': 1502.95,
+  'series': 'EQ',
+  'symbol': 'LT',
+  'tradedQuantity': 1291056.0,
+  'turnoverInLakhs': 19709.13}]
+>>> 
+>>> top_losers = nse.get_top_losers()
+>>> pprint(top_losers)
+[{'highPrice': 655.9,
+  'lastCorpAnnouncement': 'Annual General Meeting/Dividend - Rs.17/- Per Share',
+  'lastCorpAnnouncementDate': '05-Sep-2014',
+  'lowPrice': 642.45,
+  'ltp': 646.75,
+  'netPrice': None,
+  'openPrice': 650.9,
+  'previousPrice': 654.2,
+  'series': 'EQ',
+  'symbol': 'BPCL',
+  'tradedQuantity': 1023715.0,
+  'turnoverInLakhs': 6638.08},  
+.
+.
+.
+ {'highPrice': 766.0,
+  'lastCorpAnnouncement': 'Interim Dividend Rs.6/- Per Share (Purpose Revised)',
+  'lastCorpAnnouncementDate': '31-Oct-2014',
+  'lowPrice': 752.65,
+  'ltp': 757.05,
+  'netPrice': None,
+  'openPrice': 757.0,
+  'previousPrice': 758.45,
+  'series': 'EQ',
+  'symbol': 'HINDUNILVR',
+  'tradedQuantity': 1207322.0,
+  'turnoverInLakhs': 9174.56}]
+>>> 
+
