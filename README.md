@@ -1,3 +1,7 @@
+Project Page
+=============
+http://nsetools.readthedocs.org
+
 nsetools
 ========
 
@@ -24,7 +28,7 @@ Dependencies
 =============
 To keep it simple and supported on most of the platforms, it uses only core python libraries, hence there are no external dependencies. It can be used out of box and absolutely not set up is required except an internet connection.
 
-Documentation
-=============
+Detailed Documenation 
+=====================
 
-For complete documenation, please refer http://vsjha18.github.io/nsetools/
+For complete documenation, please refer http://nsetools.readthedocs.org
