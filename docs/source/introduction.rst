@@ -7,10 +7,12 @@ stock or index or building large data sets for further data analytics. You can a
 applications which can provide you live market details at a blazing fast speeds, much faster
 than any browser. The accuracy of data is only as correct as provided on `www.nseindia.com`_
 
+.. _www.nseindia.com: www.nseindia.com
+
 .. note:: 
     The data provided by APIs is only as correct as provided on `www.nseindia.com`_
 
- .. _www.nseindia.com: www.nseindia.com
+.. _www.nseindia.com: www.nseindia.com
 
 Github Project Page
 ===================
