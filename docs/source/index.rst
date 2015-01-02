@@ -13,6 +13,7 @@ Table Of Contents
    :maxdepth: 2
 
    introduction
+   usage
 
 Indices and tables
 ==================

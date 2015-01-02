@@ -29,7 +29,7 @@ Main Features
 Installation
 ============
 
-Installing nsetools is very simple and it has been delibrating written in such a way 
+Installing nsetools is very simple and it has been deliberately written in such a way 
 so that it doesn't have any additional dependencies apart from standard python 
 packages::
 
