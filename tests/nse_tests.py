@@ -79,9 +79,14 @@ class TestCoreAPIs(unittest.TestCase):
         self.assertDictEqual(ret_dict, expected_dict)
 
     def test_get_stock_codes(self):
-        sq = self.nse.get_stock_codes()
-        self.assertIsNotNone(sq)
-        self.assertIsInstance(sq, dict)
+        sc = self.nse.get_stock_codes()
+        self.assertIsNotNone(sc)
+        self.assertIsInstance(sc, dict)
+        # test the json format return
+        sc_json = self.nse.get_stock_codes(as_json=True)
+        self.assertIsInstance(sc_json, str)
+        # reconstruct the dict from json and compare
+        self.assertItemsEqual(sc, json.loads(sc_json))
 
 # TODO: use mock and create one test where response contains a blank line
 # TODO: use mock and create one test where response doesnt contain a csv
@@ -94,7 +99,15 @@ class TestCoreAPIs(unittest.TestCase):
 
     def test_get_quote(self):
         code = 'infy'
-        self.assertIsInstance(self.nse.get_quote(code), dict)
+        resp = self.nse.get_quote(code)
+        self.assertIsInstance(resp, dict)
+        # test json response
+        json_resp = self.nse.get_quote(code, as_json=True)
+        self.assertIsInstance(json_resp, str)
+        # reconstruct the original dict from json
+        # this test may raise false alarms in case the
+        # the price changed in that very moment.
+        self.assertDictEqual(resp, json.loads(json_resp))
 
     def test_is_valid_code(self):
         code = 'infy'
@@ -107,6 +120,9 @@ class TestCoreAPIs(unittest.TestCase):
     def test_get_top_gainers(self):
         res = self.nse.get_top_gainers()
         self.assertIsInstance(res, list)
+        # test json response
+        res = self.nse.get_top_gainers(as_json=True)
+        self.assertIsInstance(res, str)
 
     def test_get_top_losers(self):
         res = self.nse.get_top_losers()
@@ -114,24 +130,21 @@ class TestCoreAPIs(unittest.TestCase):
 
     def test_render_response(self):
         d = {'fname':'vivek', 'lname':'jha'}
-        resp_dict = self.nse.render_response('default', d)
-        resp_json = self.nse.render_response('json', d)
+        resp_dict = self.nse.render_response(d)
+        resp_json = self.nse.render_response(d, as_json=True)
         # in case of dict, response should be a python dict
         self.assertIsInstance(resp_dict, dict)
         # in case of json, response should be a json string
         self.assertIsInstance(resp_json, str)
         # and on reconstruction it should become same as original dict
         self.assertDictEqual(d, json.loads(resp_json))
-        # and anything appart from json and dict should raise an error
-        with self.assertRaises(Exception):
-            self.nse.render_response('list', d)
 
     def test_advances_declines(self):
         resp = self.nse.get_advances_declines()
         # it should be a list of dictionaries
         self.assertIsInstance(resp, list)
         # get the json version
-        resp_json = self.nse.get_advances_declines(ret_type='json')
+        resp_json = self.nse.get_advances_declines(as_json=True)
         self.assertIsInstance(resp_json, str)
         # load the json response and it should have same number of
         # elements as in case of first response
@@ -151,7 +164,7 @@ class TestCoreAPIs(unittest.TestCase):
         code = 'CNX NIFTY'
         self.assertIsInstance(self.nse.get_index_quote(code), dict)
         # with json response
-        self.assertIsInstance(self.nse.get_index_quote(code, ret_type='json'),
+        self.assertIsInstance(self.nse.get_index_quote(code, as_json=True),
                               str)
         # with wrong code
         code = 'wrong code'
@@ -163,7 +176,7 @@ class TestCoreAPIs(unittest.TestCase):
 
     def test_get_index_list(self):
         index_list = self.nse.get_index_list()
-        index_list_json = self.nse.get_index_list(ret_type='json')
+        index_list_json = self.nse.get_index_list(as_json=True)
         self.assertIsInstance(index_list, list)
         # test json response type
         self.assertIsInstance(index_list_json, str)

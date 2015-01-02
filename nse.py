@@ -49,7 +49,7 @@ class Nse(AbstractBaseExchange):
         self.advances_declines_url = 'http://www.nseindia.com/common/json/indicesAdvanceDeclines.json'
         self.index_url="http://www.nseindia.com/homepage/Indices1.json"
 
-    def get_stock_codes(self, cached=True):
+    def get_stock_codes(self, cached=True, as_json=False):
         """
         returns a dictionary with key as stock code and value as stock name.
         It also implements cache functionality and hits the server only
@@ -71,7 +71,7 @@ class Nse(AbstractBaseExchange):
             else:
                 raise Exception('no response received')
             self.__CODECACHE__ = res_dict
-        return self.__CODECACHE__
+        return self.render_response(self.__CODECACHE__, as_json)
 
     def is_valid_code(self, code):
         """
@@ -85,7 +85,7 @@ class Nse(AbstractBaseExchange):
             else:
                 return False
 
-    def get_quote(self, code):
+    def get_quote(self, code, as_json=False):
         """
         gets the quote for a given stock code
         :param code:
@@ -106,13 +106,15 @@ class Nse(AbstractBaseExchange):
                     )
             # ast can raise SyntaxError, let's catch only this error
             try:
-                return self.clean_server_response(ast.literal_eval(match.group(1))['data'][0])
+                response = self.clean_server_response(ast.literal_eval(match.group(1))['data'][0])
             except SyntaxError as err:
                 raise Exception('ill formatted response')
+            else:
+                return self.render_response(response, as_json)
         else:
             return None
 
-    def get_top_gainers(self):
+    def get_top_gainers(self, as_json=False):
         """
         :return: a list of dictionaries containing top gainers of the day
         """
@@ -123,9 +125,9 @@ class Nse(AbstractBaseExchange):
         res_dict = json.load(res)
         # clean the output and make appropriate type conversions
         res_list = [self.clean_server_response(item) for item in res_dict['data']]
-        return res_list
+        return self.render_response(res_list, as_json)
 
-    def get_top_losers(self):
+    def get_top_losers(self, as_json=False):
         """
         :return: a list of dictionaries containing top losers of the day
         """
@@ -137,9 +139,9 @@ class Nse(AbstractBaseExchange):
         # clean the output and make appropriate type conversions
         res_list = [self.clean_server_response(item)
                     for item in res_dict['data']]
-        return res_list
+        return self.render_response(res_list, as_json)
 
-    def get_advances_declines(self, ret_type='default'):
+    def get_advances_declines(self, as_json=False):
         """
         :return: a list of dictionaries with advance decline data
         :raises: URLError, HTTPError
@@ -151,12 +153,12 @@ class Nse(AbstractBaseExchange):
         resp_dict = json.load(resp)
         resp_list = [self.clean_server_response(item)
                      for item in resp_dict['data']]
-        return self.render_response(ret_type, resp_list)
+        return self.render_response(resp_list, as_json)
 
-    def get_index_list(self, ret_type='default'):
+    def get_index_list(self, as_json=False):
         """
         params:
-            ret_type: dict | json
+            as_json: True | False
         returns: a list | json of index codes
         """
         url = self.index_url
@@ -165,7 +167,7 @@ class Nse(AbstractBaseExchange):
         resp = self.opener.open(req)
         resp_list = json.load(resp)['data']
         index_list = [str(item['name']) for item in resp_list]
-        return self.render_response(ret_type, index_list)
+        return self.render_response(index_list, as_json)
 
     def is_valid_index(self, code):
         """
@@ -174,12 +176,13 @@ class Nse(AbstractBaseExchange):
         index_list = self.get_index_list()
         return True if code.upper() in index_list else False
 
-    def get_index_quote(self, code, ret_type='default'):
+    def get_index_quote(self, code, as_json=False):
         """
         params:
             code : string index code
-            ret_type: dict | json
-        returns: a dict | json quote for the given index
+            as_json: True|False
+        returns:
+            a dict | json quote for the given index
         """
         url = self.index_url
         if self.is_valid_index(code):
@@ -196,7 +199,7 @@ class Nse(AbstractBaseExchange):
                 if item['name'] == code.upper():
                     search_flag = True
                     break
-            return self.render_response(ret_type, item) if search_flag else None
+            return self.render_response(item, as_json) if search_flag else None
 
     def nse_headers(self):
         """
@@ -255,13 +258,11 @@ class Nse(AbstractBaseExchange):
                     resp_dict[key] = str(value)
         return resp_dict
 
-    def render_response(self, ret_type, data):
-        if ret_type == 'json':
+    def render_response(self, data, as_json=False):
+        if as_json is True:
             return json.dumps(data)
-        elif ret_type == 'default':
-            return data
         else:
-            raise Exception("only 'default' and 'json' return types are supported")
+            return data
 
     def __str__(self):
         """
@@ -270,18 +271,9 @@ class Nse(AbstractBaseExchange):
         """
         return 'Driver Class for National Stock Exchange (NSE)'
 
-if __name__ == '__main__': # pragma: no cover
-    nse = Nse()
-    import json
-
-    # print json.dumps(nse.get_quote('INFY'))
-    # TODO: get_indices
-    # TODO: get_index_quote(index)
-    # TODO: Implement different return formats in network APIs
-    # TODO: get_most_active()
-    # TODO: get_top_volume()
-    # TODO: get_peer_companies()
-    # TODO: is_market_open()
-    # TODO: get_advance_declines()
-    # TODO: concept of portfolio for fetching price in a batch and field which should be captured
-    # TODO: Concept of session, just like as in sqlalchemy
+# TODO: get_most_active()
+# TODO: get_top_volume()
+# TODO: get_peer_companies()
+# TODO: is_market_open()
+# TODO: concept of portfolio for fetching price in a batch and field which should be captured
+# TODO: Concept of session, just like as in sqlalchemy

@@ -5,6 +5,15 @@ In this section we will focus on the basic usage and cover all the APIs which ns
 Though I would encourage you to take a look at the code and unittests in case you want to 
 further customize it.
 
+.. note::
+
+    All the data APIs support json return as well. Call any API with as_json=True
+    to get the json return. For example.
+    nse.get_quote('infy', as_json=True)
+    would provide a json return.
+
+    By default every API returns python data structures.
+
 Instantiation
 --------------
 
