@@ -5,7 +5,7 @@ readme = 'sample readme'
 
 setup(
     name="nsetools",
-    version="0.1.0",
+    version="0.2.0",
     author="Vivek Jha",
     author_email="vsjha18@gmail.com",
     description = ("Python library for extracting realtime data from National Stock Exchange"),

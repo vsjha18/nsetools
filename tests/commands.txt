@@ -1,1 +1,2 @@
 nosetests --with-coverage --cover-package nsetools.nse --cover-branch
+python setup.py sdist upload -r pypi
