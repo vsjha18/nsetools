@@ -6,22 +6,14 @@
 Welcome to nsetools's documentation!
 ====================================
 
-Contents:
+Table Of Contents
+================
 
 .. toctree::
    :maxdepth: 2
 
    introduction
-   
 
-API Guide:
-
-.. toctree::
-   :maxdepth: 2
-
-   apidoc/nsetools
-   apidoc/modules
-   
 Indices and tables
 ==================
 

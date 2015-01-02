@@ -1,3 +1,6 @@
+.. toctree::
+   :maxdepth: 2
+   
 Introduction
 ============
 
@@ -7,7 +10,10 @@ stock or index or build large data sets for further data analytics. You can also
 applications which can provide you live market details at a blazing fast speeds, much faster
 that the browsers. The accuracy of data is only as correct as provided on `www.nseindia.com`_
 
-.. _www.nseindia.com: www.nseindia.com
+.. note:: 
+    The data provided by APIs is only as correct as provided on www.nseindia.com
+
+ .. _`www.nseindia.com`: www.nseindia.com
 
 Main Features
 =============
@@ -16,10 +22,9 @@ Main Features
     #. Fetches live stock code and index codes in blazing fast speed.
     #. Provides list of all indices and stocks traded in National Stock Exchange.
     #. Additionally provides list of::
-        
-        #. Top losers.
-        #. Top gainers.
-        #. Most active.
+        * Top losers.
+        * Top gainers.
+        * Most active.
     #. Provides some useful APIs to validate a stock code and index code.
     #. Optionally returns data in JSON format.
     #. Hunderd Percent Unittest coverage.
