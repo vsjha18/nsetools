@@ -1,14 +1,17 @@
 API Walkthrough & Examples
 ===========================
 
-In this section we will focus on the basic usage and covering all the APIs which nsetools offer.
+In this section we will focus on the basic usage and cover all the APIs which nsetools offer.
+Though I would encourage you to take a look at the code and unittests in case you want to 
+further customize it.
 
+Instantiation
+--------------
 
-Instantiating
--------------
+nsetools uses www.nseindia.com as a data source. 
 
 As mentioned earlier, nsetools comes pre-built with all the right url mappings and hence 
-instantiating it requires not contructor information.
+instantiating it requires no contructor arguments.
 
 >>> from nsetools import Nse
 >>> nse = Nse()
@@ -24,7 +27,8 @@ Getting a Stock Quote
 ---------------------
 
 Before going though other fundamental APIs. We will first see how to get a quote.
-Assume that we want to fetch current price of *Infosys Technology*. The NSE stock 
+Assume that we want to fetch current price of *Infosys Technology*. The only thing 
+we need is NSE Code for this company. The NSE stock 
 code for *Infosys* is **INFY**. 
 
 >>> q = nse.get_quote('infy') # it's ok to use both upper or lower case for codes.
@@ -99,7 +103,7 @@ code for *Infosys* is **INFY**.
 
 .. note::
 
-    This is a stock quote with all possible details. Since this is a dictionary you can easily 
+    This is a stock quote with all possible details. Since it is a dictionary you can easily 
     chop off fields of your interest.
 
 .. warning::
@@ -163,6 +167,11 @@ programatically as well.
     Output has been truncated for better legibility. This is a dictionary with more that thousand 
     entries.
 
+.. note::
+
+    After the first time use, this api returns the cached value. To avoid 
+    caching use get_stock_codes(cached=False)
+
 List of Index Codes
 -------------------
 
@@ -212,7 +221,7 @@ Advances Declines
 -----------------
 
 Advances Declines is a very important feature which, in a brief snapshot, tells 
-you the story of a trading day.
+you the story of a trading day for the given index.
 
 Advances Declines
     It containes the number of rising stocks, falling stocks and unchanged stocks 
@@ -360,42 +369,6 @@ quote.
 True
 >>> nse.is_valid_code('innnfy') # should return False 
 False
-
-Similarly for index codes 
-
->>> nse.is_valid_index('cnx nifty') # should return True 
-True 
->>> nse.is_valid_index('cnxnifty') # should return False 
-False 
-
-
-
-Similarly for index codes 
-
->>> nse.is_valid_index('cnx nifty') # should return True 
-True 
->>> nse.is_valid_index('cnxnifty') # should return False 
-False 
-
-
-
-Similarly for index codes 
-
->>> nse.is_valid_index('cnx nifty') # should return True 
-True 
->>> nse.is_valid_index('cnxnifty') # should return False 
-False 
-
-
-
-Similarly for index codes 
-
->>> nse.is_valid_index('cnx nifty') # should return True 
-True 
->>> nse.is_valid_index('cnxnifty') # should return False 
-False 
-
-
 
 Similarly for index codes 
 
