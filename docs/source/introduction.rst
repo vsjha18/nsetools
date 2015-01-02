@@ -1,6 +1,3 @@
-.. toctree::
-   :maxdepth: 2
-   
 Introduction
 ============
 
@@ -21,13 +18,22 @@ Main Features
     #. Works out of box, without any required setup.
     #. Fetches live stock code and index codes in blazing fast speed.
     #. Provides list of all indices and stocks traded in National Stock Exchange.
-    #. Additionally provides list of::
+    #. Additionally provides list of:
         * Top losers.
         * Top gainers.
         * Most active.
     #. Provides some useful APIs to validate a stock code and index code.
     #. Optionally returns data in JSON format.
     #. Hunderd Percent Unittest coverage.
+
+Installation
+============
+
+Installing nsetools is very simple and it has been delibrating written in such a way 
+so that it doesn't have any additional dependencies apart from standard python 
+packages::
+
+    pip install nsetools
 
 
 
