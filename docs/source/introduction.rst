@@ -5,19 +5,18 @@ nsetools is a library for collecting real time data from National Stock Exchange
 It can be used in various types of projects which requires fetching live quotes for a given
 stock or index or building large data sets for further data analytics. You can also build cli
 applications which can provide you live market details at a blazing fast speeds, much faster
-than any browser. The accuracy of data is only as correct as provided on www.nseindia.com
+than any browser. The accuracy of data is only as correct as provided on http://www.nseindia.com
 
 
 .. note:: 
-    The data provided by APIs is only as correct as provided on http://nseindia.com
+    The data provided by APIs is only as correct as provided on http://www.nseindia.com
 
 
 Github Project Page
 ===================
 
-`https://github.com/vsjha18/nsetools`_
+https://github.com/vsjha18/nsetools
 
-.. _https://github.com/vsjha18/nsetools: https://github.com/vsjha18/nsetools
 
 Main Features
 =============
