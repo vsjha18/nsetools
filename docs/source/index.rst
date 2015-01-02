@@ -6,6 +6,8 @@
 Welcome to nsetools's documentation!
 ====================================
 
+Python library for extracting realtime data from National Stock Exchange (India)
+
 Table Of Contents
 ================
 

@@ -102,7 +102,7 @@ code for *Infosys* is **INFY**.
     This is a stock quote with all possible details. Since this is a dictionary you can easily 
     chop off fields of your interest.
 
-.. warn::
+.. warning::
 
     Always use NSE codes of stocks. Yahoo Finance or Google codes are not supported.
 
@@ -346,3 +346,66 @@ trading session.
   'turnoverInLakhs': 9174.56}]
 >>> 
 
+Checking If the Code is Valid
+-----------------------------
+
+It is expected that this library will not be used directly and the resulting 
+data will be consumed and processed by some higher level application. Hence it
+is important to provide some APIs which can check the validity of the stock 
+code or index code before fetching live quote of the same. It is recommend that 
+in your application you always use the following two APIs before fetching a live 
+quote.
+
+>>> nse.is_valid_code('infy') # this should return True 
+True
+>>> nse.is_valid_code('innnfy') # should return False 
+False
+
+Similarly for index codes 
+
+>>> nse.is_valid_index('cnx nifty') # should return True 
+True 
+>>> nse.is_valid_index('cnxnifty') # should return False 
+False 
+
+
+
+Similarly for index codes 
+
+>>> nse.is_valid_index('cnx nifty') # should return True 
+True 
+>>> nse.is_valid_index('cnxnifty') # should return False 
+False 
+
+
+
+Similarly for index codes 
+
+>>> nse.is_valid_index('cnx nifty') # should return True 
+True 
+>>> nse.is_valid_index('cnxnifty') # should return False 
+False 
+
+
+
+Similarly for index codes 
+
+>>> nse.is_valid_index('cnx nifty') # should return True 
+True 
+>>> nse.is_valid_index('cnxnifty') # should return False 
+False 
+
+
+
+Similarly for index codes 
+
+>>> nse.is_valid_index('cnx nifty') # should return True 
+True 
+>>> nse.is_valid_index('cnxnifty') # should return False 
+False 
+
+.. note::
+
+    In case you perform a get_quote or get_index_quote on a code which is 
+    invalid, then the APIs return None. It doesn't raise exception as one 
+    might expect.
