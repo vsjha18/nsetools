@@ -11,7 +11,6 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-.. automodule:: nsetools.nse
 
 Indices and tables
 ==================
