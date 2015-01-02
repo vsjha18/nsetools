@@ -102,4 +102,68 @@ code for *Infosys* is **INFY**.
     This is a stock quote with all possible details. Since this is a dictionary you can easily 
     chop off fields of your interest.
 
+.. warn::
 
+    Always use NSE codes of stocks. Yahoo Finance or Google codes are not supported.
+
+And the Index Quote
+-------------------
+
+You don't always need a stock quote. At times it is just enough to know the index status.
+A market in general is home to many indices, in other words there are more that on index 
+which are traded in a market. 
+
+This is true with **NSE** as well. This is how we will get quote for *CNX NIFTY* and *BANK NIFTY*
+
+>>> nifty_quote = nse.get_index_quote('cnx nifty') # code can be provided in upper|lower case.
+>>> banknifty_quote = nse.get_index_quote('banknifty') # code can be provided in upper|lower case.
+>>> pprint(nifty_quote)
+{'change': 94.6,
+ 'imgFileName': 'CNX_NIFTY_open.png',
+ 'lastPrice': 8378.6,
+ 'name': 'CNX NIFTY',
+ 'pChange': 1.14}
+>>>
+>>> pprint(banknifty_quote)
+{'change': 286.9,
+ 'imgFileName': 'BANK_NIFTY_open.png',
+ 'lastPrice': 19037.35,
+ 'name': 'BANK NIFTY',
+ 'pChange': 1.53}
+>>> 
+ 
+
+But How do I Know All The Stock Codes?
+--------------------------------------
+
+This is very trivial in general, if you are browsing manually. But there is a way to get it 
+programatically as well. 
+
+>>> all_stock_codes = nse.get_stock_codes()
+{'20MICRONS': '20 Microns Limited',
+ '3IINFOTECH': '3i Infotech Limited',
+ '3MINDIA': '3M India Limited',
+ '8KMILES': '8K Miles Software Services Limited',
+ 'A2ZINFRA': 'A2Z INFRA ENGINEERING LIMITED',
+ 'AARTIDRUGS': 'Aarti Drugs Limited',
+ 'AARTIIND': 'Aarti Industries Limited',
+.
+.
+.
+.
+ 'ZODIACLOTH': 'Zodiac Clothing Company Limited',
+ 'ZODJRDMKJ': 'Zodiac JRD- MKJ Limited',
+ 'ZUARI': 'Zuari Agro Chemicals Limited',
+ 'ZUARIGLOB': 'ZUARI GLOBAL LIMITED',
+ 'ZYDUSWELL': 'Zydus Wellness Limited',
+ 'ZYLOG': 'Zylog Systems Limited'}
+
+.. note:: 
+
+    Output has been truncated for better legibility. This is a dictionary with more that thousand 
+    entries.
+
+But How About Index Codes
+-------------------------
+
+You dont't always need a stock code. At times knowing the index 
