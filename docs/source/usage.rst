@@ -8,9 +8,9 @@ further customize it.
 .. note::
 
     All the data APIs support json return as well. Call any API with as_json=True
-    to get the json return. For example.
+    to get the json return. For example following would provide a json return.
+    
     nse.get_quote('infy', as_json=True)
-    would provide a json return.
 
     By default every API returns python data structures.
 
