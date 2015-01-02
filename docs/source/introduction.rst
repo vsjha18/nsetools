@@ -8,9 +8,16 @@ applications which can provide you live market details at a blazing fast speeds,
 than any browser. The accuracy of data is only as correct as provided on `www.nseindia.com`_
 
 .. note:: 
-    The data provided by APIs is only as correct as provided on www.nseindia.com
+    The data provided by APIs is only as correct as provided on `www.nseindia.com`_
 
- .. _`www.nseindia.com`: www.nseindia.com
+ .. _www.nseindia.com: www.nseindia.com
+
+Github Project Page
+===================
+
+`https://github.com/vsjha18/nsetools`_
+
+.. _https://github.com/vsjha18/nsetools: https://github.com/vsjha18/nsetools
 
 Main Features
 =============
