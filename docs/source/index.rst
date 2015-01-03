@@ -16,6 +16,8 @@ Table Of Contents
 
    introduction
    usage
+   modules
+   nsetools
 
 Indices and tables
 ==================
