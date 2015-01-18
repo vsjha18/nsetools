@@ -1,0 +1,563 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API Walkthrough &amp; Examples &mdash; nsetools 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="nsetools 0.1.0 documentation" href="index.html"/>
+        <link rel="prev" title="Introduction" href="introduction.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> nsetools</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#github-project-page">Github Project Page</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#main-features">Main Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#python-3-support">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#a-word-on-exception-handling">A Word On Exception Handling</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">API Walkthrough &amp; Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#instantiation">Instantiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-a-stock-quote">Getting a Stock Quote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#and-the-index-quote">And the Index Quote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#list-of-traded-stock-codes-names">List of Traded Stock Codes &amp; Names</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#list-of-index-codes">List of Index Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advances-declines">Advances Declines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#top-losers-gainers">Top Losers &amp; Gainers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checking-if-the-code-is-valid">Checking If the Code is Valid</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">nsetools</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>API Walkthrough &amp; Examples</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/usage.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="api-walkthrough-examples">
+<h1>API Walkthrough &amp; Examples<a class="headerlink" href="#api-walkthrough-examples" title="Permalink to this headline">¶</a></h1>
+<p>In this section we will focus on the basic usage and cover all the APIs which nsetools offer.
+Though I would encourage you to take a look at the code and unittests in case you want to
+further customize it.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>All the data APIs support json return as well. Call any API with as_json=True
+to get the json return. For example following would provide a json return.</p>
+<p>nse.get_quote(&#8216;infy&#8217;, as_json=True)</p>
+<p class="last">By default every API returns python data structures.</p>
+</div>
+<div class="section" id="instantiation">
+<h2>Instantiation<a class="headerlink" href="#instantiation" title="Permalink to this headline">¶</a></h2>
+<p>nsetools uses www.nseindia.com as a data source.</p>
+<p>As mentioned earlier, nsetools comes pre-built with all the right url mappings and hence
+instantiating it requires no contructor arguments.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nsetools</span> <span class="kn">import</span> <span class="n">Nse</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nse</span> <span class="o">=</span> <span class="n">Nse</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">nse</span>
+<span class="go">Driver Class for National Stock Exchange (NSE)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Please make sure that you are connected to internet while using this library. It
+will raise URLError in case of any network glitch.</p>
+</div>
+</div>
+<div class="section" id="getting-a-stock-quote">
+<h2>Getting a Stock Quote<a class="headerlink" href="#getting-a-stock-quote" title="Permalink to this headline">¶</a></h2>
+<p>Before going though other fundamental APIs. We will first see how to get a quote.
+Assume that we want to fetch current price of <em>Infosys Technology</em>. The only thing
+we need is NSE Code for this company. The NSE stock
+code for <em>Infosys</em> is <strong>INFY</strong>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">nse</span><span class="o">.</span><span class="n">get_quote</span><span class="p">(</span><span class="s">&#39;infy&#39;</span><span class="p">)</span> <span class="c"># it&#39;s ok to use both upper or lower case for codes.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span> <span class="c"># just for neatness of display</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<span class="go">{&#39;adhocMargin&#39;: None,</span>
+<span class="go"> &#39;applicableMargin&#39;: 12.5,</span>
+<span class="go"> &#39;averagePrice&#39;: 1999.82,</span>
+<span class="go"> &#39;bcEndDate&#39;: None,</span>
+<span class="go"> &#39;bcStartDate&#39;: None,</span>
+<span class="go"> &#39;buyPrice1&#39;: 1999.45,</span>
+<span class="go"> &#39;buyPrice2&#39;: 1999.4,</span>
+<span class="go"> &#39;buyPrice3&#39;: 1999.35,</span>
+<span class="go"> &#39;buyPrice4&#39;: 1999.15,</span>
+<span class="go"> &#39;buyPrice5&#39;: 1999.1,</span>
+<span class="go"> &#39;buyQuantity1&#39;: 50.0,</span>
+<span class="go"> &#39;buyQuantity2&#39;: 209.0,</span>
+<span class="go"> &#39;buyQuantity3&#39;: 22.0,</span>
+<span class="go"> &#39;buyQuantity4&#39;: 1.0,</span>
+<span class="go"> &#39;buyQuantity5&#39;: 24.0,</span>
+<span class="go"> &#39;change&#39;: 25.35,</span>
+<span class="go"> &#39;closePrice&#39;: None,</span>
+<span class="go"> &#39;cm_adj_high_dt&#39;: &#39;01-DEC-14&#39;,</span>
+<span class="go"> &#39;cm_adj_low_dt&#39;: &#39;30-MAY-14&#39;,</span>
+<span class="go"> &#39;cm_ffm&#39;: 190659.16,</span>
+<span class="go"> &#39;companyName&#39;: &#39;Infosys Limited&#39;,</span>
+<span class="go"> &#39;css_status_desc&#39;: &#39;Listed&#39;,</span>
+<span class="go"> &#39;dayHigh&#39;: 2010.0,</span>
+<span class="go"> &#39;dayLow&#39;: 1972.0,</span>
+<span class="go"> &#39;deliveryQuantity&#39;: 258080.0,</span>
+<span class="go"> &#39;deliveryToTradedQuantity&#39;: 51.54,</span>
+<span class="go"> &#39;exDate&#39;: &#39;02-DEC-14&#39;,</span>
+<span class="go"> &#39;extremeLossMargin&#39;: 5.0,</span>
+<span class="go"> &#39;faceValue&#39;: 5.0,</span>
+<span class="go"> &#39;high52&#39;: 2201.1,</span>
+<span class="go"> &#39;indexVar&#39;: None,</span>
+<span class="go"> &#39;isinCode&#39;: &#39;INE009A01021&#39;,</span>
+<span class="go"> &#39;lastPrice&#39;: 1999.75,</span>
+<span class="go"> &#39;low52&#39;: 1440.0,</span>
+<span class="go"> &#39;marketType&#39;: &#39;N&#39;,</span>
+<span class="go"> &#39;ndEndDate&#39;: None,</span>
+<span class="go"> &#39;ndStartDate&#39;: None,</span>
+<span class="go"> &#39;open&#39;: 1972.0,</span>
+<span class="go"> &#39;pChange&#39;: 1.28,</span>
+<span class="go"> &#39;previousClose&#39;: 1974.4,</span>
+<span class="go"> &#39;priceBand&#39;: &#39;No Band&#39;,</span>
+<span class="go"> &#39;pricebandlower&#39;: 1777.0,</span>
+<span class="go"> &#39;pricebandupper&#39;: 2171.8,</span>
+<span class="go"> &#39;purpose&#39;: &#39;BONUS 1:1&#39;,</span>
+<span class="go"> &#39;quantityTraded&#39;: 500691.0,</span>
+<span class="go"> &#39;recordDate&#39;: &#39;03-DEC-14&#39;,</span>
+<span class="go"> &#39;secDate&#39;: &#39;1JAN2015&#39;,</span>
+<span class="go"> &#39;securityVar&#39;: 5.02,</span>
+<span class="go"> &#39;sellPrice1&#39;: 2000.0,</span>
+<span class="go"> &#39;sellPrice2&#39;: 2000.5,</span>
+<span class="go"> &#39;sellPrice3&#39;: 2000.55,</span>
+<span class="go"> &#39;sellPrice4&#39;: 2000.6,</span>
+<span class="go"> &#39;sellPrice5&#39;: 2000.85,</span>
+<span class="go"> &#39;sellQuantity1&#39;: 5.0,</span>
+<span class="go"> &#39;sellQuantity2&#39;: 21.0,</span>
+<span class="go"> &#39;sellQuantity3&#39;: 250.0,</span>
+<span class="go"> &#39;sellQuantity4&#39;: 250.0,</span>
+<span class="go"> &#39;sellQuantity5&#39;: 250.0,</span>
+<span class="go"> &#39;series&#39;: &#39;EQ&#39;,</span>
+<span class="go"> &#39;symbol&#39;: &#39;INFY&#39;,</span>
+<span class="go"> &#39;totalBuyQuantity&#39;: 78715.0,</span>
+<span class="go"> &#39;totalSellQuantity&#39;: 80295.0,</span>
+<span class="go"> &#39;totalTradedValue&#39;: 22914.16,</span>
+<span class="go"> &#39;totalTradedVolume&#39;: 1145811.0,</span>
+<span class="go"> &#39;varMargin&#39;: 7.5}</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is a stock quote with all possible details. Since it is a dictionary you can easily
+chop off fields of your interest.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Always use NSE codes of stocks. Yahoo Finance or Google codes are not supported.</p>
+</div>
+</div>
+<div class="section" id="and-the-index-quote">
+<h2>And the Index Quote<a class="headerlink" href="#and-the-index-quote" title="Permalink to this headline">¶</a></h2>
+<p>You don&#8217;t always need a stock quote. At times it is just enough to know the index status.
+A market in general is home to many indices, in other words there are more that on index
+which are traded in a market.</p>
+<p>This is true with <strong>NSE</strong> as well. This is how we will get quote for <em>CNX NIFTY</em> and <em>BANK NIFTY</em></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nifty_quote</span> <span class="o">=</span> <span class="n">nse</span><span class="o">.</span><span class="n">get_index_quote</span><span class="p">(</span><span class="s">&#39;cnx nifty&#39;</span><span class="p">)</span> <span class="c"># code can be provided in upper|lower case.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">banknifty_quote</span> <span class="o">=</span> <span class="n">nse</span><span class="o">.</span><span class="n">get_index_quote</span><span class="p">(</span><span class="s">&#39;banknifty&#39;</span><span class="p">)</span> <span class="c"># code can be provided in upper|lower case.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">nifty_quote</span><span class="p">)</span>
+<span class="go">{&#39;change&#39;: 94.6,</span>
+<span class="go"> &#39;imgFileName&#39;: &#39;CNX_NIFTY_open.png&#39;,</span>
+<span class="go"> &#39;lastPrice&#39;: 8378.6,</span>
+<span class="go"> &#39;name&#39;: &#39;CNX NIFTY&#39;,</span>
+<span class="go"> &#39;pChange&#39;: 1.14}</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">banknifty_quote</span><span class="p">)</span>
+<span class="go">{&#39;change&#39;: 286.9,</span>
+<span class="go"> &#39;imgFileName&#39;: &#39;BANK_NIFTY_open.png&#39;,</span>
+<span class="go"> &#39;lastPrice&#39;: 19037.35,</span>
+<span class="go"> &#39;name&#39;: &#39;BANK NIFTY&#39;,</span>
+<span class="go"> &#39;pChange&#39;: 1.53}</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="list-of-traded-stock-codes-names">
+<h2>List of Traded Stock Codes &amp; Names<a class="headerlink" href="#list-of-traded-stock-codes-names" title="Permalink to this headline">¶</a></h2>
+<p>This is very trivial in general, if you are browsing manually. But there is a way to get it
+programatically as well.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">all_stock_codes</span> <span class="o">=</span> <span class="n">nse</span><span class="o">.</span><span class="n">get_stock_codes</span><span class="p">()</span>
+<span class="go">{&#39;20MICRONS&#39;: &#39;20 Microns Limited&#39;,</span>
+<span class="go"> &#39;3IINFOTECH&#39;: &#39;3i Infotech Limited&#39;,</span>
+<span class="go"> &#39;3MINDIA&#39;: &#39;3M India Limited&#39;,</span>
+<span class="go"> &#39;8KMILES&#39;: &#39;8K Miles Software Services Limited&#39;,</span>
+<span class="go"> &#39;A2ZINFRA&#39;: &#39;A2Z INFRA ENGINEERING LIMITED&#39;,</span>
+<span class="go"> &#39;AARTIDRUGS&#39;: &#39;Aarti Drugs Limited&#39;,</span>
+<span class="go"> &#39;AARTIIND&#39;: &#39;Aarti Industries Limited&#39;,</span>
+<span class="go">.</span>
+<span class="go">.</span>
+<span class="go">.</span>
+<span class="go">.</span>
+<span class="go"> &#39;ZODIACLOTH&#39;: &#39;Zodiac Clothing Company Limited&#39;,</span>
+<span class="go"> &#39;ZODJRDMKJ&#39;: &#39;Zodiac JRD- MKJ Limited&#39;,</span>
+<span class="go"> &#39;ZUARI&#39;: &#39;Zuari Agro Chemicals Limited&#39;,</span>
+<span class="go"> &#39;ZUARIGLOB&#39;: &#39;ZUARI GLOBAL LIMITED&#39;,</span>
+<span class="go"> &#39;ZYDUSWELL&#39;: &#39;Zydus Wellness Limited&#39;,</span>
+<span class="go"> &#39;ZYLOG&#39;: &#39;Zylog Systems Limited&#39;}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Output has been truncated for better legibility. This is a dictionary with more that thousand
+entries.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">After the first time use, this api returns the cached value. To avoid
+caching use get_stock_codes(cached=False)</p>
+</div>
+</div>
+<div class="section" id="list-of-index-codes">
+<h2>List of Index Codes<a class="headerlink" href="#list-of-index-codes" title="Permalink to this headline">¶</a></h2>
+<p>Similar to above, there is a way to get the list of <em>codes</em> of all the traded indices.
+Unlike in previous section, the return type is list.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">index_codes</span> <span class="o">=</span> <span class="n">nse</span><span class="o">.</span><span class="n">get_index_list</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">index_codes</span><span class="p">)</span>
+<span class="go">[&#39;CNX NIFTY Pre Open&#39;,</span>
+<span class="go"> &#39;CNX NIFTY&#39;,</span>
+<span class="go"> &#39;CNX NIFTY JUNIOR&#39;,</span>
+<span class="go"> &#39;LIX 15&#39;,</span>
+<span class="go"> &#39;BANK NIFTY&#39;,</span>
+<span class="go"> &#39;INDIA VIX&#39;,</span>
+<span class="go"> &#39;CNX 100&#39;,</span>
+<span class="go"> &#39;CNX 500&#39;,</span>
+<span class="go"> &#39;CNX MIDCAP&#39;,</span>
+<span class="go"> &#39;NIFTY MIDCAP 50&#39;,</span>
+<span class="go"> &#39;CNX INFRA&#39;,</span>
+<span class="go"> &#39;CNX REALTY&#39;,</span>
+<span class="go"> &#39;CNX ENERGY&#39;,</span>
+<span class="go"> &#39;CNX FMCG&#39;,</span>
+<span class="go"> &#39;CNX MNC&#39;,</span>
+<span class="go"> &#39;CNX PHARMA&#39;,</span>
+<span class="go"> &#39;CNX PSE&#39;,</span>
+<span class="go"> &#39;CNX PSU BANK&#39;,</span>
+<span class="go"> &#39;CNX SERVICE&#39;,</span>
+<span class="go"> &#39;CNX IT&#39;,</span>
+<span class="go"> &#39;CNX SMALLCAP&#39;,</span>
+<span class="go"> &#39;CNX 200&#39;,</span>
+<span class="go"> &#39;CNX AUTO&#39;,</span>
+<span class="go"> &#39;CNX MEDIA&#39;,</span>
+<span class="go"> &#39;CNX METAL&#39;,</span>
+<span class="go"> &#39;CNX DIVIDEND OPPT&#39;,</span>
+<span class="go"> &#39;CNX COMMODITIES&#39;,</span>
+<span class="go"> &#39;CNX CONSUMPTION&#39;,</span>
+<span class="go"> &#39;CPSE INDEX&#39;,</span>
+<span class="go"> &#39;CNX FINANCE&#39;,</span>
+<span class="go"> &#39;NI15&#39;,</span>
+<span class="go"> &#39;NIFTY TR 2X LEV&#39;,</span>
+<span class="go"> &#39;NIFTY PR 2X LEV&#39;,</span>
+<span class="go"> &#39;NIFTY TR 1X INV&#39;,</span>
+<span class="go"> &#39;NIFTY PR 1X INV&#39;]</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="advances-declines">
+<h2>Advances Declines<a class="headerlink" href="#advances-declines" title="Permalink to this headline">¶</a></h2>
+<p>Advances Declines is a very important feature which, in a brief snapshot, tells
+you the story of a trading day for the given index.</p>
+<dl class="docutils">
+<dt>Advances Declines</dt>
+<dd>It containes the number of rising stocks, falling stocks and unchanged stocks
+in a given trading day, per index.</dd>
+</dl>
+<p>The following API would return the list of dictionaries containing stats for
+every index.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">adv_dec</span> <span class="o">=</span> <span class="n">nse</span><span class="o">.</span><span class="n">get_advances_declines</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">adv_dec</span><span class="p">)</span>
+<span class="go">[{&#39;advances&#39;: 43.0, &#39;declines&#39;: 7.0, &#39;indice&#39;: &#39;CNX NIFTY&#39;, &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 35.0,</span>
+<span class="go">  &#39;declines&#39;: 15.0,</span>
+<span class="go">  &#39;indice&#39;: &#39;CNX NIFTY JUNIOR&#39;,</span>
+<span class="go">  &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 17.0, &#39;declines&#39;: 3.0, &#39;indice&#39;: &#39;CNX IT&#39;, &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 10.0, &#39;declines&#39;: 2.0, &#39;indice&#39;: &#39;BANK NIFTY&#39;, &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 41.0,</span>
+<span class="go">  &#39;declines&#39;: 9.0,</span>
+<span class="go">  &#39;indice&#39;: &#39;NIFTY MIDCAP 50&#39;,</span>
+<span class="go">  &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 19.0, &#39;declines&#39;: 4.0, &#39;indice&#39;: &#39;CNX INFRA&#39;, &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 7.0, &#39;declines&#39;: 3.0, &#39;indice&#39;: &#39;CNX REALTY&#39;, &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 7.0, &#39;declines&#39;: 3.0, &#39;indice&#39;: &#39;CNX ENERGY&#39;, &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 11.0, &#39;declines&#39;: 4.0, &#39;indice&#39;: &#39;CNX FMCG&#39;, &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 11.0, &#39;declines&#39;: 4.0, &#39;indice&#39;: &#39;CNX MNC&#39;, &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 8.0, &#39;declines&#39;: 2.0, &#39;indice&#39;: &#39;CNX PHARMA&#39;, &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 12.0, &#39;declines&#39;: 8.0, &#39;indice&#39;: &#39;CNX PSE&#39;, &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 8.0,</span>
+<span class="go">  &#39;declines&#39;: 4.0,</span>
+<span class="go">  &#39;indice&#39;: &#39;CNX PSU BANK&#39;,</span>
+<span class="go">  &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 27.0,</span>
+<span class="go">  &#39;declines&#39;: 3.0,</span>
+<span class="go">  &#39;indice&#39;: &#39;CNX SERVICE&#39;,</span>
+<span class="go">  &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 23.0,</span>
+<span class="go">  &#39;declines&#39;: 7.0,</span>
+<span class="go">  &#39;indice&#39;: &#39;CNX COMMODITIES&#39;,</span>
+<span class="go">  &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 20.0,</span>
+<span class="go">  &#39;declines&#39;: 10.0,</span>
+<span class="go">  &#39;indice&#39;: &#39;CNX CONSUMPTION&#39;,</span>
+<span class="go">  &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 13.0,</span>
+<span class="go">  &#39;declines&#39;: 2.0,</span>
+<span class="go">  &#39;indice&#39;: &#39;CNX FINANCE&#39;,</span>
+<span class="go">  &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 9.0, &#39;declines&#39;: 6.0, &#39;indice&#39;: &#39;CNX AUTO&#39;, &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 30.0,</span>
+<span class="go">  &#39;declines&#39;: 20.0,</span>
+<span class="go">  &#39;indice&#39;: &#39;CNX DIVIDEND OPPT&#39;,</span>
+<span class="go">  &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 4.0, &#39;declines&#39;: 7.0, &#39;indice&#39;: &#39;CNX MEDIA&#39;, &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 10.0, &#39;declines&#39;: 5.0, &#39;indice&#39;: &#39;CNX METAL&#39;, &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 14.0, &#39;declines&#39;: 1.0, &#39;indice&#39;: &#39;LIX 15&#39;, &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 6.0, &#39;declines&#39;: 4.0, &#39;indice&#39;: &#39;CPSE INDEX&#39;, &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 11.0, &#39;declines&#39;: 4.0, &#39;indice&#39;: &#39;NI15&#39;, &#39;unchanged&#39;: 0.0},</span>
+<span class="go"> {&#39;advances&#39;: 38.0,</span>
+<span class="go">  &#39;declines&#39;: 11.0,</span>
+<span class="go">  &#39;indice&#39;: &#39;CNX NIFTY Pre Open&#39;,</span>
+<span class="go">  &#39;unchanged&#39;: 1.0}]</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="top-losers-gainers">
+<h2>Top Losers &amp; Gainers<a class="headerlink" href="#top-losers-gainers" title="Permalink to this headline">¶</a></h2>
+<p>The following two APIs provides list of top losing and gaining stocks for the last
+trading session.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">top_gainers</span> <span class="o">=</span> <span class="n">nse</span><span class="o">.</span><span class="n">get_top_gainers</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">top_gainers</span><span class="p">)</span>
+<span class="go">[{&#39;highPrice&#39;: 1176.95,</span>
+<span class="go">  &#39;lastCorpAnnouncement&#39;: &#39;Annual General Meeting / Dividend - Rs 14/- Per Share&#39;,</span>
+<span class="go">  &#39;lastCorpAnnouncementDate&#39;: &#39;04-Jul-2014&#39;,</span>
+<span class="go">  &#39;lowPrice&#39;: 1125.35,</span>
+<span class="go">  &#39;ltp&#39;: 1171.05,</span>
+<span class="go">  &#39;netPrice&#39;: 4.19,</span>
+<span class="go">  &#39;openPrice&#39;: 1127.3,</span>
+<span class="go">  &#39;previousPrice&#39;: 1124.0,</span>
+<span class="go">  &#39;series&#39;: &#39;EQ&#39;,</span>
+<span class="go">  &#39;symbol&#39;: &#39;HDFC&#39;,</span>
+<span class="go">  &#39;tradedQuantity&#39;: 2019816.0,</span>
+<span class="go">  &#39;turnoverInLakhs&#39;: 23428.25},</span>
+<span class="go">.</span>
+<span class="go">.</span>
+<span class="go">.</span>
+<span class="go">.</span>
+<span class="go">{&#39;highPrice&#39;: 1539.0,</span>
+<span class="go">  &#39;lastCorpAnnouncement&#39;: &#39;Annual General Meeting / Dividend - Rs 14.25/- Per Share&#39;,</span>
+<span class="go">  &#39;lastCorpAnnouncementDate&#39;: &#39;13-Aug-2014&#39;,</span>
+<span class="go">  &#39;lowPrice&#39;: 1501.5,</span>
+<span class="go">  &#39;ltp&#39;: 1537.0,</span>
+<span class="go">  &#39;netPrice&#39;: 2.27,</span>
+<span class="go">  &#39;openPrice&#39;: 1501.5,</span>
+<span class="go">  &#39;previousPrice&#39;: 1502.95,</span>
+<span class="go">  &#39;series&#39;: &#39;EQ&#39;,</span>
+<span class="go">  &#39;symbol&#39;: &#39;LT&#39;,</span>
+<span class="go">  &#39;tradedQuantity&#39;: 1291056.0,</span>
+<span class="go">  &#39;turnoverInLakhs&#39;: 19709.13}]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">top_losers</span> <span class="o">=</span> <span class="n">nse</span><span class="o">.</span><span class="n">get_top_losers</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">top_losers</span><span class="p">)</span>
+<span class="go">[{&#39;highPrice&#39;: 655.9,</span>
+<span class="go">  &#39;lastCorpAnnouncement&#39;: &#39;Annual General Meeting/Dividend - Rs.17/- Per Share&#39;,</span>
+<span class="go">  &#39;lastCorpAnnouncementDate&#39;: &#39;05-Sep-2014&#39;,</span>
+<span class="go">  &#39;lowPrice&#39;: 642.45,</span>
+<span class="go">  &#39;ltp&#39;: 646.75,</span>
+<span class="go">  &#39;netPrice&#39;: None,</span>
+<span class="go">  &#39;openPrice&#39;: 650.9,</span>
+<span class="go">  &#39;previousPrice&#39;: 654.2,</span>
+<span class="go">  &#39;series&#39;: &#39;EQ&#39;,</span>
+<span class="go">  &#39;symbol&#39;: &#39;BPCL&#39;,</span>
+<span class="go">  &#39;tradedQuantity&#39;: 1023715.0,</span>
+<span class="go">  &#39;turnoverInLakhs&#39;: 6638.08},</span>
+<span class="go">.</span>
+<span class="go">.</span>
+<span class="go">.</span>
+<span class="go"> {&#39;highPrice&#39;: 766.0,</span>
+<span class="go">  &#39;lastCorpAnnouncement&#39;: &#39;Interim Dividend Rs.6/- Per Share (Purpose Revised)&#39;,</span>
+<span class="go">  &#39;lastCorpAnnouncementDate&#39;: &#39;31-Oct-2014&#39;,</span>
+<span class="go">  &#39;lowPrice&#39;: 752.65,</span>
+<span class="go">  &#39;ltp&#39;: 757.05,</span>
+<span class="go">  &#39;netPrice&#39;: None,</span>
+<span class="go">  &#39;openPrice&#39;: 757.0,</span>
+<span class="go">  &#39;previousPrice&#39;: 758.45,</span>
+<span class="go">  &#39;series&#39;: &#39;EQ&#39;,</span>
+<span class="go">  &#39;symbol&#39;: &#39;HINDUNILVR&#39;,</span>
+<span class="go">  &#39;tradedQuantity&#39;: 1207322.0,</span>
+<span class="go">  &#39;turnoverInLakhs&#39;: 9174.56}]</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checking-if-the-code-is-valid">
+<h2>Checking If the Code is Valid<a class="headerlink" href="#checking-if-the-code-is-valid" title="Permalink to this headline">¶</a></h2>
+<p>It is expected that this library will not be used directly and the resulting
+data will be consumed and processed by some higher level application. Hence it
+is important to provide some APIs which can check the validity of the stock
+code or index code before fetching live quote of the same. It is recommend that
+in your application you always use the following two APIs before fetching a live
+quote.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nse</span><span class="o">.</span><span class="n">is_valid_code</span><span class="p">(</span><span class="s">&#39;infy&#39;</span><span class="p">)</span> <span class="c"># this should return True</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nse</span><span class="o">.</span><span class="n">is_valid_code</span><span class="p">(</span><span class="s">&#39;innnfy&#39;</span><span class="p">)</span> <span class="c"># should return False</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>Similarly for index codes</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nse</span><span class="o">.</span><span class="n">is_valid_index</span><span class="p">(</span><span class="s">&#39;cnx nifty&#39;</span><span class="p">)</span> <span class="c"># should return True</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nse</span><span class="o">.</span><span class="n">is_valid_index</span><span class="p">(</span><span class="s">&#39;cnxnifty&#39;</span><span class="p">)</span> <span class="c"># should return False</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In case you perform a get_quote or get_index_quote on a code which is
+invalid, then the APIs return None. It doesn&#8217;t raise exception as one
+might expect.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="introduction.html" class="btn btn-neutral" title="Introduction"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Vivek Jha.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

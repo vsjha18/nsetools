@@ -1,0 +1,256 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Introduction &mdash; nsetools 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="nsetools 0.1.0 documentation" href="index.html"/>
+        <link rel="next" title="API Walkthrough &amp; Examples" href="usage.html"/>
+        <link rel="prev" title="Welcome to nsetools’s documentation!" href="index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> nsetools</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#github-project-page">Github Project Page</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#main-features">Main Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#python-3-support">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#a-word-on-exception-handling">A Word On Exception Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">API Walkthrough &amp; Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#instantiation">Instantiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#getting-a-stock-quote">Getting a Stock Quote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#and-the-index-quote">And the Index Quote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#list-of-traded-stock-codes-names">List of Traded Stock Codes &amp; Names</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#list-of-index-codes">List of Index Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#advances-declines">Advances Declines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#top-losers-gainers">Top Losers &amp; Gainers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#checking-if-the-code-is-valid">Checking If the Code is Valid</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">nsetools</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Introduction</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/introduction.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>nsetools is a library for collecting real time data from National Stock Exchange (India).
+It can be used in various types of projects which requires fetching live quotes for a given
+stock or index or building large data sets for further data analytics. You can also build cli
+applications which can provide you live market details at a blazing fast speeds, much faster
+than any browser. The accuracy of data is only as correct as provided on <a class="reference external" href="http://www.nseindia.com">http://www.nseindia.com</a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The data provided by APIs is only as correct as provided on <a class="reference external" href="http://www.nseindia.com">http://www.nseindia.com</a></p>
+</div>
+</div>
+<div class="section" id="github-project-page">
+<h1>Github Project Page<a class="headerlink" href="#github-project-page" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/vsjha18/nsetools">https://github.com/vsjha18/nsetools</a></p>
+</div>
+<div class="section" id="main-features">
+<h1>Main Features<a class="headerlink" href="#main-features" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><ol class="arabic">
+<li><p class="first">Works out of box, without any required setup.</p>
+</li>
+<li><p class="first">Fetches live stock code and index codes in blazing fast speed.</p>
+</li>
+<li><p class="first">Provides list of all indices and stocks traded in National Stock Exchange.</p>
+</li>
+<li><dl class="first docutils">
+<dt>Additionally provides list of:</dt>
+<dd><ul class="first last simple">
+<li>Top losers.</li>
+<li>Top gainers.</li>
+<li>Most active.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Provides some useful APIs to validate a stock code and index code.</p>
+</li>
+<li><p class="first">Optionally returns data in JSON format.</p>
+</li>
+<li><p class="first">Hunderd Percent Unittest coverage.</p>
+</li>
+</ol>
+</div></blockquote>
+</div>
+<div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>Installing nsetools is very simple and it has no external dependencies. All its dependencies
+are part of standard python distribution.
+packages:</p>
+<div class="highlight-python"><div class="highlight"><pre>pip install nsetools
+</pre></div>
+</div>
+</div>
+<div class="section" id="python-3-support">
+<h1>Python 3 Support<a class="headerlink" href="#python-3-support" title="Permalink to this headline">¶</a></h1>
+<p>It doesn&#8217;t support python 3 at the moment. If you want it to work in python3, then get ready
+to get your hands dirty. Please clone the source code and invoke the python2to3 converter
+script. Run the unittests to verify if everything still works properly. Unittest has cent
+percent branch and api coverage.</p>
+</div>
+<div class="section" id="a-word-on-exception-handling">
+<h1>A Word On Exception Handling<a class="headerlink" href="#a-word-on-exception-handling" title="Permalink to this headline">¶</a></h1>
+<p>Since this library would form a middleware of some other project. Hence it is not handling any
+exception. Apart from standard python exceptions, you should be catching the following two:</p>
+<blockquote>
+<div><ul class="simple">
+<li>URLError</li>
+<li>HTTPError</li>
+</ul>
+</div></blockquote>
+<p>Both of them can be imported from <strong>urllib2</strong>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">You need to have a working internet connection while using this library. It will raise URLErorr
+in case there is no internet connectivity. Hence please handle this scenario in your code.</p>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="usage.html" class="btn btn-neutral float-right" title="API Walkthrough &amp; Examples"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to nsetools’s documentation!"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Vivek Jha.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
