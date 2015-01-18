@@ -209,3 +209,219 @@
 
 </body>
 </html>
+=======
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="nsetools : Real Time Data Library for National Stock Exchange (NSE, India)">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>nsetools</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/vsjha18/nsetools">View on GitHub</a>
+
+          <h1 id="project_title">nsetools</h1>
+          <h2 id="project_tagline">Real Time Data Library for National Stock Exchange (NSE, India)</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/vsjha18/nsetools/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/vsjha18/nsetools/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>
+<a id="new-project-homepage" class="anchor" href="#new-project-homepage" aria-hidden="true"><span class="octicon octicon-link"></span></a>New Project Homepage</h2>
+
+<p>The project homepage has moved to: <a href="http://nsetools.readthedocs.org">http://nsetools.readthedocs.org</a>
+Please refer the above page for complete documentation. This page is deprecated and contains inaccurate data.</p>
+
+<h2>
+<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction.</h2>
+
+<p>nsetools is a library for collecting real time data from National Stock Exchange (India). It can be used in various types of projects which requires getting live quotes for a given stock or index or build large data sets for further data analytics. You can also build cli applications which can provide you live market details at a blazing fast speeds, much faster that the browsers. The accuracy of data is only as correct as provided on <a href="http://www.nseindia.com">www.nseindia.com</a>.</p>
+
+<h2>
+<a id="main-features" class="anchor" href="#main-features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Main Features:</h2>
+
+<ul>
+<li>Getting live quotes for stocks using stock codes.</li>
+<li>Return data in both json and python dict and list formats.</li>
+<li>Getting quotes for all the indices traded in NSE, e.g CNX NIFTY, BANKNIFTY etc.</li>
+<li>Getting list of top losers.</li>
+<li>Getting list of top gainers.</li>
+<li>Helper APIs to check whether a given stock code or index code is correct.</li>
+<li>Getting list of all indices and stocks.</li>
+<li>Cent percent unittest coverage.</li>
+</ul>
+
+<h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h2>
+
+<p>To keep it simple and supported on most of the platforms, it uses only core python libraries, hence there are no external dependencies. It can be used out of box and absolutely not set up is required except an internet connection.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>If you are using linux, cygwin or Mac</p>
+
+<pre><code>pip install nsetools
+</code></pre>
+
+<h1>
+<a id="api-walkthrough--examples" class="anchor" href="#api-walkthrough--examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>API Walkthrough &amp; Examples</h1>
+
+<p>I will be using ipython interpreter for demonstrations.</p>
+
+<h3>
+<a id="basic-usage-and-object-creation" class="anchor" href="#basic-usage-and-object-creation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Basic Usage and Object Creation</h3>
+
+<pre><code>In [7]: from nsetools import Nse
+In [8]: nse = Nse()
+</code></pre>
+
+<blockquote>
+<p>The constructor requires absolutely no setup information. The class is self contained and you can get going straight away.</p>
+</blockquote>
+
+<h3>
+<a id="getting-first-live-quote" class="anchor" href="#getting-first-live-quote" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting first live quote</h3>
+
+<p>Assume that we want to fetch the live quote for <em>Infosys Technology</em></p>
+
+<pre><code>In [9]: nse.get_quote('infy')
+Out[9]: 
+{'adhocMargin': None,
+ 'applicableMargin': 12.5,
+ 'averagePrice': 1966.45,
+ 'bcEndDate': None,
+ 'bcStartDate': None,
+ 'buyPrice1': 1966.35,
+ 'buyPrice2': None,
+ 'buyPrice3': None,
+ 'buyPrice4': None,
+ 'buyPrice5': None,
+ 'buyQuantity1': 102.0,
+ 'buyQuantity2': None,
+ 'buyQuantity3': None,
+ 'buyQuantity4': None,
+ 'buyQuantity5': None,
+ 'change': 9.1,
+ 'closePrice': 1966.35,
+ 'cm_adj_high_dt': '01-DEC-14',
+ 'cm_adj_low_dt': '30-MAY-14',
+ 'cm_ffm': 189881.81,
+ 'companyName': 'Infosys Limited',
+ 'css_status_desc': 'Listed',
+ 'dayHigh': 1975.0,
+ 'dayLow': 1956.8,
+ 'deliveryQuantity': 827058.0,
+ 'deliveryToTradedQuantity': 71.29,
+ 'exDate': '02-DEC-14',
+ 'extremeLossMargin': 5.0,
+ 'faceValue': 5.0,
+ 'high52': 2201.1,
+ 'indexVar': None,
+ 'isinCode': 'INE009A01021',
+ 'lastPrice': 1966.9,
+ 'low52': 1440.0,
+ 'marketType': 'N',
+ 'ndEndDate': None,
+ 'ndStartDate': None,
+ 'open': 1962.25,
+ 'pChange': 0.46,
+ 'previousClose': 1957.8,
+ 'priceBand': 'No Band',
+ 'pricebandlower': 1762.05,
+ 'pricebandupper': 2153.55,
+ 'purpose': 'BONUS 1:1',
+ 'quantityTraded': 1160138.0,
+ 'recordDate': '03-DEC-14',
+ 'secDate': '30DEC2014',
+ 'securityVar': 5.24,
+ 'sellPrice1': None,
+ 'sellPrice2': None,
+ 'sellPrice3': None,
+ 'sellPrice4': None,
+ 'sellPrice5': None,
+ 'sellQuantity1': None,
+ 'sellQuantity2': None,
+ 'sellQuantity3': None,
+ 'sellQuantity4': None,
+ 'sellQuantity5': None,
+ 'series': 'EQ',
+ 'symbol': 'INFY',
+ 'totalBuyQuantity': 102.0,
+ 'totalSellQuantity': None,
+ 'totalTradedValue': 22813.53,
+ 'totalTradedVolume': 1160138.0,
+ 'varMargin': 7.5}
+</code></pre>
+
+<h2>
+<a id="fetching-all-stock-code-and-company-names" class="anchor" href="#fetching-all-stock-code-and-company-names" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fetching All Stock Code and Company Names</h2>
+
+<pre><code>In [10]: nse.get_stock_codes()
+Out[10]: 
+{'20MICRONS': '20 Microns Limited',
+ '3IINFOTECH': '3i Infotech Limited',
+ '3MINDIA': '3M India Limited',
+ '8KMILES': '8K Miles Software Services Limited',
+ 'A2ZMES': 'A2Z Maintenance &amp; Engineering Services Limited',
+ 'AARTIDRUGS': 'Aarti Drugs Limited',
+ 'AARTIIND': 'Aarti Industries Limited',
+ 'AARVEEDEN': 'Aarvee Denims &amp; Exports Limited',
+ 'ABAN': 'Aban Offshore Limited',
+ 'ABB': 'ABB India Limited',
+ 'ABBOTINDIA': 'Abbott India Limited',
+ 'ABCIL': 'Aditya Birla Chemicals (India) Limited',
+ 'ABGSHIP': 'ABG Shipyard Limited',
+ 'ABIRLANUVO': 'Aditya Birla Nuvo Limited',
+ 'ACC': 'ACC Limited',
+ 'ACCELYA': 'Accelya Kale Solutions Limited',
+ 'ACE': 'Action Construction Equipment Limited',
+ 'ACROPETAL': 'Acropetal Technologies Limited',
+ 'ADANIENT': 'Adani Enterprises Limited',
+ 'ADANIPORTS': 'Adani Ports and Special Economic Zone Limited',
+</code></pre>
+
+<blockquote>
+<p>Above output has been deliberately truncated for sake of brevity</p>
+</blockquote>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">nsetools maintained by <a href="https://github.com/vsjha18">vsjha18</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-37377950-2");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
+  </body>
+</html>
