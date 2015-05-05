@@ -1,6 +1,6 @@
 Project Page
 =============
-http://nsetools.readthedocs.org
+http://vsjha.in/nsetools
 
 nsetools
 ========
@@ -31,4 +31,4 @@ To keep it simple and supported on most of the platforms, it uses only core pyth
 Detailed Documenation 
 =====================
 
-For complete documenation, please refer http://nsetools.readthedocs.org
+For complete documenation, please refer http://vsjha.in/nsetools
