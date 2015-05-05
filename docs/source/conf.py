@@ -33,7 +33,6 @@ sys.path.append(os.path.abspath('../../../'))
 extensions = ['sphinx.ext.autodoc', 'sphinxcontrib.newsfeed']
 
 disqus_shortname =  'vsjha'
-disqus_developer = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
