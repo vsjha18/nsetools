@@ -184,11 +184,12 @@ class Nse(AbstractBaseExchange):
         return self.render_response(resp_list, as_json)
 
     def get_index_list(self, as_json=False):
-        """
+        """ get list of indices and codes
         params:
             as_json: True | False
         returns: a list | json of index codes
         """
+
         url = self.index_url
         req = Request(url, None, self.headers)
         # raises URLError or HTTPError
@@ -265,13 +266,13 @@ class Nse(AbstractBaseExchange):
             raise Exception('code must be string')
 
     def clean_server_response(self, resp_dict):
-        """
-        cleans the server reponse by replacing:
+        """cleans the server reponse by replacing:
             '-'     -> None
             '1,000' -> 1000
         :param resp_dict:
         :return: dict with all above substitution
         """
+
         # change all the keys from unicode to string
         d = {}
         for key, value in resp_dict.items():

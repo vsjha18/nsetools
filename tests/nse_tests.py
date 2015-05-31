@@ -202,8 +202,5 @@ class TestCoreAPIs(unittest.TestCase):
         ret_file_buffer = byte_adaptor(fbuffer)
         self.assertIsInstance(ret_file_buffer, six.StringIO)
 
-
-
-
 if __name__ == '__main__':
     unittest.main()
