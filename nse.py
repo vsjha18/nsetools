@@ -22,14 +22,24 @@
     SOFTWARE.
 
 """
+import sys
+import six
 
-from urllib2 import build_opener, HTTPCookieProcessor, Request
-from urllib import urlencode
-from cookielib import CookieJar
+# import paths differ in python 2 and python 3
+if six.PY2:
+    from urllib2 import build_opener, HTTPCookieProcessor, Request
+    from urllib import urlencode
+    from cookielib import CookieJar
+elif six.PY3:
+    from urllib.request import build_opener, HTTPCookieProcessor, Request
+    from urllib.parse import urlencode
+    from http.cookiejar import CookieJar
 import ast
-from nsetools.bases import AbstractBaseExchange
 import re
 import json
+from nsetools.bases import AbstractBaseExchange
+from nsetools.utils import byte_adaptor
+from nsetools.utils import js_adaptor
 
 class Nse(AbstractBaseExchange):
     """
@@ -63,6 +73,9 @@ class Nse(AbstractBaseExchange):
             # raises HTTPError and URLError
             res = self.opener.open(req)
             if res is not None:
+                # for py3 compat covert byte file like object to
+                # string file like object
+                res = byte_adaptor(res)
                 for line in res.read().split('\n'):
                     if line != '' and re.search(',', line):
                         (code, name) = line.split(',')[0:2]
@@ -99,6 +112,10 @@ class Nse(AbstractBaseExchange):
             # north bound APIs should use it for exception handling
             res = self.opener.open(req)
 
+            # for py3 compat covert byte file like object to
+            # string file like object
+            res = byte_adaptor(res)
+
             # Now parse the response to get the relevant data
             match = re.search(\
                         r'\{<div\s+id="responseDiv"\s+style="display:none">\s+(\{.*?\{.*?\}.*?\})',
@@ -106,7 +123,9 @@ class Nse(AbstractBaseExchange):
                     )
             # ast can raise SyntaxError, let's catch only this error
             try:
-                response = self.clean_server_response(ast.literal_eval(match.group(1))['data'][0])
+                buffer = match.group(1)
+                buffer = js_adaptor(buffer)
+                response = self.clean_server_response(ast.literal_eval(buffer)['data'][0])
             except SyntaxError as err:
                 raise Exception('ill formatted response')
             else:
@@ -122,6 +141,9 @@ class Nse(AbstractBaseExchange):
         req = Request(url, None, self.headers)
         # this can raise HTTPError and URLError
         res = self.opener.open(req)
+        # for py3 compat covert byte file like object to
+        # string file like object
+        res = byte_adaptor(res)
         res_dict = json.load(res)
         # clean the output and make appropriate type conversions
         res_list = [self.clean_server_response(item) for item in res_dict['data']]
@@ -135,6 +157,9 @@ class Nse(AbstractBaseExchange):
         req = Request(url, None, self.headers)
         # this can raise HTTPError and URLError
         res = self.opener.open(req)
+        # for py3 compat covert byte file like object to
+        # string file like object
+        res = byte_adaptor(res)
         res_dict = json.load(res)
         # clean the output and make appropriate type conversions
         res_list = [self.clean_server_response(item)
@@ -150,6 +175,9 @@ class Nse(AbstractBaseExchange):
         req = Request(url, None, self.headers)
         # raises URLError or HTTPError
         resp = self.opener.open(req)
+        # for py3 compat covert byte file like object to
+        # string file like object
+        resp = byte_adaptor(resp)
         resp_dict = json.load(resp)
         resp_list = [self.clean_server_response(item)
                      for item in resp_dict['data']]
@@ -165,6 +193,7 @@ class Nse(AbstractBaseExchange):
         req = Request(url, None, self.headers)
         # raises URLError or HTTPError
         resp = self.opener.open(req)
+        resp = byte_adaptor(resp)
         resp_list = json.load(resp)['data']
         index_list = [str(item['name']) for item in resp_list]
         return self.render_response(index_list, as_json)
@@ -189,6 +218,7 @@ class Nse(AbstractBaseExchange):
             req = Request(url, None, self.headers)
             # raises HTTPError and URLError
             resp = self.opener.open(req)
+            resp = byte_adaptor(resp)
             resp_list = json.load(resp)['data']
             # this is list of dictionaries
             resp_list = [self.clean_server_response(item)
@@ -244,11 +274,11 @@ class Nse(AbstractBaseExchange):
         """
         # change all the keys from unicode to string
         d = {}
-        for key, value in resp_dict.iteritems():
+        for key, value in resp_dict.items():
             d[str(key)] = value
         resp_dict = d
-        for key, value in resp_dict.iteritems():
-            if type(value) is str or type(value) is unicode:
+        for key, value in resp_dict.items():
+            if type(value) is str or isinstance(value, six.string_types):
                 if re.match('-', value):
                     resp_dict[key] = None
                 elif re.search(r'^[0-9,.]+$', value):

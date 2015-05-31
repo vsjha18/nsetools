@@ -20,53 +20,42 @@
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
+
 """
-
-from abc import ABCMeta, abstractmethod
 import six
+import re
+import sys
+
+def byte_adaptor(fbuffer):
+    """ provides py3 compatibility by converting byte based
+    file stream to string based file stream
+
+    Arguments:
+        fbuffer: file like objects containing bytes
+
+    Returns:
+        string buffer
+    """
+    if six.PY3:
+        strings = fbuffer.read().decode('utf-8')
+        fbuffer = six.StringIO(strings)
+        return fbuffer
+    else:
+        return fbuffer
 
 
-class AbstractBaseExchange(six.with_metaclass(ABCMeta, object)):
+def js_adaptor(buffer):
+    """ convert javascript objects like true, none, NaN etc. to
+    quoted word.
 
-    @abstractmethod
-    def get_stock_codes(self):
-        """
-        :return: list of tuples with stock code and stock name
-        """
-        raise NotImplementedError
+    Arguments:
+        buffer: string to be converted
 
-    @abstractmethod
-    def is_valid_code(self, code):
-        """
-        :return: True, if it is a valid stock code, else False
-        """
-        raise NotImplementedError
-
-    @abstractmethod
-    def get_quote(self, code):
-        """
-        :param code: a stock code
-        :return: a dictionary which contain detailed stock code.
-        """
-        raise NotImplementedError
-
-    @abstractmethod
-    def get_top_gainers(self):
-        """
-        :return: a sorted list of codes of top gainers
-        """
-        raise NotImplementedError
-
-    @abstractmethod
-    def get_top_losers(self):
-        """
-        :return: a sorted list of codes of top losers
-        """
-        raise NotImplementedError
-
-    @abstractmethod
-    def __str__(self):
-        """
-        :return: market name
-        """
-        raise NotImplementedError
+    Returns:
+        string after conversion
+    """
+    buffer = re.sub('true', 'True', buffer)
+    buffer = re.sub('false', 'False', buffer)
+    buffer = re.sub('none', 'None', buffer)
+    buffer = re.sub('NaN', '"NaN"', buffer)
+    return buffer

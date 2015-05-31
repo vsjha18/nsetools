@@ -4,10 +4,11 @@
 import unittest
 import logging
 import json
-from mock import Mock
+import re
+import six
 from nsetools.bases import AbstractBaseExchange
 from nsetools import Nse
-import re
+from nsetools.utils import js_adaptor, byte_adaptor
 
 log = logging.getLogger('nse')
 logging.basicConfig(level=logging.DEBUG)
@@ -86,7 +87,7 @@ class TestCoreAPIs(unittest.TestCase):
         sc_json = self.nse.get_stock_codes(as_json=True)
         self.assertIsInstance(sc_json, str)
         # reconstruct the dict from json and compare
-        self.assertItemsEqual(sc, json.loads(sc_json))
+        six.assertCountEqual(self, sc, json.loads(sc_json))
 
 # TODO: use mock and create one test where response contains a blank line
 # TODO: use mock and create one test where response doesnt contain a csv
@@ -182,6 +183,27 @@ class TestCoreAPIs(unittest.TestCase):
         self.assertIsInstance(index_list_json, str)
         # reconstruct list from json and match
         self.assertListEqual(index_list, json.loads(index_list_json))
+
+    def test_jsadptor(self):
+        buffer = 'abc:true, def:false, ghi:NaN, jkl:none'
+        expected_buffer = 'abc:True, def:False, ghi:"NaN", jkl:None'
+        ret = js_adaptor(buffer)
+        self.assertEqual(ret, expected_buffer)
+
+    def test_byte_adaptor(self):
+        if six.PY2:
+            from StringIO import StringIO
+            buffer = 'nsetools'
+            fbuffer = StringIO(buffer)
+        else:
+            from io import BytesIO
+            buffer = b'nsetools'
+            fbuffer = BytesIO(buffer)
+        ret_file_buffer = byte_adaptor(fbuffer)
+        self.assertIsInstance(ret_file_buffer, six.StringIO)
+
+
+
 
 if __name__ == '__main__':
     unittest.main()
