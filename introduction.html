@@ -5,6 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>Introduction &mdash; nsetools 0.1.0 documentation</title>
@@ -14,7 +15,6 @@
   
 
   
-  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   
   
@@ -28,12 +28,14 @@
   
 
   
+
+  
     <link rel="top" title="nsetools 0.1.0 documentation" href="index.html"/>
         <link rel="next" title="API Walkthrough &amp; Examples" href="usage.html"/>
         <link rel="prev" title="Welcome to nsetools’s documentation!" href="index.html"/> 
 
   
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+  <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -44,24 +46,37 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-nav-search">
-        <a href="index.html" class="fa fa-home"> nsetools</a>
-        <div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+        
+
+        
+          <a href="index.html" class="icon icon-home"> nsetools
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
+
+        
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
         
-        
-            <ul class="current">
+          
+          
+              <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#github-project-page">Github Project Page</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#main-features">Main Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#update">Update</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#python-3-support">Python 3 Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#a-word-on-exception-handling">A Word On Exception Handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">API Walkthrough &amp; Examples</a><ul>
@@ -75,8 +90,10 @@
 <li class="toctree-l2"><a class="reference internal" href="usage.html#checking-if-the-code-is-valid">Checking If the Code is Valid</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Release History &amp; Change Log</a></li>
 </ul>
 
+          
         
       </div>
       &nbsp;
@@ -101,13 +118,15 @@
     <li>Introduction</li>
       <li class="wy-breadcrumbs-aside">
         
-          <a href="_sources/introduction.txt" rel="nofollow"> View page source</a>
+          
+            <a href="_sources/introduction.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
   </ul>
   <hr/>
 </div>
-          <div role="main">
+          <div role="main" class="document">
             
   <div class="section" id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
@@ -163,12 +182,17 @@ packages:</p>
 </pre></div>
 </div>
 </div>
+<div class="section" id="update">
+<h1>Update<a class="headerlink" href="#update" title="Permalink to this headline">¶</a></h1>
+<p>To updated to the lasted version:</p>
+<div class="highlight-python"><div class="highlight"><pre>pip install nsetools --update
+</pre></div>
+</div>
+</div>
 <div class="section" id="python-3-support">
 <h1>Python 3 Support<a class="headerlink" href="#python-3-support" title="Permalink to this headline">¶</a></h1>
-<p>It doesn&#8217;t support python 3 at the moment. If you want it to work in python3, then get ready
-to get your hands dirty. Please clone the source code and invoke the python2to3 converter
-script. Run the unittests to verify if everything still works properly. Unittest has cent
-percent branch and api coverage.</p>
+<p>Python 3 support has been added from 1.0.0 and onwards. Now this library works for
+both Python 2 and Python 3.</p>
 </div>
 <div class="section" id="a-word-on-exception-handling">
 <h1>A Word On Exception Handling<a class="headerlink" href="#a-word-on-exception-handling" title="Permalink to this headline">¶</a></h1>
@@ -180,11 +204,16 @@ exception. Apart from standard python exceptions, you should be catching the fol
 <li>HTTPError</li>
 </ul>
 </div></blockquote>
-<p>Both of them can be imported from <strong>urllib2</strong>.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">You need to have a working internet connection while using this library. It will raise URLErorr
 in case there is no internet connectivity. Hence please handle this scenario in your code.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If you are facing any issue with the APIs then it may be beacuse there had been some format
+change recently in the way NSE reports its live quotes. Please upgrade to the latest version
+in order to avoid this issue.</p>
 </div>
 <div class="feed-disqus">
 <div id="disqus_thread"></div>
@@ -208,10 +237,10 @@ var disqus_identifier = "/introduction";
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="usage.html" class="btn btn-neutral float-right" title="API Walkthrough &amp; Examples"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="usage.html" class="btn btn-neutral float-right" title="API Walkthrough &amp; Examples" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="Welcome to nsetools’s documentation!"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral" title="Welcome to nsetools’s documentation!" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -223,9 +252,10 @@ var disqus_identifier = "/introduction";
         &copy; Copyright 2015, Vivek Jha.
     </p>
   </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
 
-  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
 </footer>
+
         </div>
       </div>
 

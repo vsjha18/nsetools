@@ -41,14 +41,18 @@ packages::
 
     pip install nsetools
 
+Update
+===============
+
+To updated to the lasted version::
+
+    pip install nsetools --update
 
 Python 3 Support
 ================
 
-It doesn't support python 3 at the moment. If you want it to work in python3, then get ready 
-to get your hands dirty. Please clone the source code and invoke the python2to3 converter 
-script. Run the unittests to verify if everything still works properly. Unittest has cent 
-percent branch and api coverage.
+Python 3 support has been added from 1.0.0 and onwards. Now this library works for 
+both Python 2 and Python 3.
 
 A Word On Exception Handling 
 ============================
@@ -59,13 +63,16 @@ exception. Apart from standard python exceptions, you should be catching the fol
     * URLError
     * HTTPError 
 
-Both of them can be imported from **urllib2**.
-
-
 .. warning::
 
     You need to have a working internet connection while using this library. It will raise URLErorr 
     in case there is no internet connectivity. Hence please handle this scenario in your code.
+
+.. warning::
+
+    If you are facing any issue with the APIs then it may be beacuse there had been some format 
+    change recently in the way NSE reports its live quotes. Please upgrade to the latest version 
+    in order to avoid this issue.
 
 .. disqus::
 

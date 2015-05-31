@@ -5,6 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>nsetools package &mdash; nsetools 0.1.0 documentation</title>
@@ -14,7 +15,6 @@
   
 
   
-  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   
   
@@ -28,10 +28,12 @@
   
 
   
+
+  
     <link rel="top" title="nsetools 0.1.0 documentation" href="index.html"/> 
 
   
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+  <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -42,24 +44,37 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-nav-search">
-        <a href="index.html" class="fa fa-home"> nsetools</a>
-        <div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+        
+
+        
+          <a href="index.html" class="icon icon-home"> nsetools
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
+
+        
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
         
-        
-            <ul>
+          
+          
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html#github-project-page">Github Project Page</a></li>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html#main-features">Main Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#update">Update</a></li>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html#python-3-support">Python 3 Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html#a-word-on-exception-handling">A Word On Exception Handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">API Walkthrough &amp; Examples</a><ul>
@@ -73,8 +88,10 @@
 <li class="toctree-l2"><a class="reference internal" href="usage.html#checking-if-the-code-is-valid">Checking If the Code is Valid</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Release History &amp; Change Log</a></li>
 </ul>
 
+          
         
       </div>
       &nbsp;
@@ -99,13 +116,15 @@
     <li>nsetools package</li>
       <li class="wy-breadcrumbs-aside">
         
-          <a href="_sources/nsetools.txt" rel="nofollow"> View page source</a>
+          
+            <a href="_sources/nsetools.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
   </ul>
   <hr/>
 </div>
-          <div role="main">
+          <div role="main" class="document">
             
   <div class="section" id="nsetools-package">
 <h1>nsetools package<a class="headerlink" href="#nsetools-package" title="Permalink to this headline">¶</a></h1>
@@ -133,11 +152,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</p>
 <dl class="class">
 <dt id="nsetools.bases.AbstractBaseExchange">
-<em class="property">class </em><tt class="descclassname">nsetools.bases.</tt><tt class="descname">AbstractBaseExchange</tt><a class="headerlink" href="#nsetools.bases.AbstractBaseExchange" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<em class="property">class </em><code class="descclassname">nsetools.bases.</code><code class="descname">AbstractBaseExchange</code><a class="headerlink" href="#nsetools.bases.AbstractBaseExchange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="nsetools.bases.AbstractBaseExchange.get_quote">
-<tt class="descname">get_quote</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#nsetools.bases.AbstractBaseExchange.get_quote" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_quote</code><span class="sig-paren">(</span><em>code</em><span class="sig-paren">)</span><a class="headerlink" href="#nsetools.bases.AbstractBaseExchange.get_quote" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -152,7 +171,7 @@ SOFTWARE.</p>
 
 <dl class="method">
 <dt id="nsetools.bases.AbstractBaseExchange.get_stock_codes">
-<tt class="descname">get_stock_codes</tt><big>(</big><big>)</big><a class="headerlink" href="#nsetools.bases.AbstractBaseExchange.get_stock_codes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_stock_codes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nsetools.bases.AbstractBaseExchange.get_stock_codes" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -165,7 +184,7 @@ SOFTWARE.</p>
 
 <dl class="method">
 <dt id="nsetools.bases.AbstractBaseExchange.get_top_gainers">
-<tt class="descname">get_top_gainers</tt><big>(</big><big>)</big><a class="headerlink" href="#nsetools.bases.AbstractBaseExchange.get_top_gainers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_top_gainers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nsetools.bases.AbstractBaseExchange.get_top_gainers" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -178,7 +197,7 @@ SOFTWARE.</p>
 
 <dl class="method">
 <dt id="nsetools.bases.AbstractBaseExchange.get_top_losers">
-<tt class="descname">get_top_losers</tt><big>(</big><big>)</big><a class="headerlink" href="#nsetools.bases.AbstractBaseExchange.get_top_losers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_top_losers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nsetools.bases.AbstractBaseExchange.get_top_losers" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -191,7 +210,7 @@ SOFTWARE.</p>
 
 <dl class="method">
 <dt id="nsetools.bases.AbstractBaseExchange.is_valid_code">
-<tt class="descname">is_valid_code</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#nsetools.bases.AbstractBaseExchange.is_valid_code" title="Permalink to this definition">¶</a></dt>
+<code class="descname">is_valid_code</code><span class="sig-paren">(</span><em>code</em><span class="sig-paren">)</span><a class="headerlink" href="#nsetools.bases.AbstractBaseExchange.is_valid_code" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -226,13 +245,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</p>
 <dl class="class">
 <dt id="nsetools.nse.Nse">
-<em class="property">class </em><tt class="descclassname">nsetools.nse.</tt><tt class="descname">Nse</tt><a class="headerlink" href="#nsetools.nse.Nse" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nsetools.bases.AbstractBaseExchange" title="nsetools.bases.AbstractBaseExchange"><tt class="xref py py-class docutils literal"><span class="pre">nsetools.bases.AbstractBaseExchange</span></tt></a></p>
+<em class="property">class </em><code class="descclassname">nsetools.nse.</code><code class="descname">Nse</code><a class="headerlink" href="#nsetools.nse.Nse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nsetools.bases.AbstractBaseExchange" title="nsetools.bases.AbstractBaseExchange"><code class="xref py py-class docutils literal"><span class="pre">nsetools.bases.AbstractBaseExchange</span></code></a></p>
 <p>class which implements all the functionality for
 National Stock Exchange</p>
 <dl class="method">
 <dt id="nsetools.nse.Nse.build_url_for_quote">
-<tt class="descname">build_url_for_quote</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#nsetools.nse.Nse.build_url_for_quote" title="Permalink to this definition">¶</a></dt>
+<code class="descname">build_url_for_quote</code><span class="sig-paren">(</span><em>code</em><span class="sig-paren">)</span><a class="headerlink" href="#nsetools.nse.Nse.build_url_for_quote" title="Permalink to this definition">¶</a></dt>
 <dd><p>builds a url which can be requested for a given stock code
 :param code: string containing stock code.
 :return: a url object</p>
@@ -240,7 +259,7 @@ National Stock Exchange</p>
 
 <dl class="method">
 <dt id="nsetools.nse.Nse.clean_server_response">
-<tt class="descname">clean_server_response</tt><big>(</big><em>resp_dict</em><big>)</big><a class="headerlink" href="#nsetools.nse.Nse.clean_server_response" title="Permalink to this definition">¶</a></dt>
+<code class="descname">clean_server_response</code><span class="sig-paren">(</span><em>resp_dict</em><span class="sig-paren">)</span><a class="headerlink" href="#nsetools.nse.Nse.clean_server_response" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>cleans the server reponse by replacing:</dt>
 <dd>&#8216;-&#8216;     -&gt; None
@@ -260,7 +279,7 @@ National Stock Exchange</p>
 
 <dl class="method">
 <dt id="nsetools.nse.Nse.get_advances_declines">
-<tt class="descname">get_advances_declines</tt><big>(</big><em>as_json=False</em><big>)</big><a class="headerlink" href="#nsetools.nse.Nse.get_advances_declines" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_advances_declines</code><span class="sig-paren">(</span><em>as_json=False</em><span class="sig-paren">)</span><a class="headerlink" href="#nsetools.nse.Nse.get_advances_declines" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -275,17 +294,17 @@ National Stock Exchange</p>
 
 <dl class="method">
 <dt id="nsetools.nse.Nse.get_index_list">
-<tt class="descname">get_index_list</tt><big>(</big><em>as_json=False</em><big>)</big><a class="headerlink" href="#nsetools.nse.Nse.get_index_list" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>params:</dt>
-<dd>as_json: True | False</dd>
-</dl>
+<code class="descname">get_index_list</code><span class="sig-paren">(</span><em>as_json=False</em><span class="sig-paren">)</span><a class="headerlink" href="#nsetools.nse.Nse.get_index_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>get list of indices and codes
+params:</p>
+<blockquote>
+<div>as_json: True | False</div></blockquote>
 <p>returns: a list | json of index codes</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="nsetools.nse.Nse.get_index_quote">
-<tt class="descname">get_index_quote</tt><big>(</big><em>code</em>, <em>as_json=False</em><big>)</big><a class="headerlink" href="#nsetools.nse.Nse.get_index_quote" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_index_quote</code><span class="sig-paren">(</span><em>code</em>, <em>as_json=False</em><span class="sig-paren">)</span><a class="headerlink" href="#nsetools.nse.Nse.get_index_quote" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>params:</dt>
 <dd>code : string index code
@@ -297,7 +316,7 @@ as_json: True|False</dd>
 
 <dl class="method">
 <dt id="nsetools.nse.Nse.get_quote">
-<tt class="descname">get_quote</tt><big>(</big><em>code</em>, <em>as_json=False</em><big>)</big><a class="headerlink" href="#nsetools.nse.Nse.get_quote" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_quote</code><span class="sig-paren">(</span><em>code</em>, <em>as_json=False</em><span class="sig-paren">)</span><a class="headerlink" href="#nsetools.nse.Nse.get_quote" title="Permalink to this definition">¶</a></dt>
 <dd><p>gets the quote for a given stock code
 :param code:
 :return: dict or None
@@ -306,7 +325,7 @@ as_json: True|False</dd>
 
 <dl class="method">
 <dt id="nsetools.nse.Nse.get_stock_codes">
-<tt class="descname">get_stock_codes</tt><big>(</big><em>cached=True</em>, <em>as_json=False</em><big>)</big><a class="headerlink" href="#nsetools.nse.Nse.get_stock_codes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_stock_codes</code><span class="sig-paren">(</span><em>cached=True</em>, <em>as_json=False</em><span class="sig-paren">)</span><a class="headerlink" href="#nsetools.nse.Nse.get_stock_codes" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns a dictionary with key as stock code and value as stock name.
 It also implements cache functionality and hits the server only
 if user insists or cache is empty
@@ -315,7 +334,7 @@ if user insists or cache is empty
 
 <dl class="method">
 <dt id="nsetools.nse.Nse.get_top_gainers">
-<tt class="descname">get_top_gainers</tt><big>(</big><em>as_json=False</em><big>)</big><a class="headerlink" href="#nsetools.nse.Nse.get_top_gainers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_top_gainers</code><span class="sig-paren">(</span><em>as_json=False</em><span class="sig-paren">)</span><a class="headerlink" href="#nsetools.nse.Nse.get_top_gainers" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -328,7 +347,7 @@ if user insists or cache is empty
 
 <dl class="method">
 <dt id="nsetools.nse.Nse.get_top_losers">
-<tt class="descname">get_top_losers</tt><big>(</big><em>as_json=False</em><big>)</big><a class="headerlink" href="#nsetools.nse.Nse.get_top_losers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_top_losers</code><span class="sig-paren">(</span><em>as_json=False</em><span class="sig-paren">)</span><a class="headerlink" href="#nsetools.nse.Nse.get_top_losers" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -341,7 +360,7 @@ if user insists or cache is empty
 
 <dl class="method">
 <dt id="nsetools.nse.Nse.is_valid_code">
-<tt class="descname">is_valid_code</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#nsetools.nse.Nse.is_valid_code" title="Permalink to this definition">¶</a></dt>
+<code class="descname">is_valid_code</code><span class="sig-paren">(</span><em>code</em><span class="sig-paren">)</span><a class="headerlink" href="#nsetools.nse.Nse.is_valid_code" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -356,27 +375,27 @@ if user insists or cache is empty
 
 <dl class="method">
 <dt id="nsetools.nse.Nse.is_valid_index">
-<tt class="descname">is_valid_index</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#nsetools.nse.Nse.is_valid_index" title="Permalink to this definition">¶</a></dt>
+<code class="descname">is_valid_index</code><span class="sig-paren">(</span><em>code</em><span class="sig-paren">)</span><a class="headerlink" href="#nsetools.nse.Nse.is_valid_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns: True | Flase , based on whether code is valid</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="nsetools.nse.Nse.nse_headers">
-<tt class="descname">nse_headers</tt><big>(</big><big>)</big><a class="headerlink" href="#nsetools.nse.Nse.nse_headers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">nse_headers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nsetools.nse.Nse.nse_headers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds right set of headers for requesting <a class="reference external" href="http://nseindia.com">http://nseindia.com</a>
 :return: a dict with http headers</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="nsetools.nse.Nse.nse_opener">
-<tt class="descname">nse_opener</tt><big>(</big><big>)</big><a class="headerlink" href="#nsetools.nse.Nse.nse_opener" title="Permalink to this definition">¶</a></dt>
+<code class="descname">nse_opener</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nsetools.nse.Nse.nse_opener" title="Permalink to this definition">¶</a></dt>
 <dd><p>builds opener for urllib2
 :return: opener object</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="nsetools.nse.Nse.render_response">
-<tt class="descname">render_response</tt><big>(</big><em>data</em>, <em>as_json=False</em><big>)</big><a class="headerlink" href="#nsetools.nse.Nse.render_response" title="Permalink to this definition">¶</a></dt>
+<code class="descname">render_response</code><span class="sig-paren">(</span><em>data</em>, <em>as_json=False</em><span class="sig-paren">)</span><a class="headerlink" href="#nsetools.nse.Nse.render_response" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -419,9 +438,10 @@ SOFTWARE.</p>
         &copy; Copyright 2015, Vivek Jha.
     </p>
   </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
 
-  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
 </footer>
+
         </div>
       </div>
 

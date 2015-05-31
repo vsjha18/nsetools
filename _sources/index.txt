@@ -16,6 +16,7 @@ Table Of Contents
 
    introduction
    usage
+   changelog
 
 Indices and tables
 ==================
