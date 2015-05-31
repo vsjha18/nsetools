@@ -30,10 +30,10 @@ sys.path.append(os.path.abspath('../../../'))
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-#googleanalytics_id = 'UA-59243939-1'
-#googleanalytics_enabled = True
 
-#extensions = ['sphinx.ext.autodoc', 'sphinxcontrib.newsfeed', 'sphinxcontrib.googleanalytics']
+googleanalytics_id = 'UA-59243939-1'
+googleanalytics_enabled = True
+extensions = ['sphinx.ext.autodoc', 'sphinxcontrib.newsfeed', 'sphinxcontrib.googleanalytics']
 extensions = ['sphinx.ext.autodoc', 'sphinxcontrib.newsfeed']
 
 disqus_shortname =  'vsjha'
