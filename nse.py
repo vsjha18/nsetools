@@ -260,8 +260,8 @@ class Nse(AbstractBaseExchange):
         :return: a url object
         """
         if code is not None and type(code) is str:
-            encoded_args = urlencode({'symbol':code, 'illiquid':'0'})
-            return self.get_quote_url + encoded_args + '&series='+ series
+            encoded_args = urlencode({'symbol':code, 'illiquid':'0','series':series})
+            return self.get_quote_url + encoded_args 
         else:
             raise Exception('code must be string')
 
