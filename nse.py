@@ -253,14 +253,14 @@ class Nse(AbstractBaseExchange):
         cj = CookieJar()
         return build_opener(HTTPCookieProcessor(cj))
 
-    def build_url_for_quote(self, series, code):
+    def build_url_for_quote(self,code,series):
         """
         builds a url which can be requested for a given stock code
         :param code: string containing stock code.
         :return: a url object
         """
         if code is not None and type(code) is str:
-            encoded_args = urlencode({'symbol':code, 'illiquid':'0','series':series})
+            encoded_args = urlencode({'symbol':code,'series':series, 'illiquid':'0'})
             return self.get_quote_url + encoded_args 
         else:
             raise Exception('code must be string')
