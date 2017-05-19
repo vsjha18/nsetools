@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 readme = '''
 Project Page
 =============
-http://vsjha.in/nsetools
+http://nsetools.readthedocs.io
 
 nsetools
 ========
@@ -36,7 +36,7 @@ Main Features:
     Detailed Documenation
     =====================
 
-    For complete documenation, please refer http://vsjha.in/nsetools
+    For complete documenation, please refer http://nsetools.readthedocs.io
 '''
 
 setup(

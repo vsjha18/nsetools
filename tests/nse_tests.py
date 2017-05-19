@@ -152,17 +152,17 @@ class TestCoreAPIs(unittest.TestCase):
         self.assertEqual(len(resp), len(json.loads(resp_json)))
 
     def test_is_valid_index(self):
-        code = 'CNX NIFTY'
+        code = 'NIFTY BANK'
         self.assertTrue(self.nse.is_valid_index(code))
         # test with invalid string
         code = 'some junk stuff'
         self.assertFalse(self.nse.is_valid_index(code))
         # test with lower case
-        code = 'cnx nifty'
+        code = 'nifty bank'
         self.assertTrue(self.nse.is_valid_index(code))
 
     def test_get_index_quote(self):
-        code = 'CNX NIFTY'
+        code = 'NIFTY BANK'
         self.assertIsInstance(self.nse.get_index_quote(code), dict)
         # with json response
         self.assertIsInstance(self.nse.get_index_quote(code, as_json=True),
@@ -172,7 +172,7 @@ class TestCoreAPIs(unittest.TestCase):
         self.assertIsNone(self.nse.get_index_quote(code))
 
         # with lower case code
-        code = 'cnx nifty'
+        code = 'nifty bank'
         self.assertIsInstance(self.nse.get_index_quote(code), dict)
 
     def test_get_index_list(self):
