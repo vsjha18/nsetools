@@ -37,7 +37,7 @@ def byte_adaptor(fbuffer):
         string buffer
     """
     if six.PY3:
-        strings = fbuffer.read().decode('utf-8')
+        strings = fbuffer.read().decode('latin-1')
         fbuffer = six.StringIO(strings)
         return fbuffer
     else:
