@@ -41,7 +41,7 @@ Main Features:
 
 setup(
     name="nsetools",
-    version="1.0.4",
+    version="1.0.5",
     author="Vivek Jha",
     author_email="vsjha18@gmail.com",
     description = ("Python library for extracting realtime data from National Stock Exchange"),
