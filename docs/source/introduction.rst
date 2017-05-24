@@ -74,6 +74,11 @@ exception. Apart from standard python exceptions, you should be catching the fol
     change recently in the way NSE reports its live quotes. Please upgrade to the latest version 
     in order to avoid this issue.
 
+.. warning::
+
+    Now nsetools doesn't support python 2 officially, though it may still continue to work with 
+    python 2 for some more time.
+
 .. disqus::
 
 

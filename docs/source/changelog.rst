@@ -8,3 +8,5 @@ Release History & Change Log
 1.0.0 : Support for both Python2 and Python3
 
 1.0.1 : Few bug fixes to address format changes.
+
+1.0.2 : Fixed encoding bug. End of offical python 2 support.
