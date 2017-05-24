@@ -98,7 +98,7 @@ class Nse(AbstractBaseExchange):
             else:
                 return False
 
-    def get_quote(self, code, as_json=False):
+    def get_quote(self, code, series, as_json=False):
         """
         gets the quote for a given stock code
         :param code:
@@ -106,7 +106,7 @@ class Nse(AbstractBaseExchange):
         :raises: HTTPError, URLError
         """
         if self.is_valid_code(code):
-            url = self.build_url_for_quote(code)
+            url = self.build_url_for_quote(code,series)
             req = Request(url, None, self.headers)
             # this can raise HTTPError and URLError, but we are not handling it
             # north bound APIs should use it for exception handling
@@ -253,15 +253,15 @@ class Nse(AbstractBaseExchange):
         cj = CookieJar()
         return build_opener(HTTPCookieProcessor(cj))
 
-    def build_url_for_quote(self, code):
+    def build_url_for_quote(self,code,series):
         """
         builds a url which can be requested for a given stock code
         :param code: string containing stock code.
         :return: a url object
         """
         if code is not None and type(code) is str:
-            encoded_args = urlencode({'symbol':code, 'illiquid':'0'})
-            return self.get_quote_url + encoded_args
+            encoded_args = urlencode({'symbol':code,'series':series, 'illiquid':'0'})
+            return self.get_quote_url + encoded_args 
         else:
             raise Exception('code must be string')
 
