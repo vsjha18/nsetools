@@ -52,7 +52,7 @@ class Nse(AbstractBaseExchange):
         self.opener = self.nse_opener()
         self.headers = self.nse_headers()
         # URL list
-        self.get_quote_url = 'http://nseindia.com/live_market/dynaContent/live_watch/get_quote/GetQuote.jsp?'
+        self.get_quote_url = 'https://www.nseindia.com/live_market/dynaContent/live_watch/get_quote/GetQuote.jsp?'
         self.stocks_csv_url = 'http://www.nseindia.com/content/equities/EQUITY_L.csv'
         self.top_gainer_url = 'http://www.nseindia.com/live_market/dynaContent/live_analysis/gainers/niftyGainers1.json'
         self.top_loser_url = 'http://www.nseindia.com/live_market/dynaContent/live_analysis/losers/niftyLosers1.json'
@@ -105,6 +105,7 @@ class Nse(AbstractBaseExchange):
         :return: dict or None
         :raises: HTTPError, URLError
         """
+        code = code.upper()
         if self.is_valid_code(code):
             url = self.build_url_for_quote(code)
             req = Request(url, None, self.headers)
@@ -240,7 +241,7 @@ class Nse(AbstractBaseExchange):
         return {'Accept' : '*/*',
                 'Accept-Language' : 'en-US,en;q=0.5',
                 'Host': 'nseindia.com',
-                'Referer': 'http://nseindia.com/live_market/dynaContent/live_watch/get_quote/GetQuote.jsp?symbol=INFY&illiquid=0',
+                'Referer': "https://www.nseindia.com/live_market/dynaContent/live_watch/get_quote/GetQuote.jsp?symbol=INFY&illiquid=0&smeFlag=0&itpFlag=0",
                 'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0',
                 'X-Requested-With': 'XMLHttpRequest'
             }
@@ -260,7 +261,7 @@ class Nse(AbstractBaseExchange):
         :return: a url object
         """
         if code is not None and type(code) is str:
-            encoded_args = urlencode({'symbol':code, 'illiquid':'0'})
+            encoded_args = urlencode([('symbol', code), ('illiquid', '0'), ('smeFlag', '0'), ('itpFlag', '0')])
             return self.get_quote_url + encoded_args
         else:
             raise Exception('code must be string')
