@@ -2,6 +2,11 @@ Project Page
 =============
 http://vsjha.in/nsetools
 
+Updates
+=========
+
+To stay updated please subscribe to google group https://groups.google.com/forum/#!forum/nsetools
+
 nsetools
 ========
 
