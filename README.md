@@ -1,6 +1,6 @@
 Project Page
 =============
-http://vsjha.in/nsetools
+http://nsetools.readthedocs.io
 
 Updates
 =========
