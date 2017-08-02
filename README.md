@@ -36,4 +36,4 @@ To keep it simple and supported on most of the platforms, it uses only core pyth
 Detailed Documenation 
 =====================
 
-For complete documenation, please refer http://vsjha.in/nsetools
+For complete documenation, please refer http://nsetools.readthedocs.io
