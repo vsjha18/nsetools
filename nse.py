@@ -41,6 +41,7 @@ from nsetools.bases import AbstractBaseExchange
 from nsetools.utils import byte_adaptor
 from nsetools.utils import js_adaptor
 
+
 class Nse(AbstractBaseExchange):
     """
     class which implements all the functionality for
@@ -57,7 +58,7 @@ class Nse(AbstractBaseExchange):
         self.top_gainer_url = 'http://www.nseindia.com/live_market/dynaContent/live_analysis/gainers/niftyGainers1.json'
         self.top_loser_url = 'http://www.nseindia.com/live_market/dynaContent/live_analysis/losers/niftyLosers1.json'
         self.advances_declines_url = 'http://www.nseindia.com/common/json/indicesAdvanceDeclines.json'
-        self.index_url="http://www.nseindia.com/homepage/Indices1.json"
+        self.index_url = "http://www.nseindia.com/homepage/Indices1.json"
 
     def get_stock_codes(self, cached=True, as_json=False):
         """
@@ -118,15 +119,16 @@ class Nse(AbstractBaseExchange):
             res = byte_adaptor(res)
 
             # Now parse the response to get the relevant data
-            match = re.search(\
-                        r'\{<div\s+id="responseDiv"\s+style="display:none">\s+(\{.*?\{.*?\}.*?\})',
-                        res.read(), re.S
-                    )
+            match = re.search(
+                r'\{<div\s+id="responseDiv"\s+style="display:none">\s+(\{.*?\{.*?\}.*?\})',
+                res.read(), re.S
+            )
             # ast can raise SyntaxError, let's catch only this error
             try:
                 buffer = match.group(1)
                 buffer = js_adaptor(buffer)
-                response = self.clean_server_response(ast.literal_eval(buffer)['data'][0])
+                response = self.clean_server_response(
+                    ast.literal_eval(buffer)['data'][0])
             except SyntaxError as err:
                 raise Exception('ill formatted response')
             else:
@@ -147,7 +149,8 @@ class Nse(AbstractBaseExchange):
         res = byte_adaptor(res)
         res_dict = json.load(res)
         # clean the output and make appropriate type conversions
-        res_list = [self.clean_server_response(item) for item in res_dict['data']]
+        res_list = [self.clean_server_response(
+            item) for item in res_dict['data']]
         return self.render_response(res_list, as_json)
 
     def get_top_losers(self, as_json=False):
@@ -238,13 +241,13 @@ class Nse(AbstractBaseExchange):
         Builds right set of headers for requesting http://nseindia.com
         :return: a dict with http headers
         """
-        return {'Accept' : '*/*',
-                'Accept-Language' : 'en-US,en;q=0.5',
+        return {'Accept': '*/*',
+                'Accept-Language': 'en-US,en;q=0.5',
                 'Host': 'nseindia.com',
                 'Referer': "https://www.nseindia.com/live_market/dynaContent/live_watch/get_quote/GetQuote.jsp?symbol=INFY&illiquid=0&smeFlag=0&itpFlag=0",
-                'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0',
                 'X-Requested-With': 'XMLHttpRequest'
-            }
+                }
 
     def nse_opener(self):
         """
@@ -261,7 +264,8 @@ class Nse(AbstractBaseExchange):
         :return: a url object
         """
         if code is not None and type(code) is str:
-            encoded_args = urlencode([('symbol', code), ('illiquid', '0'), ('smeFlag', '0'), ('itpFlag', '0')])
+            encoded_args = urlencode(
+                [('symbol', code), ('illiquid', '0'), ('smeFlag', '0'), ('itpFlag', '0')])
             return self.get_quote_url + encoded_args
         else:
             raise Exception('code must be string')
@@ -281,9 +285,9 @@ class Nse(AbstractBaseExchange):
         resp_dict = d
         for key, value in resp_dict.items():
             if type(value) is str or isinstance(value, six.string_types):
-                if re.match('-', value):
+                if '-' == value:
                     resp_dict[key] = None
-                elif re.search(r'^[0-9,.]+$', value):
+                elif re.search(r'^[-]?[0-9,.]+$', value):
                     # replace , to '', and type cast to int
                     resp_dict[key] = float(re.sub(',', '', value))
                 else:
