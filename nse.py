@@ -287,7 +287,7 @@ class Nse(AbstractBaseExchange):
             if type(value) is str or isinstance(value, six.string_types):
                 if '-' == value:
                     resp_dict[key] = None
-                elif re.search(r'^-[0-9,.]+$', value):
+                elif re.search(r'^[-]?[0-9,.]+$', value):
                     # replace , to '', and type cast to int
                     resp_dict[key] = float(re.sub(',', '', value))
                 else:
