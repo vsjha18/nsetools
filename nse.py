@@ -345,7 +345,6 @@ class Nse(AbstractBaseExchange):
 if __name__ == "__main__":
     n = Nse()
     data = n.download_bhavcopy("14th Dec")
-    print(data)
 # TODO: get_most_active()
 # TODO: get_top_volume()
 # TODO: get_peer_companies()
