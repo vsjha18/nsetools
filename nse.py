@@ -37,6 +37,9 @@ elif six.PY3:
 import ast
 import re
 import json
+import zipfile
+import io
+from dateutil import parser
 from nsetools.bases import AbstractBaseExchange
 from nsetools.utils import byte_adaptor
 from nsetools.utils import js_adaptor
@@ -58,6 +61,8 @@ class Nse(AbstractBaseExchange):
         self.top_loser_url = 'http://www.nseindia.com/live_market/dynaContent/live_analysis/losers/niftyLosers1.json'
         self.advances_declines_url = 'http://www.nseindia.com/common/json/indicesAdvanceDeclines.json'
         self.index_url="http://www.nseindia.com/homepage/Indices1.json"
+        self.bhavcopy_base_url = "https://www.nseindia.com/content/historical/EQUITIES/%s/%s/cm%s%s%sbhav.csv.zip"
+        self.bhavcopy_base_filename = "cm%s%s%sbhav.csv"
 
     def get_stock_codes(self, cached=True, as_json=False):
         """
@@ -296,6 +301,39 @@ class Nse(AbstractBaseExchange):
         else:
             return data
 
+    def get_bhavcopy_url(self, d):
+        """take date and return bhavcopy url"""
+        d = parser.parse(d).date()
+        day_of_month = d.strftime("%d")
+        mon = d.strftime("%b").upper()
+        year = d.year
+        url = self.bhavcopy_base_url % (year, mon, day_of_month, mon, year)
+        return url
+
+    def get_bhavcopy_filename(self, d):
+        d = parser.parse(d).date()
+        day_of_month = d.strftime("%d")
+        mon = d.strftime("%b").upper()
+        year = d.year
+        filename = self.bhavcopy_base_filename % (day_of_month, mon, year)
+        return filename
+
+    def download_bhavcopy(self, d):
+        """returns bhavcopy as csv file."""
+        # ex_url = "https://www.nseindia.com/content/historical/EQUITIES/2011/NOV/cm08NOV2011bhav.csv.zip"
+        url = self.get_bhavcopy_url(d)
+        filename = self.get_bhavcopy_filename(d)
+        # response = requests.get(url, headers=self.headers)
+        response = self.opener.open(Request(url, None, self.headers))
+        zip_file_handle = io.BytesIO(response.read())
+        zf = zipfile.ZipFile(zip_file_handle)
+        return zf.read(filename)
+
+
+    def download_index_copy(self, d):
+        """returns index copy file"""
+        pass
+
     def __str__(self):
         """
         string representation of object
@@ -303,9 +341,16 @@ class Nse(AbstractBaseExchange):
         """
         return 'Driver Class for National Stock Exchange (NSE)'
 
+
+if __name__ == "__main__":
+    n = Nse()
+    data = n.download_bhavcopy("14th Dec")
+    print(data)
 # TODO: get_most_active()
 # TODO: get_top_volume()
 # TODO: get_peer_companies()
 # TODO: is_market_open()
 # TODO: concept of portfolio for fetching price in a batch and field which should be captured
 # TODO: Concept of session, just like as in sqlalchemy
+
+
