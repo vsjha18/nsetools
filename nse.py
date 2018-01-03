@@ -63,6 +63,34 @@ class Nse(AbstractBaseExchange):
         self.index_url="http://www.nseindia.com/homepage/Indices1.json"
         self.bhavcopy_base_url = "https://www.nseindia.com/content/historical/EQUITIES/%s/%s/cm%s%s%sbhav.csv.zip"
         self.bhavcopy_base_filename = "cm%s%s%sbhav.csv"
+        self.fno_lot_size_url = "https://www.nseindia.com/content/fo/fo_mktlots.csv"
+
+    def get_fno_lot_sizes(self, cached=True, as_json=False):
+        """
+        returns a dictionary with key as stock code and value as stock name.
+        It also implements cache functionality and hits the server only
+        if user insists or cache is empty
+        :return: dict
+        """
+        url = self.fno_lot_size_url
+        req = Request(url, None, self.headers)
+        res_dict = {}
+        if cached is not True or self.__CODECACHE__ is None:
+            # raises HTTPError and URLError
+            res = self.opener.open(req)
+            if res is not None:
+                # for py3 compat covert byte file like object to
+                # string file like object
+                res = byte_adaptor(res)
+                for line in res.read().split('\n'):
+                    if line != '' and re.search(',', line) and (line.casefold().find('symbol') == -1):
+                        (code, name) = [x.strip() for x in line.split(',')[1:3]]
+                        res_dict[code] = int(name)
+                    # else just skip the evaluation, line may not be a valid csv
+            else:
+                raise Exception('no response received')
+            self.__CODECACHE__ = res_dict
+        return self.render_response(self.__CODECACHE__, as_json)
 
     def get_stock_codes(self, cached=True, as_json=False):
         """
