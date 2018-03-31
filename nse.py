@@ -63,6 +63,9 @@ class Nse(AbstractBaseExchange):
         self.index_url="http://www.nseindia.com/homepage/Indices1.json"
         self.bhavcopy_base_url = "https://www.nseindia.com/content/historical/EQUITIES/%s/%s/cm%s%s%sbhav.csv.zip"
         self.bhavcopy_base_filename = "cm%s%s%sbhav.csv"
+        self.active_equity_monthly_url = "https://www.nseindia.com/products/dynaContent/equities/equities/json/mostActiveMonthly.json"
+        self.year_high_url = "https://www.nseindia.com/products/dynaContent/equities/equities/json/online52NewHigh.json"
+        self.year_low_url = "https://www.nseindia.com/products/dynaContent/equities/equities/json/online52NewLow.json"
 
     def get_stock_codes(self, cached=True, as_json=False):
         """
@@ -204,6 +207,31 @@ class Nse(AbstractBaseExchange):
         resp_list = json.load(resp)['data']
         index_list = [str(item['name']) for item in resp_list]
         return self.render_response(index_list, as_json)
+
+    def get_active_monthly(self, as_json=False):
+        return self._get_json_response_from_url(self.active_equity_monthly_url, as_json)
+
+    def get_year_high(self, as_json=False):
+        return self._get_json_response_from_url(self.year_high_url, as_json)
+
+    def get_year_low(self, as_json=False):
+        return self._get_json_response_from_url(self.year_low_url, as_json)
+
+    def _get_json_response_from_url(self, url, as_json):
+        """
+        :return: a list of dictionaries containing the response got back from url
+        """
+        req = Request(url, None, self.headers)
+        # this can raise HTTPError and URLError
+        res = self.opener.open(req)
+        # for py3 compat covert byte file like object to
+        # string file like object
+        res = byte_adaptor(res)
+        res_dict = json.load(res)
+        # clean the output and make appropriate type conversions
+        res_list = [self.clean_server_response(item)
+                    for item in res_dict['data']]
+        return self.render_response(res_list, as_json)
 
     def is_valid_index(self, code):
         """
