@@ -66,6 +66,9 @@ class Nse(AbstractBaseExchange):
         self.active_equity_monthly_url = "https://www.nseindia.com/products/dynaContent/equities/equities/json/mostActiveMonthly.json"
         self.year_high_url = "https://www.nseindia.com/products/dynaContent/equities/equities/json/online52NewHigh.json"
         self.year_low_url = "https://www.nseindia.com/products/dynaContent/equities/equities/json/online52NewLow.json"
+        self.preopen_nifty_url = "https://www.nseindia.com/live_market/dynaContent/live_analysis/pre_open/nifty.json"
+        self.preopen_fno_url = "https://www.nseindia.com/live_market/dynaContent/live_analysis/pre_open/fo.json"
+        self.preopen_niftybank_url = "https://www.nseindia.com/live_market/dynaContent/live_analysis/pre_open/niftybank.json"
 
     def get_stock_codes(self, cached=True, as_json=False):
         """
@@ -216,6 +219,15 @@ class Nse(AbstractBaseExchange):
 
     def get_year_low(self, as_json=False):
         return self._get_json_response_from_url(self.year_low_url, as_json)
+    
+    def get_preopen_nifty(self, as_json=False):
+        return self._get_json_response_from_url(self.preopen_nifty_url, as_json)
+
+    def get_preopen_niftybank(self, as_json=False):
+        return self._get_json_response_from_url(self.preopen_niftybank_url, as_json)
+
+    def get_preopen_fno(self, as_json=False):
+        return self._get_json_response_from_url(self.preopen_fno_url, as_json)
 
     def _get_json_response_from_url(self, url, as_json):
         """
