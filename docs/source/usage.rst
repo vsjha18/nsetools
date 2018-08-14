@@ -394,4 +394,23 @@ False
 
 .. disqus::
 
+Getting Lot Sizes
+------------------
 
+In order to get the F&O lot sizes of all the stocks and indices. You
+can do the following.
+
+.. version_added:: 1.0.7
+
+>>> nse.get_fno_lot_sizes()
+{'BANKNIFTY': 40,
+ 'NIFTYCPSE': 250,
+ 'FTSE100': 100,
+ 'NIFTYIT': 50,
+ 'NIFTY': 75,
+ 'NIFTYPSE': 200,
+ 'NIFTYMID50': 110,
+ .
+ .
+ .
+ }

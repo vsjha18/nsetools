@@ -14,3 +14,5 @@ Release History & Change Log
 1.0.5 : Handled url format change in nseindia website
 
 1.0.6 : Fixed the bug related to "negative change" in stock price.
+
+1.0.7 : Added support for getting F&O lot sizes.

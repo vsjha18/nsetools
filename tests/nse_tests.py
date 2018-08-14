@@ -202,5 +202,9 @@ class TestCoreAPIs(unittest.TestCase):
         ret_file_buffer = byte_adaptor(fbuffer)
         self.assertIsInstance(ret_file_buffer, six.StringIO)
 
+    def test_nse_lot_sizes(self):
+        data = self.nse.get_fno_lot_sizes()
+        self.assertIsInstance(data, dict)
+
 if __name__ == '__main__':
     unittest.main()
