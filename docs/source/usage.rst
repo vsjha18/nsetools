@@ -392,7 +392,6 @@ False
     invalid, then the APIs return None. It doesn't raise exception as one 
     might expect.
 
-.. disqus::
 
 Getting Lot Sizes
 ------------------
@@ -414,3 +413,6 @@ can do the following.
  .
  .
  }
+
+ 
+ .. disqus::
