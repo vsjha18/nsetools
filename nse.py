@@ -58,6 +58,8 @@ class Nse(AbstractBaseExchange):
         self.stocks_csv_url = 'http://www.nseindia.com/content/equities/EQUITY_L.csv'
         self.top_gainer_url = 'http://www.nseindia.com/live_market/dynaContent/live_analysis/gainers/niftyGainers1.json'
         self.top_loser_url = 'http://www.nseindia.com/live_market/dynaContent/live_analysis/losers/niftyLosers1.json'
+        self.top_fno_gainer_url = 'https://www.nseindia.com/live_market/dynaContent/live_analysis/gainers/fnoGainers1.json'
+        self.top_fno_loser_url = 'https://www.nseindia.com/live_market/dynaContent/live_analysis/losers/fnoLosers1.json'
         self.advances_declines_url = 'http://www.nseindia.com/common/json/indicesAdvanceDeclines.json'
         self.index_url="http://www.nseindia.com/homepage/Indices1.json"
         self.bhavcopy_base_url = "https://www.nseindia.com/content/historical/EQUITIES/%s/%s/cm%s%s%sbhav.csv.zip"
@@ -187,6 +189,39 @@ class Nse(AbstractBaseExchange):
         :return: a list of dictionaries containing top losers of the day
         """
         url = self.top_loser_url
+        req = Request(url, None, self.headers)
+        # this can raise HTTPError and URLError
+        res = self.opener.open(req)
+        # for py3 compat covert byte file like object to
+        # string file like object
+        res = byte_adaptor(res)
+        res_dict = json.load(res)
+        # clean the output and make appropriate type conversions
+        res_list = [self.clean_server_response(item)
+                    for item in res_dict['data']]
+        return self.render_response(res_list, as_json)
+
+    def get_top_fno_gainers(self, as_json=False):
+        """
+        :return: a list of dictionaries containing top gainers in fno of the day
+        """
+        url = self.top_fno_gainer_url
+        req = Request(url, None, self.headers)
+        # this can raise HTTPError and URLError
+        res = self.opener.open(req)
+        # for py3 compat covert byte file like object to
+        # string file like object
+        res = byte_adaptor(res)
+        res_dict = json.load(res)
+        # clean the output and make appropriate type conversions
+        res_list = [self.clean_server_response(item) for item in res_dict['data']]
+        return self.render_response(res_list, as_json)
+
+    def get_top_fno_losers(self, as_json=False):
+        """
+        :return: a list of dictionaries containing top losers of the day
+        """
+        url = self.top_fno_loser_url
         req = Request(url, None, self.headers)
         # this can raise HTTPError and URLError
         res = self.opener.open(req)
