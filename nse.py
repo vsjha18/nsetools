@@ -58,7 +58,8 @@ class Nse(AbstractBaseExchange):
         self.stocks_csv_url = 'http://www.nseindia.com/content/equities/EQUITY_L.csv'
         self.top_gainer_url = 'http://www.nseindia.com/live_market/dynaContent/live_analysis/gainers/niftyGainers1.json'
         self.top_loser_url = 'http://www.nseindia.com/live_market/dynaContent/live_analysis/losers/niftyLosers1.json'
-        self.top_fno_gainer_url = 'https://www.nseindia.com/live_market/dynaContent/live_analysis/gainers/fnoGainers1.json'
+        self.top_fno_gainer_url\
+            = 'https://www.nseindia.com/live_market/dynaContent/live_analysis/gainers/fnoGainers1.json'
         self.top_fno_loser_url = 'https://www.nseindia.com/live_market/dynaContent/live_analysis/losers/fnoLosers1.json'
         self.advances_declines_url = 'http://www.nseindia.com/common/json/indicesAdvanceDeclines.json'
         self.index_url="http://www.nseindia.com/homepage/Indices1.json"
@@ -305,13 +306,14 @@ class Nse(AbstractBaseExchange):
         Builds right set of headers for requesting http://nseindia.com
         :return: a dict with http headers
         """
-        return {'Accept' : '*/*',
-                'Accept-Language' : 'en-US,en;q=0.5',
+        return {'Accept': '*/*',
+                'Accept-Language': 'en-US,en;q=0.5',
                 'Host': 'nseindia.com',
-                'Referer': "https://www.nseindia.com/live_market/dynaContent/live_watch/get_quote/GetQuote.jsp?symbol=INFY&illiquid=0&smeFlag=0&itpFlag=0",
-                'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0',
+                'Referer': "https://www.nseindia.com/live_market\
+                /dynaContent/live_watch/get_quote/GetQuote.jsp?symbol=INFY&illiquid=0&smeFlag=0&itpFlag=0",
+                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0',
                 'X-Requested-With': 'XMLHttpRequest'
-            }
+                }
 
     def nse_opener(self):
         """
