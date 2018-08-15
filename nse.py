@@ -22,18 +22,7 @@
     SOFTWARE.
 
 """
-import sys
 import six
-
-# import paths differ in python 2 and python 3
-if six.PY2:
-    from urllib2 import build_opener, HTTPCookieProcessor, Request
-    from urllib import urlencode
-    from cookielib import CookieJar
-elif six.PY3:
-    from urllib.request import build_opener, HTTPCookieProcessor, Request
-    from urllib.parse import urlencode
-    from http.cookiejar import CookieJar
 import ast
 import re
 import json
@@ -43,6 +32,16 @@ from dateutil import parser
 from nsetools.bases import AbstractBaseExchange
 from nsetools.utils import byte_adaptor
 from nsetools.utils import js_adaptor
+# import paths differ in python 2 and python 3
+if six.PY2:
+    from urllib2 import build_opener, HTTPCookieProcessor, Request
+    from urllib import urlencode
+    from cookielib import CookieJar
+elif six.PY3:
+    from urllib.request import build_opener, HTTPCookieProcessor, Request
+    from urllib.parse import urlencode
+    from http.cookiejar import CookieJar
+
 
 class Nse(AbstractBaseExchange):
     """
@@ -361,7 +360,6 @@ class Nse(AbstractBaseExchange):
         zf = zipfile.ZipFile(zip_file_handle)
         return zf.read(filename)
 
-
     def download_index_copy(self, d):
         """returns index copy file"""
         pass
@@ -384,5 +382,3 @@ if __name__ == "__main__":
 # TODO: is_market_open()
 # TODO: concept of portfolio for fetching price in a batch and field which should be captured
 # TODO: Concept of session, just like as in sqlalchemy
-
-
