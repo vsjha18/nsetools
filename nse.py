@@ -437,7 +437,12 @@ class Nse(AbstractBaseExchange):
         response = self.opener.open(Request(url, None, self.headers))
         zip_file_handle = io.BytesIO(response.read())
         zf = zipfile.ZipFile(zip_file_handle)
-        return zf.read(filename)
+        try:
+            result = zf.read(filename)
+        except KeyError:
+            result = zf.read(zf.filelist[0].filename)
+
+        return result
 
     def download_index_copy(self, d):
         """returns index copy file"""
