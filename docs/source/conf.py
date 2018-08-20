@@ -33,7 +33,7 @@ sys.path.append(os.path.abspath('../../../'))
 
 googleanalytics_id = 'UA-59243939-1'
 googleanalytics_enabled = True
-extensions = ['sphinx.ext.autodoc', 'sphinxcontrib.newsfeed', 'sphinxcontrib.googleanalytics']
+extensions = ['sphinx.ext.autodoc', 'sphinxcontrib.newsfeed', 'sphinxcontrib.googleanalytics', 'sphinxcontrib-disqus']
 
 disqus_shortname =  'vsjha'
 

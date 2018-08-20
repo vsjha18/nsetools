@@ -16,3 +16,5 @@ Release History & Change Log
 1.0.6 : Fixed the bug related to "negative change" in stock price.
 
 1.0.7 : Added support for getting F&O lot sizes.
+
+1.0.8 : Few build issues.
