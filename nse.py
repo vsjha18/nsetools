@@ -22,18 +22,7 @@
     SOFTWARE.
 
 """
-import sys
 import six
-
-# import paths differ in python 2 and python 3
-if six.PY2:
-    from urllib2 import build_opener, HTTPCookieProcessor, Request
-    from urllib import urlencode
-    from cookielib import CookieJar
-elif six.PY3:
-    from urllib.request import build_opener, HTTPCookieProcessor, Request
-    from urllib.parse import urlencode
-    from http.cookiejar import CookieJar
 import ast
 import re
 import json
@@ -43,6 +32,16 @@ from dateutil import parser
 from nsetools.bases import AbstractBaseExchange
 from nsetools.utils import byte_adaptor
 from nsetools.utils import js_adaptor
+# import paths differ in python 2 and python 3
+if six.PY2:
+    from urllib2 import build_opener, HTTPCookieProcessor, Request
+    from urllib import urlencode
+    from cookielib import CookieJar
+elif six.PY3:
+    from urllib.request import build_opener, HTTPCookieProcessor, Request
+    from urllib.parse import urlencode
+    from http.cookiejar import CookieJar
+
 
 class Nse(AbstractBaseExchange):
     """
@@ -59,10 +58,21 @@ class Nse(AbstractBaseExchange):
         self.stocks_csv_url = 'http://www.nseindia.com/content/equities/EQUITY_L.csv'
         self.top_gainer_url = 'http://www.nseindia.com/live_market/dynaContent/live_analysis/gainers/niftyGainers1.json'
         self.top_loser_url = 'http://www.nseindia.com/live_market/dynaContent/live_analysis/losers/niftyLosers1.json'
+        self.top_fno_gainer_url\
+            = 'https://www.nseindia.com/live_market/dynaContent/live_analysis/gainers/fnoGainers1.json'
+        self.top_fno_loser_url = 'https://www.nseindia.com/live_market/dynaContent/live_analysis/losers/fnoLosers1.json'
         self.advances_declines_url = 'http://www.nseindia.com/common/json/indicesAdvanceDeclines.json'
         self.index_url="http://www.nseindia.com/homepage/Indices1.json"
         self.bhavcopy_base_url = "https://www.nseindia.com/content/historical/EQUITIES/%s/%s/cm%s%s%sbhav.csv.zip"
         self.bhavcopy_base_filename = "cm%s%s%sbhav.csv"
+        self.active_equity_monthly_url =\
+            "https://www.nseindia.com/products/dynaContent/equities/equities/json/mostActiveMonthly.json"
+        self.year_high_url = "https://www.nseindia.com/products/dynaContent/equities/equities/json/online52NewHigh.json"
+        self.year_low_url = "https://www.nseindia.com/products/dynaContent/equities/equities/json/online52NewLow.json"
+        self.preopen_nifty_url = "https://www.nseindia.com/live_market/dynaContent/live_analysis/pre_open/nifty.json"
+        self.preopen_fno_url = "https://www.nseindia.com/live_market/dynaContent/live_analysis/pre_open/fo.json"
+        self.preopen_niftybank_url =\
+            "https://www.nseindia.com/live_market/dynaContent/live_analysis/pre_open/niftybank.json"
         self.fno_lot_size_url = "https://www.nseindia.com/content/fo/fo_mktlots.csv"
 
     def get_fno_lot_sizes(self, cached=True, as_json=False):
@@ -200,6 +210,39 @@ class Nse(AbstractBaseExchange):
                     for item in res_dict['data']]
         return self.render_response(res_list, as_json)
 
+    def get_top_fno_gainers(self, as_json=False):
+        """
+        :return: a list of dictionaries containing top gainers in fno of the day
+        """
+        url = self.top_fno_gainer_url
+        req = Request(url, None, self.headers)
+        # this can raise HTTPError and URLError
+        res = self.opener.open(req)
+        # for py3 compat covert byte file like object to
+        # string file like object
+        res = byte_adaptor(res)
+        res_dict = json.load(res)
+        # clean the output and make appropriate type conversions
+        res_list = [self.clean_server_response(item) for item in res_dict['data']]
+        return self.render_response(res_list, as_json)
+
+    def get_top_fno_losers(self, as_json=False):
+        """
+        :return: a list of dictionaries containing top losers of the day
+        """
+        url = self.top_fno_loser_url
+        req = Request(url, None, self.headers)
+        # this can raise HTTPError and URLError
+        res = self.opener.open(req)
+        # for py3 compat covert byte file like object to
+        # string file like object
+        res = byte_adaptor(res)
+        res_dict = json.load(res)
+        # clean the output and make appropriate type conversions
+        res_list = [self.clean_server_response(item)
+                    for item in res_dict['data']]
+        return self.render_response(res_list, as_json)
+
     def get_advances_declines(self, as_json=False):
         """
         :return: a list of dictionaries with advance decline data
@@ -232,6 +275,40 @@ class Nse(AbstractBaseExchange):
         resp_list = json.load(resp)['data']
         index_list = [str(item['name']) for item in resp_list]
         return self.render_response(index_list, as_json)
+
+    def get_active_monthly(self, as_json=False):
+        return self._get_json_response_from_url(self.active_equity_monthly_url, as_json)
+
+    def get_year_high(self, as_json=False):
+        return self._get_json_response_from_url(self.year_high_url, as_json)
+
+    def get_year_low(self, as_json=False):
+        return self._get_json_response_from_url(self.year_low_url, as_json)
+    
+    def get_preopen_nifty(self, as_json=False):
+        return self._get_json_response_from_url(self.preopen_nifty_url, as_json)
+
+    def get_preopen_niftybank(self, as_json=False):
+        return self._get_json_response_from_url(self.preopen_niftybank_url, as_json)
+
+    def get_preopen_fno(self, as_json=False):
+        return self._get_json_response_from_url(self.preopen_fno_url, as_json)
+
+    def _get_json_response_from_url(self, url, as_json):
+        """
+        :return: a list of dictionaries containing the response got back from url
+        """
+        req = Request(url, None, self.headers)
+        # this can raise HTTPError and URLError
+        res = self.opener.open(req)
+        # for py3 compat covert byte file like object to
+        # string file like object
+        res = byte_adaptor(res)
+        res_dict = json.load(res)
+        # clean the output and make appropriate type conversions
+        res_list = [self.clean_server_response(item)
+                    for item in res_dict['data']]
+        return self.render_response(res_list, as_json)
 
     def is_valid_index(self, code):
         """
@@ -271,13 +348,14 @@ class Nse(AbstractBaseExchange):
         Builds right set of headers for requesting http://nseindia.com
         :return: a dict with http headers
         """
-        return {'Accept' : '*/*',
-                'Accept-Language' : 'en-US,en;q=0.5',
+        return {'Accept': '*/*',
+                'Accept-Language': 'en-US,en;q=0.5',
                 'Host': 'nseindia.com',
-                'Referer': "https://www.nseindia.com/live_market/dynaContent/live_watch/get_quote/GetQuote.jsp?symbol=INFY&illiquid=0&smeFlag=0&itpFlag=0",
-                'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0',
+                'Referer': "https://www.nseindia.com/live_market\
+                /dynaContent/live_watch/get_quote/GetQuote.jsp?symbol=INFY&illiquid=0&smeFlag=0&itpFlag=0",
+                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0',
                 'X-Requested-With': 'XMLHttpRequest'
-            }
+                }
 
     def nse_opener(self):
         """
@@ -359,8 +437,12 @@ class Nse(AbstractBaseExchange):
         response = self.opener.open(Request(url, None, self.headers))
         zip_file_handle = io.BytesIO(response.read())
         zf = zipfile.ZipFile(zip_file_handle)
-        return zf.read(filename)
+        try:
+            result = zf.read(filename)
+        except KeyError:
+            result = zf.read(zf.filelist[0].filename)
 
+        return result
 
     def download_index_copy(self, d):
         """returns index copy file"""
@@ -384,5 +466,3 @@ if __name__ == "__main__":
 # TODO: is_market_open()
 # TODO: concept of portfolio for fetching price in a batch and field which should be captured
 # TODO: Concept of session, just like as in sqlalchemy
-
-

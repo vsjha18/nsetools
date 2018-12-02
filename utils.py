@@ -24,7 +24,7 @@
 """
 import six
 import re
-import sys
+
 
 def byte_adaptor(fbuffer):
     """ provides py3 compatibility by converting byte based

@@ -13,16 +13,17 @@ from nsetools.utils import js_adaptor, byte_adaptor
 log = logging.getLogger('nse')
 logging.basicConfig(level=logging.DEBUG)
 
+
 class TestCoreAPIs(unittest.TestCase):
     def setUp(self):
         self.nse = Nse()
 
     def test_string_representation(self):
-        self.assertEqual(str(self.nse) ,
-                         "Driver Class for National Stock Exchange (NSE)")
+        self.assertEqual(str(self.nse), "Driver Class for National Stock Exchange (NSE)")
 
     def test_instantiate_abs_class(self):
-        class Exchange(AbstractBaseExchange): pass
+        class Exchange(AbstractBaseExchange):
+            pass
         with self.assertRaises(TypeError):
             exc = Exchange()
 
@@ -205,6 +206,47 @@ class TestCoreAPIs(unittest.TestCase):
     def test_nse_lot_sizes(self):
         data = self.nse.get_fno_lot_sizes()
         self.assertIsInstance(data, dict)
+
+    def test_6th_Dec_1994(self):
+        data = self.nse.download_bhavcopy('1994-12-06')
+        self.assertIsInstance(self, data, bytes)
+
+    def test_top_fno_gainers_losers(self):
+        fno_gainer = self.nse.get_top_fno_gainers()
+        self.assertIsInstance(fno_gainer, list)
+        fno_gainer_json = self.nse.get_top_fno_gainers()
+        self.assertIsInstance(fno_gainer_json, str)
+        fno_loser = self.nse.get_top_fno_losers()
+        self.assertIsInstance(fno_loser, list)
+        fno_loser_json = self.nse.get_top_fno_losers()
+        self.assertIsInstance(fno_loser_json, str)
+
+    def test_statistics(self):
+        active = self.nse.get_active_monthly()
+        self.assertIsInstance(active, list)
+        active_json = self.nse.get_active_monthly(as_json=True)
+        self.assertIsInstance(active_json, str)
+        yr_high = self.nse.get_year_high()
+        self.assertIsInstance(yr_high, list)
+        yr_high_json = self.nse.get_year_high(as_json=True)
+        self.assertIsInstance(yr_high_json, str)
+        yr_low = self.nse.get_year_low()
+        self.assertIsInstance(yr_low, list)
+        yr_low_json = self.nse.get_year_low(as_json=True)
+        self.assertIsInstance(yr_low_json, str)
+        preopen = self.nse.get_preopen_nifty()
+        self.assertIsInstance(preopen, list)
+        preopen_json = self.nse.get_preopen_nifty(as_json=True)
+        self.assertIsInstance(preopen_json, str)
+        preopen_nb = self.nse.get_preopen_niftybank()
+        self.assertIsInstance(preopen_nb, list)
+        preopen_nb_json = self.nse.get_preopen_niftybank(as_json=True)
+        self.assertIsInstance(preopen_nb_json, str)
+        preopen_fno = self.nse.get_preopen_fno()
+        self.assertIsInstance(preopen_fno, list)
+        preopen_fno_json = self.nse.get_preopen_fno(as_json=True)
+        self.assertIsInstance(preopen_fno_json, str)
+
 
 if __name__ == '__main__':
     unittest.main()
