@@ -46,7 +46,7 @@ Update
 
 To updated to the lasted version::
 
-    pip install nsetools --update
+    pip install nsetools --upgrade
 
 Python 3 Support
 ================
