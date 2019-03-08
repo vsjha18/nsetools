@@ -23,15 +23,17 @@
 
 """
 import six
-import ast
+# import ast
 import re
 import json
-import zipfile
 import io
+import requests
+import zipfile
+from bs4 import BeautifulSoup as bs
 from dateutil import parser
 from nsetools.bases import AbstractBaseExchange
 from nsetools.utils import byte_adaptor
-from nsetools.utils import js_adaptor
+# from nsetools.utils import js_adaptor
 # import paths differ in python 2 and python 3
 if six.PY2:
     from urllib2 import build_opener, HTTPCookieProcessor, Request
@@ -48,7 +50,8 @@ class Nse(AbstractBaseExchange):
     class which implements all the functionality for
     National Stock Exchange
     """
-    __CODECACHE__ = None
+    __STOCKCODECACHE__ = None
+    __FNOCODECACHE__ = None
 
     def __init__(self):
         self.opener = self.nse_opener()
@@ -85,7 +88,7 @@ class Nse(AbstractBaseExchange):
         url = self.fno_lot_size_url
         req = Request(url, None, self.headers)
         res_dict = {}
-        if cached is not True or self.__CODECACHE__ is None:
+        if cached is not True or self.__FNOCODECACHE__ is None:
             # raises HTTPError and URLError
             res = self.opener.open(req)
             if res is not None:
@@ -99,8 +102,8 @@ class Nse(AbstractBaseExchange):
                     # else just skip the evaluation, line may not be a valid csv
             else:
                 raise Exception('no response received')
-            self.__CODECACHE__ = res_dict
-        return self.render_response(self.__CODECACHE__, as_json)
+            self.__FNOCODECACHE__ = res_dict
+        return self.render_response(self.__FNOCODECACHE__, as_json)
 
     def get_stock_codes(self, cached=True, as_json=False):
         """
@@ -112,7 +115,7 @@ class Nse(AbstractBaseExchange):
         url = self.stocks_csv_url
         req = Request(url, None, self.headers)
         res_dict = {}
-        if cached is not True or self.__CODECACHE__ is None:
+        if cached is not True or self.__STOCKCODECACHE__ is None:
             # raises HTTPError and URLError
             res = self.opener.open(req)
             if res is not None:
@@ -126,8 +129,8 @@ class Nse(AbstractBaseExchange):
                     # else just skip the evaluation, line may not be a valid csv
             else:
                 raise Exception('no response received')
-            self.__CODECACHE__ = res_dict
-        return self.render_response(self.__CODECACHE__, as_json)
+            self.__STOCKCODECACHE__ = res_dict
+        return self.render_response(self.__STOCKCODECACHE__, as_json)
 
     def is_valid_code(self, code):
         """
@@ -151,29 +154,15 @@ class Nse(AbstractBaseExchange):
         code = code.upper()
         if self.is_valid_code(code):
             url = self.build_url_for_quote(code)
-            req = Request(url, None, self.headers)
-            # this can raise HTTPError and URLError, but we are not handling it
-            # north bound APIs should use it for exception handling
-            res = self.opener.open(req)
-
-            # for py3 compat covert byte file like object to
-            # string file like object
-            res = byte_adaptor(res)
-
-            # Now parse the response to get the relevant data
-            match = re.search(\
-                        r'\{<div\s+id="responseDiv"\s+style="display:none">\s+(\{.*?\{.*?\}.*?\})',
-                        res.read(), re.S
-                    )
-            # ast can raise SyntaxError, let's catch only this error
             try:
-                buffer = match.group(1)
-                buffer = js_adaptor(buffer)
-                response = self.clean_server_response(ast.literal_eval(buffer)['data'][0])
+                buffer = bs(requests.get(url).text, 'lxml')
+                response = buffer.find_all('div', id='responseDiv')
+                response = self.clean_server_response(
+                                                json.loads(response[0].text))
             except SyntaxError as err:
-                raise Exception('ill formatted response')
+                raise Exception(f'ill formatted response {err}')
             else:
-                return self.render_response(response, as_json)
+                return self.render_response(response['data'][0], as_json)
         else:
             return None
 
@@ -284,7 +273,7 @@ class Nse(AbstractBaseExchange):
 
     def get_year_low(self, as_json=False):
         return self._get_json_response_from_url(self.year_low_url, as_json)
-    
+
     def get_preopen_nifty(self, as_json=False):
         return self._get_json_response_from_url(self.preopen_nifty_url, as_json)
 
@@ -457,8 +446,9 @@ class Nse(AbstractBaseExchange):
 
 
 if __name__ == "__main__":
-    n = Nse()
-    data = n.download_bhavcopy("14th Dec")
+    nse = Nse()
+    # n.get_quote('SBIN')
+    # data = n.download_bhavcopy("14th Dec")
 
 # TODO: get_most_active()
 # TODO: get_top_volume()
