@@ -214,11 +214,11 @@ class TestCoreAPIs(unittest.TestCase):
     def test_top_fno_gainers_losers(self):
         fno_gainer = self.nse.get_top_fno_gainers()
         self.assertIsInstance(fno_gainer, list)
-        fno_gainer_json = self.nse.get_top_fno_gainers()
+        fno_gainer_json = self.nse.get_top_fno_gainers(as_json=True)
         self.assertIsInstance(fno_gainer_json, str)
         fno_loser = self.nse.get_top_fno_losers()
         self.assertIsInstance(fno_loser, list)
-        fno_loser_json = self.nse.get_top_fno_losers()
+        fno_loser_json = self.nse.get_top_fno_losers(as_json=True)
         self.assertIsInstance(fno_loser_json, str)
 
     def test_statistics(self):
