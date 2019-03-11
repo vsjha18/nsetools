@@ -128,23 +128,29 @@ which are traded in a market.
 
 This is true with **NSE** as well. This is how we will get quote for *CNX NIFTY* and *BANK NIFTY*
 
->>> nifty_quote = nse.get_index_quote('cnx nifty') # code can be provided in upper|lower case.
->>> banknifty_quote = nse.get_index_quote('banknifty') # code can be provided in upper|lower case.
->>> pprint(nifty_quote)
-{'change': 94.6,
- 'imgFileName': 'CNX_NIFTY_open.png',
- 'lastPrice': 8378.6,
- 'name': 'CNX NIFTY',
- 'pChange': 1.14}
->>>
->>> pprint(banknifty_quote)
-{'change': 286.9,
- 'imgFileName': 'BANK_NIFTY_open.png',
- 'lastPrice': 19037.35,
- 'name': 'BANK NIFTY',
- 'pChange': 1.53}
->>> 
+>>> nse.get_index_list()
+['NIFTY 50 Pre Open',
+ 'NIFTY 50',
+ 'NIFTY NEXT 50',
+ 'NIFTY100 LIQ 15',
+ 'NIFTY BANK',
+ 'INDIA VIX',
+ 'NIFTY 100',
+ 'NIFTY 500',
+ 'NIFTY MIDCAP 100',
+ 'NIFTY MIDCAP 50',
+ 'NIFTY INFRA',
  
+Pick one of the index codes from the above list and use it as follows. For example let's 
+find index quote for "Nifty Bank".
+
+>>> nse.get_index_quote("nifty bank") # code can be provided in upper|lower case.
+{'name': 'NIFTY BANK',
+ 'lastPrice': 27966.65,
+ 'change': 204.85,
+ 'pChange': 0.74,
+ 'imgFileName': 'NIFTY_BANK_open.png'}
+
 
 List of Traded Stock Codes & Names
 ----------------------------------
