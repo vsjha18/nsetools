@@ -74,6 +74,10 @@ class Nse(AbstractBaseExchange):
         self.preopen_niftybank_url =\
             "https://www.nseindia.com/live_market/dynaContent/live_analysis/pre_open/niftybank.json"
         self.fno_lot_size_url = "https://www.nseindia.com/content/fo/fo_mktlots.csv"
+        self.top_volume = \
+            'https://www.nseindia.com/live_market/dynaContent/live_analysis/volume_spurts/volume_spurts.json'
+        self.most_active = \
+            'https://www.nseindia.com/live_market/dynaContent/live_analysis/most_active/allTopValue1.json'
 
     def get_fno_lot_sizes(self, cached=True, as_json=False):
         """
@@ -169,7 +173,7 @@ class Nse(AbstractBaseExchange):
                 buffer = match.group(1).strip()
                 # commenting following two lines because now we are not using ast and instead
                 # relying on json's ability to do parsing. Should be much faster and more
-                # reliable. 
+                # reliable.
                 #buffer = js_adaptor(buffer)
                 #response = self.clean_server_response(ast.literal_eval(buffer)['data'][0])
                 response = self.clean_server_response(json.loads(buffer)['data'][0])
@@ -287,7 +291,7 @@ class Nse(AbstractBaseExchange):
 
     def get_year_low(self, as_json=False):
         return self._get_json_response_from_url(self.year_low_url, as_json)
-    
+
     def get_preopen_nifty(self, as_json=False):
         return self._get_json_response_from_url(self.preopen_nifty_url, as_json)
 
@@ -458,13 +462,42 @@ class Nse(AbstractBaseExchange):
         """
         return 'Driver Class for National Stock Exchange (NSE)'
 
+    def get_top_volume(self, as_json=False):
+        """
+        :return: a list of dictionaries containing top volume gainers of the day
+        """
+        url = self.top_volume
+        req = Request(url, None, self.headers)
+        # this can raise HTTPError and URLError
+        res = self.opener.open(req)
+        # for py3 compat covert byte file like object to
+        # string file like object
+        res = byte_adaptor(res)
+        res_dict = json.load(res)
+        # clean the output and make appropriate type conversions
+        res_list = [self.clean_server_response(item) for item in res_dict['data']]
+        return self.render_response(res_list, as_json)
+
+    def get_most_active(self, as_json=False):
+        """
+        :return: a list of dictionaries containing most active of the day
+        """
+        url = self.most_active
+        req = Request(url, None, self.headers)
+        # this can raise HTTPError and URLError
+        res = self.opener.open(req)
+        # for py3 compat covert byte file like object to
+        # string file like object
+        res = byte_adaptor(res)
+        res_dict = json.load(res)
+        # clean the output and make appropriate type conversions
+        res_list = [self.clean_server_response(item) for item in res_dict['data']]
+        return self.render_response(res_list, as_json)
 
 if __name__ == "__main__":
     n = Nse()
     data = n.download_bhavcopy("14th Dec")
 
-# TODO: get_most_active()
-# TODO: get_top_volume()
 # TODO: get_peer_companies()
 # TODO: is_market_open()
 # TODO: concept of portfolio for fetching price in a batch and field which should be captured
