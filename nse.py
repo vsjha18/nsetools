@@ -74,6 +74,8 @@ class Nse(AbstractBaseExchange):
         self.preopen_niftybank_url =\
             "https://www.nseindia.com/live_market/dynaContent/live_analysis/pre_open/niftybank.json"
         self.fno_lot_size_url = "https://www.nseindia.com/content/fo/fo_mktlots.csv"
+        self.bhavcopy_derivative_base_url = "https://www.nseindia.com/content/historical/DERIVATIVES/%s/%s/fo%s%s%sbhav.csv.zip"
+        self.bhavcopy_dervivative_base_filename = "fo%s%s%sbhav.csv"    
 
     def get_fno_lot_sizes(self, cached=True, as_json=False):
         """
@@ -459,9 +461,45 @@ class Nse(AbstractBaseExchange):
         return 'Driver Class for National Stock Exchange (NSE)'
 
 
+    def donwload_bhavcopy_derivative(self, d):
+        url = self.get_bhavcopy_derivative_url(d)
+        filename = self.get_bhavcopy_derivative_filename(d)
+        # response = requests.get(url, headers=self.headers)
+        response = self.opener.open(Request(url, None, self.headers))
+        zip_file_handle = io.BytesIO(response.read())
+        zf = zipfile.ZipFile(zip_file_handle)
+        try:
+            result = zf.read(filename)
+        except KeyError:
+            result = zf.read(zf.filelist[0].filename)
+
+        return result
+
+    def get_bhavcopy_derivative_url(self, d):
+        """take date and return bhavcopy url"""
+        d = parser.parse(d).date()
+        day_of_month = d.strftime("%d")
+        mon = d.strftime("%b").upper()
+        year = d.year
+        url = self.bhavcopy_derivative_base_url % (year, mon, day_of_month, mon, year)
+        print(url)
+        return url
+
+    def get_bhavcopy_derivative_filename(self, d):
+        d = parser.parse(d).date()
+        day_of_month = d.strftime("%d")
+        mon = d.strftime("%b").upper()
+        year = d.year
+        filename = self.bhavcopy_dervivative_base_filename % (day_of_month, mon, year)
+        print(filename)
+        return filename
+
+
 if __name__ == "__main__":
     n = Nse()
-    data = n.download_bhavcopy("14th Dec")
+
+    data = n.donwload_bhavcopy_derivative("20190617")
+    print(data)
 
 # TODO: get_most_active()
 # TODO: get_top_volume()
