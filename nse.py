@@ -461,7 +461,7 @@ class Nse(AbstractBaseExchange):
         return 'Driver Class for National Stock Exchange (NSE)'
 
 
-    def donwload_bhavcopy_derivative(self, d):
+    def download_bhavcopy_derivative(self, d):
         url = self.get_bhavcopy_derivative_url(d)
         filename = self.get_bhavcopy_derivative_filename(d)
         # response = requests.get(url, headers=self.headers)
@@ -482,7 +482,6 @@ class Nse(AbstractBaseExchange):
         mon = d.strftime("%b").upper()
         year = d.year
         url = self.bhavcopy_derivative_base_url % (year, mon, day_of_month, mon, year)
-        print(url)
         return url
 
     def get_bhavcopy_derivative_filename(self, d):
@@ -491,7 +490,6 @@ class Nse(AbstractBaseExchange):
         mon = d.strftime("%b").upper()
         year = d.year
         filename = self.bhavcopy_dervivative_base_filename % (day_of_month, mon, year)
-        print(filename)
         return filename
 
 
