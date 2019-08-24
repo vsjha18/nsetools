@@ -6,6 +6,7 @@ import logging
 import json
 import re
 import six
+from urllib.request import OpenerDirector
 from nsetools.bases import AbstractBaseExchange
 from nsetools import Nse
 from nsetools.utils import js_adaptor, byte_adaptor
@@ -34,6 +35,7 @@ class TestCoreAPIs(unittest.TestCase):
     def test_nse_opener(self):
         ''' should not raise any exception '''
         opener = self.nse.nse_opener()
+        self.assertIsInstance(opener, OpenerDirector)
 
     def test_build_url_for_quote(self):
         test_code = 'infy'
