@@ -1,2 +1,4 @@
 sphinxcontrib-googleanalytics==0.1
 sphinxcontrib-newsfeed==0.1.4
+sphinx-rtd-theme==0.4.3
+python-dateutil==2.8.0
