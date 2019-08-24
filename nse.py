@@ -23,7 +23,6 @@
 
 """
 import six
-import ast
 import re
 import json
 import zipfile
@@ -31,7 +30,7 @@ import io
 from dateutil import parser
 from nsetools.bases import AbstractBaseExchange
 from nsetools.utils import byte_adaptor
-from nsetools.utils import js_adaptor
+
 # import paths differ in python 2 and python 3
 if six.PY2:
     from urllib2 import build_opener, HTTPCookieProcessor, Request
@@ -74,6 +73,8 @@ class Nse(AbstractBaseExchange):
         self.preopen_niftybank_url =\
             "https://www.nseindia.com/live_market/dynaContent/live_analysis/pre_open/niftybank.json"
         self.fno_lot_size_url = "https://www.nseindia.com/content/fo/fo_mktlots.csv"
+        self.bhavcopyPR_base_url = "https://www.nseindia.com/archives/equities/bhavcopy/pr/PR%s%s%s.zip"
+        self.corp_act_base_filename = "Bc%s%s%s.csv"
 
     def get_fno_lot_sizes(self, cached=True, as_json=False):
         """
@@ -415,7 +416,7 @@ class Nse(AbstractBaseExchange):
             return data
 
     def get_bhavcopy_url(self, d):
-        """take date and return bhavcopy url"""
+        """Take date and return bhavcopy url. Starts from 1st November 1994."""
         d = parser.parse(d).date()
         day_of_month = d.strftime("%d")
         mon = d.strftime("%b").upper()
@@ -431,11 +432,44 @@ class Nse(AbstractBaseExchange):
         filename = self.bhavcopy_base_filename % (day_of_month, mon, year)
         return filename
 
+    def get_bhavcopyPR_url(self, d):
+        """Take date and return bhavcopyPR zip url. Starts from 4th January 2010."""
+        d = parser.parse(d).date()
+        day_of_month = d.strftime("%d")
+        mon = d.strftime("%m")
+        year = d.strftime("%y")
+        url = self.bhavcopyPR_base_url % (day_of_month, mon, year)
+        return url
+
+    def get_corp_act_filename(self, d):
+        d = parser.parse(d).date()
+        day_of_month = d.strftime("%d")
+        mon = d.strftime("%m")
+        year = d.strftime("%y")
+        filename = self.corp_act_base_filename % (day_of_month, mon, year)
+        return filename
+
     def download_bhavcopy(self, d):
         """returns bhavcopy as csv file."""
         # ex_url = "https://www.nseindia.com/content/historical/EQUITIES/2011/NOV/cm08NOV2011bhav.csv.zip"
         url = self.get_bhavcopy_url(d)
         filename = self.get_bhavcopy_filename(d)
+        # response = requests.get(url, headers=self.headers)
+        response = self.opener.open(Request(url, None, self.headers))
+        zip_file_handle = io.BytesIO(response.read())
+        zf = zipfile.ZipFile(zip_file_handle)
+        try:
+            result = zf.read(filename)
+        except KeyError:
+            result = zf.read(zf.filelist[0].filename)
+
+        return result
+
+    def download_corp_act(self, d):
+        """returns Corporate Actions file as csv file."""
+        # ex_url = "https://www.nseindia.com/archives/equities/bhavcopy/pr/PR230819.zip"
+        url = self.get_bhavcopyPR_url(d)
+        filename = self.get_corp_act_filename(d)
         # response = requests.get(url, headers=self.headers)
         response = self.opener.open(Request(url, None, self.headers))
         zip_file_handle = io.BytesIO(response.read())

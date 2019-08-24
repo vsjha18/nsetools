@@ -211,6 +211,10 @@ class TestCoreAPIs(unittest.TestCase):
         data = self.nse.download_bhavcopy('1994-12-06')
         self.assertIsInstance(data, bytes)
 
+    def test_4th_Jan_2010(self):
+        data = self.nse.download_corp_act('2010-01-04')
+        self.assertIsInstance(data, bytes)
+
     def test_top_fno_gainers_losers(self):
         fno_gainer = self.nse.get_top_fno_gainers()
         self.assertIsInstance(fno_gainer, list)
