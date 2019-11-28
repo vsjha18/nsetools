@@ -6,9 +6,9 @@ import logging
 import json
 import re
 import six
-from nsetools.bases import AbstractBaseExchange
-from nsetools import Nse
-from nsetools.utils import js_adaptor, byte_adaptor
+from bases import AbstractBaseExchange
+from nse import Nse
+from utils import js_adaptor, byte_adaptor
 
 log = logging.getLogger('nse')
 logging.basicConfig(level=logging.DEBUG)
@@ -40,6 +40,14 @@ class TestCoreAPIs(unittest.TestCase):
         url = self.nse.build_url_for_quote(test_code)
         # 'test_code' should be present in the url
         self.assertIsNotNone(re.search(test_code, url))
+
+    def test_build_url_for_futures_quote(self):
+        test_code = 'INFY'
+        test_expiry = '28NOV2019'
+        url = self.nse.build_url_for_futures_quote(test_code, test_expiry)
+        # 'test_code' and expiry should be present in the url
+        self.assertIsNotNone(re.search(test_code, url))
+        self.assertIsNotNone(re.search(test_expiry, url))
 
     def test_negative_build_url_for_quote(self):
             negative_codes = [1, None]
@@ -109,6 +117,15 @@ class TestCoreAPIs(unittest.TestCase):
         # reconstruct the original dict from json
         # this test may raise false alarms in case the
         # the price changed in that very moment.
+        self.assertDictEqual(resp, json.loads(json_resp))
+
+    def test_get_futures_quote(self):
+        code = 'infy'
+        expiry = '28NOV2019'
+        resp = self.nse.get_futures_quote(code, expiry)
+        self.assertIsInstance(resp, dict)
+        json_resp = self.nse.get_futures_quote(code, expiry, as_json=True)
+        self.assertIsInstance(json_resp, str)
         self.assertDictEqual(resp, json.loads(json_resp))
 
     def test_is_valid_code(self):

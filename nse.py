@@ -29,9 +29,9 @@ import json
 import zipfile
 import io
 from dateutil import parser
-from nsetools.bases import AbstractBaseExchange
-from nsetools.utils import byte_adaptor
-from nsetools.utils import js_adaptor
+from bases import AbstractBaseExchange
+from utils import byte_adaptor
+from utils import js_adaptor
 # import paths differ in python 2 and python 3
 if six.PY2:
     from urllib2 import build_opener, HTTPCookieProcessor, Request
@@ -54,7 +54,9 @@ class Nse(AbstractBaseExchange):
         self.opener = self.nse_opener()
         self.headers = self.nse_headers()
         # URL list
-        self.get_quote_url = 'https://www.nseindia.com/live_market/dynaContent/live_watch/get_quote/GetQuote.jsp?'
+        self.get_quote_url = 'https://nseindia.com/live_market/dynaContent/live_watch/get_quote/GetQuote.jsp?'
+        # Same url with different GET parameters while sending request
+        self.get_futures_quote_url = 'https://nseindia.com/live_market/dynaContent/live_watch/get_quote/GetQuoteFO.jsp?'
         self.stocks_csv_url = 'http://www.nseindia.com/content/equities/EQUITY_L.csv'
         self.top_gainer_url = 'http://www.nseindia.com/live_market/dynaContent/live_analysis/gainers/niftyGainers1.json'
         self.top_loser_url = 'http://www.nseindia.com/live_market/dynaContent/live_analysis/losers/niftyLosers1.json'
@@ -170,6 +172,46 @@ class Nse(AbstractBaseExchange):
                 # commenting following two lines because now we are not using ast and instead
                 # relying on json's ability to do parsing. Should be much faster and more
                 # reliable. 
+                #buffer = js_adaptor(buffer)
+                #response = self.clean_server_response(ast.literal_eval(buffer)['data'][0])
+                response = self.clean_server_response(json.loads(buffer)['data'][0])
+            except SyntaxError as err:
+                raise Exception('ill formatted response')
+            else:
+                return self.render_response(response, as_json)
+        else:
+            return None
+
+    def get_futures_quote(self, code, expiry, as_json=False):
+        """
+        gets the quote for a given stock code's futures contract
+        :param code:
+        :return: dict or None
+        :raises: HTTPError, URLError
+        """
+        code = code.upper()
+        expiry = expiry.upper()
+        if self.is_valid_code(code):
+            url = self.build_url_for_futures_quote(code, expiry)
+            req = Request(url, None, self.headers)
+            # this can raise HTTPError and URLError, but we are not handling it
+            # north bound APIs should use it for exception handling
+            res = self.opener.open(req)
+
+            # for py3 compat covert byte file like object to
+            # string file like object
+            res = byte_adaptor(res)
+            res = res.read()
+            # Now parse the response to get the relevant data
+            match = re.search(\
+                        r'<div\s+id="responseDiv"\s+style="display:none">(.*?)</div>',
+                        res, re.S
+                    )
+            try:
+                buffer = match.group(1).strip()
+                # commenting following two lines because now we are not using ast and instead
+                # relying on json's ability to do parsing. Should be much faster and more
+                # reliable.
                 #buffer = js_adaptor(buffer)
                 #response = self.clean_server_response(ast.literal_eval(buffer)['data'][0])
                 response = self.clean_server_response(json.loads(buffer)['data'][0])
@@ -356,7 +398,7 @@ class Nse(AbstractBaseExchange):
                 'Host': 'nseindia.com',
                 'Referer': "https://www.nseindia.com/live_market\
                 /dynaContent/live_watch/get_quote/GetQuote.jsp?symbol=INFY&illiquid=0&smeFlag=0&itpFlag=0",
-                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0',
+                'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0',
                 'X-Requested-With': 'XMLHttpRequest'
                 }
 
@@ -379,6 +421,22 @@ class Nse(AbstractBaseExchange):
             return self.get_quote_url + encoded_args
         else:
             raise Exception('code must be string')
+
+    def build_url_for_futures_quote(self, code, expiry):
+        """
+        builds a url which can be requested for a given stock code's
+        futures contract
+        :param code: string containing stock code.
+        :param expiry: string containing futures contract's
+                       settlement date
+        :return: a url object
+        """
+        if code is not None and type(code) is str:
+            encoded_args = urlencode([('underlying', code), ('instrument', 'FUTSTK'), ('expiry', expiry),
+                                      ('type', '-'), ('strike', '-')])
+            return self.get_futures_quote_url + encoded_args
+        else:
+            raise Exception('code and expiry must be string')
 
     def clean_server_response(self, resp_dict):
         """cleans the server reponse by replacing:

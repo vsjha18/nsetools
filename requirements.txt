@@ -1,2 +1,3 @@
 sphinxcontrib-googleanalytics==0.1
 sphinxcontrib-newsfeed==0.1.4
+nose
