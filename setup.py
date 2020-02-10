@@ -17,6 +17,6 @@ setup(
     install_requires=['six', 'dateutils'],
     url="http://vsjha18.github.com/nsetools",
     packages=find_packages(),
-    long_description=pathlib.Path('README.md').read_text('utf-8'),
+    long_description=(pathlib.Path(__file__).parent / 'README.md').read_text('utf-8'),
     long_description_content_type="text/markdown",
 )
