@@ -59,3 +59,4 @@ def js_adaptor(buffer):
     buffer = re.sub('none', 'None', buffer)
     buffer = re.sub('NaN', '"NaN"', buffer)
     return buffer
+
