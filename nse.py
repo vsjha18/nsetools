@@ -42,6 +42,8 @@ elif six.PY3:
     from urllib.parse import urlencode
     from http.cookiejar import CookieJar
 
+from nsetools.utils import byte_adaptor, js_adaptor
+from nsetools.datemgr import mkdate
 
 class Nse(AbstractBaseExchange):
     """
@@ -414,7 +416,7 @@ class Nse(AbstractBaseExchange):
 
     def get_bhavcopy_url(self, d):
         """take date and return bhavcopy url"""
-        d = parser.parse(d).date()
+        d = mkdate(d)
         day_of_month = d.strftime("%d")
         mon = d.strftime("%b").upper()
         year = d.year
@@ -422,7 +424,7 @@ class Nse(AbstractBaseExchange):
         return url
 
     def get_bhavcopy_filename(self, d):
-        d = parser.parse(d).date()
+        d = mkdate(d)
         day_of_month = d.strftime("%d")
         mon = d.strftime("%b").upper()
         year = d.year
@@ -442,8 +444,7 @@ class Nse(AbstractBaseExchange):
             result = zf.read(filename)
         except KeyError:
             result = zf.read(zf.filelist[0].filename)
-
-        return result
+        return zf.read(filename).decode("utf-8")
 
     def download_index_copy(self, d):
         """returns index copy file"""
