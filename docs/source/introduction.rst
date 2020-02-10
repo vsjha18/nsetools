@@ -51,8 +51,8 @@ To updated to the lasted version::
 Python 3 Support
 ================
 
-Python 3 support has been added from 1.0.0 and onwards. Now this library works for 
-both Python 2 and Python 3.
+Python 3 support has been added from 1.0.0 and onwards. Python 2 support was removed in
+1.0.3.
 
 A Word On Exception Handling 
 ============================
