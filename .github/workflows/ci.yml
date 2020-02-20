@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - v*
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  test:
+    name: ${{ matrix.os.name }} ${{ matrix.python.name }}
+    runs-on: ${{ matrix.os.runs-on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - name: Linux
+            runs-on: ubuntu-latest
+          - name: Windows
+            runs-on: windows-latest
+          - name: macOS
+            runs-on: macos-latest
+        python:
+          - name: CPython 3.8
+            tox: py38
+            action: 3.8
+    steps:
+      - uses: actions/checkout@v2
+        path: nsetool
+      - name: Set up ${{ matrix.python.name }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python.action }}
+          architecture: x64
+      - name: Install Python Dependencies
+        run: |
+          pip install nose
+      - name: Test
+        run: |
+          mv nsetool/setup.py .
+          pip install .
+          mkdir isolation
+          cd isolation
+          nosetests --where ../nsetool
