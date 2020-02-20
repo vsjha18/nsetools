@@ -30,7 +30,8 @@ jobs:
             action: 3.8
     steps:
       - uses: actions/checkout@v2
-        path: nsetool
+        with:
+          path: nsetool
       - name: Set up ${{ matrix.python.name }}
         uses: actions/setup-python@v1
         with:
