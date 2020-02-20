@@ -31,7 +31,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          path: nsetool
+          path: nsetools
       - name: Set up ${{ matrix.python.name }}
         uses: actions/setup-python@v1
         with:
@@ -42,8 +42,8 @@ jobs:
           pip install nose
       - name: Test
         run: |
-          mv nsetool/setup.py .
+          mv nsetools/setup.py .
           pip install .
           mkdir isolation
           cd isolation
-          nosetests --where ../nsetool
+          nosetests --where ../nsetools
