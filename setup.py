@@ -1,4 +1,19 @@
+import pathlib
 from setuptools import setup, find_packages
+
+
+here = pathlib.Path(__file__).parent
+
+
+def load_long_description():
+    paths = [here, here / 'nsetools']
+    for countdown, path in reversed(list(enumerate(paths))):
+        try:
+            return (path / 'README.md').read_text('utf-8')
+        except FileNotFoundError:
+            if countdown == 0:
+                raise
+
 
 setup(
     name="nsetools",
@@ -17,6 +32,6 @@ setup(
     install_requires=['six', 'dateutils'],
     url="http://vsjha18.github.com/nsetools",
     packages=find_packages(),
-    long_description=(pathlib.Path(__file__).parent / 'README.md').read_text('utf-8'),
+    long_description=load_long_description(),
     long_description_content_type="text/markdown",
 )
