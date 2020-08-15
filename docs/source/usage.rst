@@ -420,5 +420,79 @@ can do the following.
  .
  }
 
+Getting a Stock Futures Quote
+------------------------------
+
+You can get the current Futures quote for any stock, given its stock code and expiry date using the command below. Here, we fetch the current futures quote of State Bank of India. The NSE stock code for
+State Bank of India is **SBIN**.
+
+>>> fq = nse.get_futures_quote('sbin',expiry='29OCT2020')
+>>> from pprint import pprint
+>>> pprint(fq)
+{'annualisedVolatility': 54.99,
+ 'bestBuy': 2.84,
+ 'bestSell': 3.57,
+ 'buyPrice1': 197.95,
+ 'buyPrice2': 197.85,
+ 'buyPrice3': 197.0,
+ 'buyPrice4': 196.7,
+ 'buyPrice5': 196.35,
+ 'buyQuantity1': 3000.0,
+ 'buyQuantity2': 3000.0,
+ 'buyQuantity3': 3000.0,
+ 'buyQuantity4': 9000.0,
+ 'buyQuantity5': 3000.0,
+ 'change': '-5.20',
+ 'changeinOpenInterest': 87000.0,
+ 'clientWisePositionLimits': None,
+ 'closePrice': 198.05,
+ 'dailyVolatility': 2.88,
+ 'expiryDate': '29OCT2020',
+ 'highPrice': 205.2,
+ 'impliedVolatility': None,
+ 'instrumentType': 'FUTSTK',
+ 'lastPrice': 198.1,
+ 'lowPrice': 196.0,
+ 'ltp': 3.2,
+ 'marketLot': 3000.0,
+ 'marketWidePositionLimits': 746624593.0,
+ 'numberOfContractsTraded': 134.0,
+ 'openInterest': 591000.0,
+ 'openPrice': 205.05,
+ 'optionType': None,
+ 'pChange': '-2.56',
+ 'pchangeinOpenInterest': 17.26,
+ 'premiumTurnover': None,
+ 'prevClose': 203.3,
+ 'sellPrice1': 198.25,
+ 'sellPrice2': 198.3,
+ 'sellPrice3': 199.45,
+ 'sellPrice4': 199.5,
+ 'sellPrice5': 200.2,
+ 'sellQuantity1': 3000.0,
+ 'sellQuantity2': 3000.0,
+ 'sellQuantity3': 9000.0,
+ 'sellQuantity4': 45000.0,
+ 'sellQuantity5': 6000.0,
+ 'settlementPrice': 198.05,
+ 'strikePrice': None,
+ 'totalBuyQuantity': 78000.0,
+ 'totalSellQuantity': 129000.0,
+ 'turnoverinRsLakhs': 805.81,
+ 'underlying': 'SBIN',
+ 'underlyingValue': 196.8,
+ 'vwap': 200.45}
+>>>
+
+.. note::
+
+    The argument expiry is optional. You can also pass only Stock code as an argument.
+    In that case, it will fetch the result for the next upcoming expiry date.
+
+.. warning::
+
+    Always pass a valid expiry date. Otherwise the result will be a blank dict.
+    Also, take care of the proper format of expiry date.
+
  
  .. disqus::
