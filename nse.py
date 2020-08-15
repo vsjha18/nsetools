@@ -144,6 +144,19 @@ class Nse(AbstractBaseExchange):
             else:
                 return False
 
+    def is_valid_fno_code(self, code):
+        """
+        Returns true if a stock has Futures and Options derivative
+        :param code: a string stock code
+        :return: Boolean
+        """
+        if code:
+            stock_codes = self.get_fno_lot_sizes()
+            if code.upper() in stock_codes.keys():
+                return True
+            else:
+                return False
+
     def get_quote(self, code, as_json=False):
         """
         gets the quote for a given stock code
@@ -183,7 +196,7 @@ class Nse(AbstractBaseExchange):
         else:
             return None
 
-    def get_futures_quote(self, code, expiry='nodategiven', as_json=False):
+    def get_futures_quote(self, code, expiry='NODATEGIVEN', as_json=False):
         """
         gets the quote of futures derivative for a given stock code
         :param code:
@@ -191,7 +204,8 @@ class Nse(AbstractBaseExchange):
         :raises: HTTPError, URLError
         """
         code = code.upper()
-        if self.is_valid_code(code):
+        expiry = expiry.upper()
+        if self.is_valid_fno_code(code):
             url = self.build_url_for_futures_quote(code, expiry)
             req = Request(url, None, self.headers)
             # this can raise HTTPError and URLError, but we are not handling it
@@ -427,7 +441,7 @@ class Nse(AbstractBaseExchange):
         :return: a url object
         """
         if code is not None and type(code) is str:
-            if expiry=='nodategiven':
+            if expiry=='NODATEGIVEN':
                 encoded_args = urlencode([('underlying', code), ('instrument', 'FUTSTK')])
             else:
                 encoded_args = urlencode([('underlying', code), ('instrument', 'FUTSTK'), ('expiry', expiry)])
