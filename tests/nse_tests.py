@@ -47,6 +47,18 @@ class TestCoreAPIs(unittest.TestCase):
                 for test_code in negative_codes:
                     url = self.nse.build_url_for_quote(test_code)
 
+    def test_build_url_for_futures_quote(self):
+        test_code = 'infy'
+        url = self.nse.build_url_for_futures_quote(test_code)
+        # 'test_code' should be present in the url
+        self.assertIsNotNone(re.search(test_code, url))
+
+    def test_negative_build_url_for_futures_quote(self):
+            negative_codes = [1, None]
+            with self.assertRaises(Exception):
+                for test_code in negative_codes:
+                    url = self.nse.build_url_for_futures_quote(test_code)
+
     def test_response_cleaner(self):
         test_dict = {
             'a': '10',
@@ -116,7 +128,7 @@ class TestCoreAPIs(unittest.TestCase):
         resp = self.nse.get_futures_quote(code)
         self.assertIsInstance(resp, dict)
         # test json response
-        json_resp = self.nse.get_quote(code, as_json=True)
+        json_resp = self.nse.get_futures_quote(code, as_json=True)
         self.assertIsInstance(json_resp, str)
         # reconstruct the original dict from json
         # this test may raise false alarms in case the
@@ -127,9 +139,17 @@ class TestCoreAPIs(unittest.TestCase):
         code = 'infy'
         self.assertTrue(self.nse.is_valid_code(code))
 
+    def test_is_valid_fno_code(self):
+        code = 'infy'
+        self.assertTrue(self.nse.is_valid_fno_code(code))
+
     def test_negative_is_valid_code(self):
         wrong_code = 'in'
         self.assertFalse(self.nse.is_valid_code(wrong_code))
+
+    def test_negative_is_valid_fno_code(self):
+        wrong_code = 'in'
+        self.assertFalse(self.nse.is_valid_fno_code(wrong_code))
 
     def test_get_top_gainers(self):
         res = self.nse.get_top_gainers()
