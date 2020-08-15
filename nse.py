@@ -183,7 +183,7 @@ class Nse(AbstractBaseExchange):
         else:
             return None
 
-    def get_futures_quote(self, code, as_json=False):
+    def get_futures_quote(self, code, expiry='nodategiven', as_json=False):
         """
         gets the quote of futures derivative for a given stock code
         :param code:
@@ -192,7 +192,7 @@ class Nse(AbstractBaseExchange):
         """
         code = code.upper()
         if self.is_valid_code(code):
-            url = self.build_url_for_futures_quote(code)
+            url = self.build_url_for_futures_quote(code, expiry)
             req = Request(url, None, self.headers)
             # this can raise HTTPError and URLError, but we are not handling it
             # north bound APIs should use it for exception handling
@@ -420,14 +420,17 @@ class Nse(AbstractBaseExchange):
         else:
             raise Exception('code must be string')
 
-    def build_url_for_futures_quote(self, code):
+    def build_url_for_futures_quote(self, code, expiry):
         """
         builds a url which can be requested for futures dericative of given stock code
         :param code: string containing stock code.
         :return: a url object
         """
         if code is not None and type(code) is str:
-            encoded_args = urlencode([('underlying', code), ('instrument', 'FUTSTK')])
+            if expiry=='nodategiven':
+                encoded_args = urlencode([('underlying', code), ('instrument', 'FUTSTK')])
+            else:
+                encoded_args = urlencode([('underlying', code), ('instrument', 'FUTSTK'), ('expiry', expiry)])
             return self.get_derivative_quote_url + encoded_args
         else:
             raise Exception('code must be string')  
