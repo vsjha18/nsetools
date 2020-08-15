@@ -111,6 +111,18 @@ class TestCoreAPIs(unittest.TestCase):
         # the price changed in that very moment.
         self.assertDictEqual(resp, json.loads(json_resp))
 
+    def test_get_futures_quote(self):
+        code = 'sbin'
+        resp = self.nse.get_futures_quote(code)
+        self.assertIsInstance(resp, dict)
+        # test json response
+        json_resp = self.nse.get_quote(code, as_json=True)
+        self.assertIsInstance(json_resp, str)
+        # reconstruct the original dict from json
+        # this test may raise false alarms in case the
+        # the price changed in that very moment.
+        self.assertDictEqual(resp, json.loads(json_resp))
+
     def test_is_valid_code(self):
         code = 'infy'
         self.assertTrue(self.nse.is_valid_code(code))
