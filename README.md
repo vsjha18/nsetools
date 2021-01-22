@@ -15,7 +15,7 @@ Python library for extracting realtime data from National Stock Exchange (India)
 Introduction.
 ============
 
-nsetools is a library for collecting real time data from National Stock Exchange (India). It can be used in various types of projects which requires getting live quotes for a given stock or index or build large data sets for further data analytics. You can also build cli applications which can provide you live market details at a blazing fast speeds, much faster that the browsers. The accuracy of data is only as correct as provided on www.nseindia.com.
+nsetools is a library for collecting real-time data from National Stock Exchange (India). It can be used in various types of projects which requires getting live quotes for a given stock or index or build large data sets for further data analytics. You can also build cli applications that can provide you live market details at blazing fast speeds, much faster than the browsers. The accuracy of data is only as correct as provided on www.nseindia.com.
 
 Main Features:
 =============
@@ -27,11 +27,11 @@ Main Features:
 * Getting list of top gainers.
 * Helper APIs to check whether a given stock code or index code is correct.
 * Getting list of all indices and stocks.
-* Cent percent unittest coverage.
+* Cent percent unit test coverage.
 
 Dependencies
 =============
-To keep it simple and supported on most of the platforms, it uses only core python libraries, hence there are no external dependencies. It can be used out of box and absolutely not set up is required except an internet connection.
+To keep it simple and supported on most of the platforms, it uses only core python libraries, hence there are no external dependencies. It can be used out of the box and absolutely no set up is required except an internet connection.
 
 Detailed Documenation 
 =====================
