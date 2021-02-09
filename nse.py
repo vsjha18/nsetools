@@ -174,7 +174,9 @@ class Nse(AbstractBaseExchange):
                 # reliable. 
                 #buffer = js_adaptor(buffer)
                 #response = self.clean_server_response(ast.literal_eval(buffer)['data'][0])
+                lastUpdateTime = json.loads(buffer)['lastUpdateTime']
                 response = self.clean_server_response(json.loads(buffer)['data'][0])
+                response['lastUpdateTime'] = lastUpdateTime
             except SyntaxError as err:
                 raise Exception('ill formatted response')
             else:
