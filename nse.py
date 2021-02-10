@@ -174,7 +174,8 @@ class Nse(AbstractBaseExchange):
                 # reliable. 
                 #buffer = js_adaptor(buffer)
                 #response = self.clean_server_response(ast.literal_eval(buffer)['data'][0])
-                lastUpdateTime = json.loads(buffer)['lastUpdateTime']
+                # lastUpdateTime = json.loads(buffer)['lastUpdateTime'] # comment the below one line and uncomment this line to use string time format for last update time
+                lastUpdateTime = datetime.datetime.strptime(json.loads(buffer)['lastUpdateTime'], '%d-%b-%Y %H:%M:%S') # extracts last updated time written on the website and converts it into a datetime.datetime object
                 response = self.clean_server_response(json.loads(buffer)['data'][0])
                 response['lastUpdateTime'] = lastUpdateTime
             except SyntaxError as err:
