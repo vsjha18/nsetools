@@ -20,21 +20,20 @@ nse = Nse()
 indexesQ = ['NIFTY 50', 'NIFTY NEXT 50', 'INDIA VIX']
 etfQ = ["NIFTYBEES", "JUNIORBEES"]
 
-outputStocks = []
+outputETFs = []
 outputIndexes = []
 
 for q in etfQ:
     jd = json.loads(nse.get_etf_quote(q, as_json=True))
     items = [q, jd.get("pChange"), jd.get("change"), jd.get("lastPrice")]
-    outputStocks.append(items)
+    outputETFs.append(items)
 
 for q in indexesQ:
     jd = json.loads(nse.get_index_quote(q, as_json=True))
     items = [q, jd.get("pChange"), jd.get("change"), jd.get("lastPrice")]
     outputIndexes.append(items)
 
-print(*outputIndexes, "*"*100, *outputStocks, sep="\n")
-
+print(*outputIndexes, "*"*100, *outputETFs, sep="\n")
 ```
  
 
