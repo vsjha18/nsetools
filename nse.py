@@ -58,13 +58,14 @@ class Nse(AbstractBaseExchange):
         # URL list
         self.get_quote_url = 'https://www1.nseindia.com/live_market/dynaContent/live_watch/get_quote/GetQuote.jsp?'
         self.stocks_csv_url = 'http://www1.nseindia.com/content/equities/EQUITY_L.csv'
+        self.etf_csv_url = 'https://www1.nseindia.com/content/equities/eq_etfseclist.csv'
         self.top_gainer_url = 'http://www1.nseindia.com/live_market/dynaContent/live_analysis/gainers/niftyGainers1.json'
         self.top_loser_url = 'http://www1.nseindia.com/live_market/dynaContent/live_analysis/losers/niftyLosers1.json'
         self.top_fno_gainer_url\
             = 'https://www1.nseindia.com/live_market/dynaContent/live_analysis/gainers/fnoGainers1.json'
         self.top_fno_loser_url = 'https://www1.nseindia.com/live_market/dynaContent/live_analysis/losers/fnoLosers1.json'
         self.advances_declines_url = 'http://www1.nseindia.com/common/json/indicesAdvanceDeclines.json'
-        self.index_url="http://www1.nseindia.com/homepage/Indices1.json"
+        self.index_url = "http://www1.nseindia.com/homepage/Indices1.json"
         self.bhavcopy_base_url = "https://www1.nseindia.com/content/historical/EQUITIES/%s/%s/cm%s%s%sbhav.csv.zip"
         self.bhavcopy_base_filename = "cm%s%s%sbhav.csv"
         self.active_equity_monthly_url =\
@@ -96,7 +97,8 @@ class Nse(AbstractBaseExchange):
                 res = byte_adaptor(res)
                 for line in res.read().split('\n'):
                     if line != '' and re.search(',', line) and (line.casefold().find('symbol') == -1):
-                        (code, name) = [x.strip() for x in line.split(',')[1:3]]
+                        (code, name) = [x.strip()
+                                        for x in line.split(',')[1:3]]
                         res_dict[code] = int(name)
                     # else just skip the evaluation, line may not be a valid csv
             else:
@@ -131,6 +133,33 @@ class Nse(AbstractBaseExchange):
             self.__CODECACHE__ = res_dict
         return self.render_response(self.__CODECACHE__, as_json)
 
+    def get_etf_codes(self, cached=True, as_json=False):
+        """
+        returns a dictionary with key as etf code and value as etf name.
+        It also implements cache functionality and hits the server only
+        if user insists or cache is empty
+        :return: dict
+        """
+        url = self.etf_csv_url
+        req = Request(url, None, self.headers)
+        res_dict = {}
+        if cached is not True or self.__CODECACHE__ is None:
+            # raises HTTPError and URLError
+            res = self.opener.open(req)
+            if res is not None:
+                # for py3 compat covert byte file like object to
+                # string file like object
+                res = byte_adaptor(res)
+                for line in res.read().split('\n'):
+                    if line != '' and re.search(',', line):
+                        (code, name) = line.split(',')[0:2]
+                        res_dict[code] = name
+                    # else just skip the evaluation, line may not be a valid csv
+            else:
+                raise Exception('no response received')
+            self.__CODECACHE__ = res_dict
+        return self.render_response(self.__CODECACHE__, as_json)
+
     def is_valid_code(self, code):
         """
         :param code: a string stock code
@@ -139,6 +168,18 @@ class Nse(AbstractBaseExchange):
         if code:
             stock_codes = self.get_stock_codes()
             if code.upper() in stock_codes.keys():
+                return True
+            else:
+                return False
+
+    def is_valid_etf(self, code):
+        """
+        :param code: a string etf code
+        :return: Boolean
+        """
+        if code:
+            etf_codes = self.get_etf_codes()
+            if code.upper() in etf_codes.keys():
                 return True
             else:
                 return False
@@ -163,18 +204,59 @@ class Nse(AbstractBaseExchange):
             res = byte_adaptor(res)
             res = res.read()
             # Now parse the response to get the relevant data
-            match = re.search(\
-                        r'<div\s+id="responseDiv"\s+style="display:none">(.*?)</div>',
-                        res, re.S
-                    )
+            match = re.search(
+                r'<div\s+id="responseDiv"\s+style="display:none">(.*?)</div>',
+                res, re.S
+            )
             try:
                 buffer = match.group(1).strip()
                 # commenting following two lines because now we are not using ast and instead
                 # relying on json's ability to do parsing. Should be much faster and more
-                # reliable. 
+                # reliable.
                 #buffer = js_adaptor(buffer)
                 #response = self.clean_server_response(ast.literal_eval(buffer)['data'][0])
-                response = self.clean_server_response(json.loads(buffer)['data'][0])
+                response = self.clean_server_response(
+                    json.loads(buffer)['data'][0])
+            except SyntaxError as err:
+                raise Exception('ill formatted response')
+            else:
+                return self.render_response(response, as_json)
+        else:
+            return None
+
+    def get_etf_quote(self, code, as_json=False):
+        """
+        gets the quote for a given etf code
+        :param code:
+        :return: dict or None
+        :raises: HTTPError, URLError
+        """
+        code = code.upper()
+        if self.is_valid_etf(code):
+            url = self.build_url_for_quote(code)
+            req = Request(url, None, self.headers)
+            # this can raise HTTPError and URLError, but we are not handling it
+            # north bound APIs should use it for exception handling
+            res = self.opener.open(req)
+
+            # for py3 compat covert byte file like object to
+            # string file like object
+            res = byte_adaptor(res)
+            res = res.read()
+            # Now parse the response to get the relevant data
+            match = re.search(
+                r'<div\s+id="responseDiv"\s+style="display:none">(.*?)</div>',
+                res, re.S
+            )
+            try:
+                buffer = match.group(1).strip()
+                # commenting following two lines because now we are not using ast and instead
+                # relying on json's ability to do parsing. Should be much faster and more
+                # reliable.
+                #buffer = js_adaptor(buffer)
+                #response = self.clean_server_response(ast.literal_eval(buffer)['data'][0])
+                response = self.clean_server_response(
+                    json.loads(buffer)['data'][0])
             except SyntaxError as err:
                 raise Exception('ill formatted response')
             else:
@@ -195,7 +277,8 @@ class Nse(AbstractBaseExchange):
         res = byte_adaptor(res)
         res_dict = json.load(res)
         # clean the output and make appropriate type conversions
-        res_list = [self.clean_server_response(item) for item in res_dict['data']]
+        res_list = [self.clean_server_response(
+            item) for item in res_dict['data']]
         return self.render_response(res_list, as_json)
 
     def get_top_losers(self, as_json=False):
@@ -228,7 +311,8 @@ class Nse(AbstractBaseExchange):
         res = byte_adaptor(res)
         res_dict = json.load(res)
         # clean the output and make appropriate type conversions
-        res_list = [self.clean_server_response(item) for item in res_dict['data']]
+        res_list = [self.clean_server_response(
+            item) for item in res_dict['data']]
         return self.render_response(res_list, as_json)
 
     def get_top_fno_losers(self, as_json=False):
@@ -289,7 +373,7 @@ class Nse(AbstractBaseExchange):
 
     def get_year_low(self, as_json=False):
         return self._get_json_response_from_url(self.year_low_url, as_json)
-    
+
     def get_preopen_nifty(self, as_json=False):
         return self._get_json_response_from_url(self.preopen_nifty_url, as_json)
 
@@ -375,7 +459,8 @@ class Nse(AbstractBaseExchange):
         :return: a url object
         """
         if code is not None and type(code) is str:
-            encoded_args = urlencode([('symbol', code), ('illiquid', '0'), ('smeFlag', '0'), ('itpFlag', '0')])
+            encoded_args = urlencode(
+                [('symbol', code), ('illiquid', '0'), ('smeFlag', '0'), ('itpFlag', '0')])
             return self.get_quote_url + encoded_args
         else:
             raise Exception('code must be string')
