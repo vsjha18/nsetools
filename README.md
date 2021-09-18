@@ -1,3 +1,45 @@
+Fork of https://github.com/vsjha18/nsetools
+=======================
+Changes
+  * ETF live data fetching
+
+Installation
+  * mkdir stock_watch
+  * cd stock_watch
+  * git clone https://github.com/ask1234560/nsetools.git
+  * python3 -m venv environment
+  * pip install -r nsetools/requirements.txt
+ 
+Example Script
+```
+import json
+from nsetools import Nse
+
+nse = Nse()
+
+indexesQ = ['NIFTY 50', 'NIFTY NEXT 50', 'INDIA VIX']
+etfQ = ["NIFTYBEES", "JUNIORBEES"]
+
+outputStocks = []
+outputIndexes = []
+
+for q in etfQ:
+    jd = json.loads(nse.get_etf_quote(q, as_json=True))
+    items = [q, jd.get("pChange"), jd.get("change"), jd.get("lastPrice")]
+    outputStocks.append(items)
+
+for q in indexesQ:
+    jd = json.loads(nse.get_index_quote(q, as_json=True))
+    items = [q, jd.get("pChange"), jd.get("change"), jd.get("lastPrice")]
+    outputIndexes.append(items)
+
+print(*outputIndexes, "*"*100, *outputStocks, sep="\n")
+
+```
+ 
+
+
+
 Project Page
 =============
 http://nsetools.readthedocs.io
