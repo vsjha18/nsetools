@@ -7,28 +7,28 @@ from nsetools.errors import DateFormatError
 
 def get_nearest_business_day(d):
     """ takes datetime object"""
-    if d.isoweekday() is 7 or d.isoweekday() is 6:
+    if d.isoweekday() == 7 or d.isoweekday() == 6:
         d = d - relativedelta(days=1)
         return get_nearest_business_day(d)
 
     # republic day
-    elif d.month is 1 and d.day is 26:
+    elif d.month == 1 and d.day == 26:
         d = d - relativedelta(days=1)
         return get_nearest_business_day(d)
     # labour day
-    elif d.month is 5 and d.day is 1:
+    elif d.month == 5 and d.day == 1:
         d = d - relativedelta(days=1)
         return get_nearest_business_day(d)
     # independece day
-    elif d.month is 8 and d.day is 15:
+    elif d.month == 8 and d.day == 15:
         d = d - relativedelta(days=1)
         return get_nearest_business_day(d)
     # Gandhi Jayanti
-    elif d.month is 10 and d.day is 2:
+    elif d.month == 10 and d.day == 2:
         d = d - relativedelta(days=1)
         return get_nearest_business_day(d)
     # chirstmas
-    elif d.month is 12 and d.day is 25:
+    elif d.month == 12 and d.day == 25:
         d = d - relativedelta(days=1)
         return get_nearest_business_day(d)
     else:
@@ -47,20 +47,20 @@ def is_known_holiday(d):
 
         # declare the list of holidays here.
     # republic day.
-    if d.month is 1 and d.day is 26:
+    if d.month == 1 and d.day == 26:
         return True
     # labour day
-    elif d.month is 5 and d.day is 1:
+    elif d.month == 5 and d.day == 1:
         d = d - relativedelta(days=1)
         return get_nearest_business_day(d)
     # independence day
-    elif d.month is 8 and d.day is 15:
+    elif d.month == 8 and d.day == 15:
         return True
     # gandhi jayanti
-    elif d.month is 10 and d.day is 2:
+    elif d.month == 10 and d.day == 2:
         return True
     # christmas
-    elif d.month is 12 and d.day is 25:
+    elif d.month == 12 and d.day == 25:
         return True
     else:
         return False
@@ -72,7 +72,7 @@ def mkdate(d):
     """
     # check if the it is a string
     return_date = ""
-    if type(d) is str:
+    if type(d) == str:
         if d == "today":
             return_date = dt.date.today()
         elif d == "yesterday":
