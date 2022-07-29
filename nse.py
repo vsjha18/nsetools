@@ -453,17 +453,9 @@ class Nse(AbstractBaseExchange):
         d = mkdate(d)
         day_of_month = d.strftime("%d")
         mon = d.strftime("%m")
-        year = d.strftime("%y")
+        year = d.year
         url = self.daily_volatility_files % (day_of_month, mon, year)
         return url
-
-    def get_daily_volatility_filename(self, d):
-        d = mkdate(d)
-        day_of_month = d.strftime("%d")
-        mon = d.strftime("%m")
-        year = d.strftime("%y")
-        filename = self.daily_volatility_filename % (day_of_month, mon, year)
-        return filename
 
     def download_bhavcopy(self, d):
         """returns bhavcopy as csv file."""
@@ -478,7 +470,7 @@ class Nse(AbstractBaseExchange):
             result = zf.read(filename)
         except KeyError:
             result = zf.read(zf.filelist[0].filename)
-        return zf.read(filename).decode("utf-8")
+        return result.decode("utf-8")
 
     def download_corp_act(self, d):
         """returns Corporate Actions file as csv file."""
@@ -493,14 +485,12 @@ class Nse(AbstractBaseExchange):
             result = zf.read(filename)
         except KeyError:
             result = zf.read(zf.filelist[0].filename)
-
-        return result
+        return result.decode('utf-8')
 
     def download_daily_volatility_file(self, d):
         url = self.get_daily_volatility_file_url(d)
-        filename = self.get_daily_volatility_filename(d)
-        response = self.opener.open(Request(url, None, self.headers))
-        return response
+        response = self.opener.open(Request(url, None, self.headers)).read()
+        return response.decode('utf-8')
 
     def download_index_copy(self, d):
         """returns index copy file"""
