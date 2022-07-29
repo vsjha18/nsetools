@@ -27,8 +27,8 @@ import os
 import zipfile
 import datetime as dt
 from urllib.request import Request
-from .datemgr import mkdate, get_date_range
-from .nse import Nse
+from nsetools.datemgr import mkdate, get_date_range
+from nsetools import Nse
 from abc import ABCMeta, abstractmethod
 
 

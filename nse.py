@@ -27,10 +27,9 @@ import re
 import json
 import zipfile
 import io
-from dateutil import parser
-from .bases import AbstractBaseExchange
-from .utils import byte_adaptor
-from .datemgr import mkdate
+from nsetools.bases import AbstractBaseExchange
+from nsetools.utils import byte_adaptor
+from nsetools.datemgr import mkdate
 
 # import paths differ in python 2 and python 3
 if six.PY2:
@@ -76,6 +75,8 @@ class Nse(AbstractBaseExchange):
         self.fno_lot_size_url = "https://www1.nseindia.com/content/fo/fo_mktlots.csv"
         self.bhavcopyPR_base_url = "https://www1.nseindia.com/archives/equities/bhavcopy/pr/PR%s%s%s.zip"
         self.corp_act_base_filename = "Bc%s%s%s.csv"
+        self.daily_volatility_files = "https://www1.nseindia.com/archives/nsccl/volt/FOVOLT_%s%s%s.csv"
+        self.daily_volatility_filename = "FOVOLT_%s%s%s.csv"
 
     def get_fno_lot_sizes(self, cached=True, as_json=False):
         """
@@ -433,7 +434,7 @@ class Nse(AbstractBaseExchange):
 
     def get_bhavcopyPR_url(self, d):
         """Take date and return bhavcopyPR zip url. Starts from 4th January 2010."""
-        d = parser.parse(d).date()
+        d = mkdate(d)
         day_of_month = d.strftime("%d")
         mon = d.strftime("%m")
         year = d.strftime("%y")
@@ -441,11 +442,27 @@ class Nse(AbstractBaseExchange):
         return url
 
     def get_corp_act_filename(self, d):
-        d = parser.parse(d).date()
+        d = mkdate(d)
         day_of_month = d.strftime("%d")
         mon = d.strftime("%m")
         year = d.strftime("%y")
         filename = self.corp_act_base_filename % (day_of_month, mon, year)
+        return filename
+
+    def get_daily_volatility_file_url(self, d):
+        d = mkdate(d)
+        day_of_month = d.strftime("%d")
+        mon = d.strftime("%m")
+        year = d.strftime("%y")
+        url = self.daily_volatility_files % (day_of_month, mon, year)
+        return url
+
+    def get_daily_volatility_filename(self, d):
+        d = mkdate(d)
+        day_of_month = d.strftime("%d")
+        mon = d.strftime("%m")
+        year = d.strftime("%y")
+        filename = self.daily_volatility_filename % (day_of_month, mon, year)
         return filename
 
     def download_bhavcopy(self, d):
@@ -478,6 +495,12 @@ class Nse(AbstractBaseExchange):
             result = zf.read(zf.filelist[0].filename)
 
         return result
+
+    def download_daily_volatility_file(self, d):
+        url = self.get_daily_volatility_file_url(d)
+        filename = self.get_daily_volatility_filename(d)
+        response = self.opener.open(Request(url, None, self.headers))
+        return response
 
     def download_index_copy(self, d):
         """returns index copy file"""
