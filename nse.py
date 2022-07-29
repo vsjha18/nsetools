@@ -28,8 +28,9 @@ import json
 import zipfile
 import io
 from dateutil import parser
-from nsetools.bases import AbstractBaseExchange
-from nsetools.utils import byte_adaptor
+from .bases import AbstractBaseExchange
+from .utils import byte_adaptor
+from .datemgr import mkdate
 
 # import paths differ in python 2 and python 3
 if six.PY2:
@@ -53,27 +54,27 @@ class Nse(AbstractBaseExchange):
         self.opener = self.nse_opener()
         self.headers = self.nse_headers()
         # URL list
-        self.get_quote_url = 'https://www.nseindia.com/live_market/dynaContent/live_watch/get_quote/GetQuote.jsp?'
-        self.stocks_csv_url = 'http://www.nseindia.com/content/equities/EQUITY_L.csv'
-        self.top_gainer_url = 'http://www.nseindia.com/live_market/dynaContent/live_analysis/gainers/niftyGainers1.json'
-        self.top_loser_url = 'http://www.nseindia.com/live_market/dynaContent/live_analysis/losers/niftyLosers1.json'
+        self.get_quote_url = 'https://www1.nseindia.com/live_market/dynaContent/live_watch/get_quote/GetQuote.jsp?'
+        self.stocks_csv_url = 'http://www1.nseindia.com/content/equities/EQUITY_L.csv'
+        self.top_gainer_url = 'http://www1.nseindia.com/live_market/dynaContent/live_analysis/gainers/niftyGainers1.json'
+        self.top_loser_url = 'http://www1.nseindia.com/live_market/dynaContent/live_analysis/losers/niftyLosers1.json'
         self.top_fno_gainer_url\
-            = 'https://www.nseindia.com/live_market/dynaContent/live_analysis/gainers/fnoGainers1.json'
-        self.top_fno_loser_url = 'https://www.nseindia.com/live_market/dynaContent/live_analysis/losers/fnoLosers1.json'
-        self.advances_declines_url = 'http://www.nseindia.com/common/json/indicesAdvanceDeclines.json'
-        self.index_url="http://www.nseindia.com/homepage/Indices1.json"
-        self.bhavcopy_base_url = "https://www.nseindia.com/content/historical/EQUITIES/%s/%s/cm%s%s%sbhav.csv.zip"
+            = 'https://www1.nseindia.com/live_market/dynaContent/live_analysis/gainers/fnoGainers1.json'
+        self.top_fno_loser_url = 'https://www1.nseindia.com/live_market/dynaContent/live_analysis/losers/fnoLosers1.json'
+        self.advances_declines_url = 'http://www1.nseindia.com/common/json/indicesAdvanceDeclines.json'
+        self.index_url="http://www1.nseindia.com/homepage/Indices1.json"
+        self.bhavcopy_base_url = "https://www1.nseindia.com/content/historical/EQUITIES/%s/%s/cm%s%s%sbhav.csv.zip"
         self.bhavcopy_base_filename = "cm%s%s%sbhav.csv"
         self.active_equity_monthly_url =\
-            "https://www.nseindia.com/products/dynaContent/equities/equities/json/mostActiveMonthly.json"
-        self.year_high_url = "https://www.nseindia.com/products/dynaContent/equities/equities/json/online52NewHigh.json"
-        self.year_low_url = "https://www.nseindia.com/products/dynaContent/equities/equities/json/online52NewLow.json"
-        self.preopen_nifty_url = "https://www.nseindia.com/live_market/dynaContent/live_analysis/pre_open/nifty.json"
-        self.preopen_fno_url = "https://www.nseindia.com/live_market/dynaContent/live_analysis/pre_open/fo.json"
+            "https://www1.nseindia.com/products/dynaContent/equities/equities/json/mostActiveMonthly.json"
+        self.year_high_url = "https://www1.nseindia.com/products/dynaContent/equities/equities/json/online52NewHigh.json"
+        self.year_low_url = "https://www1.nseindia.com/products/dynaContent/equities/equities/json/online52NewLow.json"
+        self.preopen_nifty_url = "https://www1.nseindia.com/live_market/dynaContent/live_analysis/pre_open/nifty.json"
+        self.preopen_fno_url = "https://www1.nseindia.com/live_market/dynaContent/live_analysis/pre_open/fo.json"
         self.preopen_niftybank_url =\
-            "https://www.nseindia.com/live_market/dynaContent/live_analysis/pre_open/niftybank.json"
-        self.fno_lot_size_url = "https://www.nseindia.com/content/fo/fo_mktlots.csv"
-        self.bhavcopyPR_base_url = "https://www.nseindia.com/archives/equities/bhavcopy/pr/PR%s%s%s.zip"
+            "https://www1.nseindia.com/live_market/dynaContent/live_analysis/pre_open/niftybank.json"
+        self.fno_lot_size_url = "https://www1.nseindia.com/content/fo/fo_mktlots.csv"
+        self.bhavcopyPR_base_url = "https://www1.nseindia.com/archives/equities/bhavcopy/pr/PR%s%s%s.zip"
         self.corp_act_base_filename = "Bc%s%s%s.csv"
 
     def get_fno_lot_sizes(self, cached=True, as_json=False):
@@ -354,9 +355,7 @@ class Nse(AbstractBaseExchange):
         """
         return {'Accept': '*/*',
                 'Accept-Language': 'en-US,en;q=0.5',
-                'Host': 'nseindia.com',
-                'Referer': "https://www.nseindia.com/live_market\
-                /dynaContent/live_watch/get_quote/GetQuote.jsp?symbol=INFY&illiquid=0&smeFlag=0&itpFlag=0",
+                'Host': 'www1.nseindia.com',
                 'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0',
                 'X-Requested-With': 'XMLHttpRequest'
                 }
@@ -416,8 +415,8 @@ class Nse(AbstractBaseExchange):
             return data
 
     def get_bhavcopy_url(self, d):
-        """Take date and return bhavcopy url. Starts from 1st November 1994."""
-        d = parser.parse(d).date()
+        """take date and return bhavcopy url"""
+        d = mkdate(d)
         day_of_month = d.strftime("%d")
         mon = d.strftime("%b").upper()
         year = d.year
@@ -425,7 +424,7 @@ class Nse(AbstractBaseExchange):
         return url
 
     def get_bhavcopy_filename(self, d):
-        d = parser.parse(d).date()
+        d = mkdate(d)
         day_of_month = d.strftime("%d")
         mon = d.strftime("%b").upper()
         year = d.year
@@ -462,8 +461,7 @@ class Nse(AbstractBaseExchange):
             result = zf.read(filename)
         except KeyError:
             result = zf.read(zf.filelist[0].filename)
-
-        return result
+        return zf.read(filename).decode("utf-8")
 
     def download_corp_act(self, d):
         """returns Corporate Actions file as csv file."""

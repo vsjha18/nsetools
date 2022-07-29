@@ -20,3 +20,5 @@ Release History & Change Log
 1.0.8 : Few build issues.
 
 1.0.10: Handling change in backend data format.
+
+1.0.11: Updated URLs after NSE website changes.

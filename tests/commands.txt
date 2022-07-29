@@ -1,9 +1,11 @@
 nosetests --with-coverage --cover-package nsetools.nse --cover-branch
 python setup.py sdist upload -r pypi
 
+Follow these instructions for building.
 # move setup.py one level up.
 # run command from there.
 # change version in setup.py and __init__.py
+# install wheel in order to support bdist_wheel
 
 python setup.py bdist_wheel
 twine upload --repository-url https://upload.pypi.org/legacy/ dist/nsetools-1.0.6.tar.gz
