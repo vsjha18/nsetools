@@ -357,8 +357,15 @@ class Nse(AbstractBaseExchange):
         return {'Accept': '*/*',
                 'Accept-Language': 'en-US,en;q=0.5',
                 'Host': 'www1.nseindia.com',
-                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0',
-                'X-Requested-With': 'XMLHttpRequest'
+                'Connection': 'keep-alive',
+                'Referer': "https://www1.nseindia.com/products/content/equities/equities/archieve_eq.htm",
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0) Gecko/20100101 Firefox/102.0',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Sec - Fetch - Dest': 'document',
+                'Sec - Fetch - Mode': 'navigate',
+                'Sec - Fetch - Site': 'same - origin',
+                'Sec - Fetch - User': '?1',
+                'Sec - GPC': '1'
                 }
 
     def nse_opener(self):
