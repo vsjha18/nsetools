@@ -3,3 +3,4 @@ sphinxcontrib-newsfeed==0.1.4
 sphinx-rtd-theme==1.0.0
 dateutils
 six
+pandas

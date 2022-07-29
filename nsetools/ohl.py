@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import requests
-import json
 import ast
 import re
 import os
@@ -8,7 +7,6 @@ import pandas as pd
 import datetime as dt
 import pickle
 from argparse import ArgumentParser
-from pprint import pprint
 
 INVESTMENT_AMOUNT = 10000
 URL = "https://nseindia.com/live_market/dynaContent/live_watch/stock_watch/foSecStockWatch.json"
