@@ -22,26 +22,17 @@
     SOFTWARE.
 
 """
-import six
-import ast
+import ast 
 import re
 import json
 import zipfile
 import io
+import requests
 from dateutil import parser
+from datetime import datetime as dt 
 from nsetools.bases import AbstractBaseExchange
 from nsetools.utils import byte_adaptor
 from nsetools.utils import js_adaptor
-# import paths differ in python 2 and python 3
-if six.PY2:
-    from urllib2 import build_opener, HTTPCookieProcessor, Request
-    from urllib import urlencode
-    from cookielib import CookieJar
-elif six.PY3:
-    from urllib.request import build_opener, HTTPCookieProcessor, Request
-    from urllib.parse import urlencode
-    from http.cookiejar import CookieJar
-
 from nsetools.utils import byte_adaptor, js_adaptor
 from nsetools.datemgr import mkdate
 
@@ -52,11 +43,11 @@ class Nse(AbstractBaseExchange):
     """
     __CODECACHE__ = None
 
-    def __init__(self):
-        self.opener = self.nse_opener()
-        self.headers = self.nse_headers()
+    def __init__(self, session_refresh_interval=300):
         # URL list
-        self.get_quote_url = 'https://www1.nseindia.com/live_market/dynaContent/live_watch/get_quote/GetQuote.jsp?'
+        self.session_refresh_interval = session_refresh_interval 
+        self.create_session()
+        self.get_quote_url = "https://www.nseindia.com/get-quotes/equity?symbol={code}"
         self.stocks_csv_url = 'http://www1.nseindia.com/content/equities/EQUITY_L.csv'
         self.top_gainer_url = 'http://www1.nseindia.com/live_market/dynaContent/live_analysis/gainers/niftyGainers1.json'
         self.top_loser_url = 'http://www1.nseindia.com/live_market/dynaContent/live_analysis/losers/niftyLosers1.json'
@@ -85,7 +76,7 @@ class Nse(AbstractBaseExchange):
         :return: dict
         """
         url = self.fno_lot_size_url
-        req = Request(url, None, self.headers)
+        req = "Request(url, None, self.headers)"
         res_dict = {}
         if cached is not True or self.__CODECACHE__ is None:
             # raises HTTPError and URLError
@@ -112,7 +103,7 @@ class Nse(AbstractBaseExchange):
         :return: dict
         """
         url = self.stocks_csv_url
-        req = Request(url, None, self.headers)
+        req = "Request(url, None, self.headers)"
         res_dict = {}
         if cached is not True or self.__CODECACHE__ is None:
             # raises HTTPError and URLError
@@ -143,51 +134,24 @@ class Nse(AbstractBaseExchange):
             else:
                 return False
 
-    def get_quote(self, code, as_json=False):
+    def get_quote(self, code, all_data=False):
         """
         gets the quote for a given stock code
         :param code:
         :return: dict or None
-        :raises: HTTPError, URLError
+        :raises: HTTPError
         """
         code = code.upper()
-        if self.is_valid_code(code):
-            url = self.build_url_for_quote(code)
-            req = Request(url, None, self.headers)
-            # this can raise HTTPError and URLError, but we are not handling it
-            # north bound APIs should use it for exception handling
-            res = self.opener.open(req)
-
-            # for py3 compat covert byte file like object to
-            # string file like object
-            res = byte_adaptor(res)
-            res = res.read()
-            # Now parse the response to get the relevant data
-            match = re.search(\
-                        r'<div\s+id="responseDiv"\s+style="display:none">(.*?)</div>',
-                        res, re.S
-                    )
-            try:
-                buffer = match.group(1).strip()
-                # commenting following two lines because now we are not using ast and instead
-                # relying on json's ability to do parsing. Should be much faster and more
-                # reliable. 
-                #buffer = js_adaptor(buffer)
-                #response = self.clean_server_response(ast.literal_eval(buffer)['data'][0])
-                response = self.clean_server_response(json.loads(buffer)['data'][0])
-            except SyntaxError as err:
-                raise Exception('ill formatted response')
-            else:
-                return self.render_response(response, as_json)
-        else:
-            return None
-
+        # TODO: implement if the code is valid
+        res = self.fetch(f"https://www.nseindia.com/api/quote-equity?symbol={code}")
+        return res.json()['priceInfo'] if all_data is False else res.json()
+    
     def get_top_gainers(self, as_json=False):
         """
         :return: a list of dictionaries containing top gainers of the day
         """
         url = self.top_gainer_url
-        req = Request(url, None, self.headers)
+        req = "Request(url, None, self.headers)"
         # this can raise HTTPError and URLError
         res = self.opener.open(req)
         # for py3 compat covert byte file like object to
@@ -203,7 +167,7 @@ class Nse(AbstractBaseExchange):
         :return: a list of dictionaries containing top losers of the day
         """
         url = self.top_loser_url
-        req = Request(url, None, self.headers)
+        req = "Request(url, None, self.headers)"
         # this can raise HTTPError and URLError
         res = self.opener.open(req)
         # for py3 compat covert byte file like object to
@@ -220,7 +184,7 @@ class Nse(AbstractBaseExchange):
         :return: a list of dictionaries containing top gainers in fno of the day
         """
         url = self.top_fno_gainer_url
-        req = Request(url, None, self.headers)
+        req = "Request(url, None, self.headers)"
         # this can raise HTTPError and URLError
         res = self.opener.open(req)
         # for py3 compat covert byte file like object to
@@ -236,7 +200,7 @@ class Nse(AbstractBaseExchange):
         :return: a list of dictionaries containing top losers of the day
         """
         url = self.top_fno_loser_url
-        req = Request(url, None, self.headers)
+        req = "Request(url, None, self.headers)"
         # this can raise HTTPError and URLError
         res = self.opener.open(req)
         # for py3 compat covert byte file like object to
@@ -254,7 +218,7 @@ class Nse(AbstractBaseExchange):
         :raises: URLError, HTTPError
         """
         url = self.advances_declines_url
-        req = Request(url, None, self.headers)
+        req = "Request(url, None, self.headers)"
         # raises URLError or HTTPError
         resp = self.opener.open(req)
         # for py3 compat covert byte file like object to
@@ -273,7 +237,7 @@ class Nse(AbstractBaseExchange):
         """
 
         url = self.index_url
-        req = Request(url, None, self.headers)
+        req = "Request(url, None, self.headers)"
         # raises URLError or HTTPError
         resp = self.opener.open(req)
         resp = byte_adaptor(resp)
@@ -303,7 +267,7 @@ class Nse(AbstractBaseExchange):
         """
         :return: a list of dictionaries containing the response got back from url
         """
-        req = Request(url, None, self.headers)
+        req = "Request(url, None, self.headers)"
         # this can raise HTTPError and URLError
         res = self.opener.open(req)
         # for py3 compat covert byte file like object to
@@ -332,7 +296,7 @@ class Nse(AbstractBaseExchange):
         """
         url = self.index_url
         if self.is_valid_index(code):
-            req = Request(url, None, self.headers)
+            req = "Request(url, None, self.headers)"
             # raises HTTPError and URLError
             resp = self.opener.open(req)
             resp = byte_adaptor(resp)
@@ -353,32 +317,20 @@ class Nse(AbstractBaseExchange):
         Builds right set of headers for requesting http://nseindia.com
         :return: a dict with http headers
         """
-        return {'Accept': '*/*',
-                'Accept-Language': 'en-US,en;q=0.5',
-                'Host': 'www1.nseindia.com',
-                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0',
-                'X-Requested-With': 'XMLHttpRequest'
+        return {"Accept": "*/*",
+                "Accept-Language": "en-US,en;q=0.5",
+                "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
+                "X-Requested-With": "XMLHttpRequest"
                 }
 
-    def nse_opener(self):
-        """
-        builds opener for urllib2
-        :return: opener object
-        """
-        cj = CookieJar()
-        return build_opener(HTTPCookieProcessor(cj))
-
+    
     def build_url_for_quote(self, code):
         """
         builds a url which can be requested for a given stock code
         :param code: string containing stock code.
         :return: a url object
         """
-        if code is not None and type(code) is str:
-            encoded_args = urlencode([('symbol', code), ('illiquid', '0'), ('smeFlag', '0'), ('itpFlag', '0')])
-            return self.get_quote_url + encoded_args
-        else:
-            raise Exception('code must be string')
+        pass 
 
     def clean_server_response(self, resp_dict):
         """cleans the server reponse by replacing:
@@ -389,24 +341,7 @@ class Nse(AbstractBaseExchange):
         """
 
         # change all the keys from unicode to string
-        d = {}
-        for key, value in resp_dict.items():
-            d[str(key)] = value
-        resp_dict = d
-        for key, value in resp_dict.items():
-            if type(value) is str or isinstance(value, six.string_types):
-                if re.match('-', value):
-                    try:
-                        if float(value) or int(value):
-                            dataType = True
-                    except ValueError:
-                        resp_dict[key] = None
-                elif re.search(r'^[0-9,.]+$', value):
-                    # replace , to '', and type cast to int
-                    resp_dict[key] = float(re.sub(',', '', value))
-                else:
-                    resp_dict[key] = str(value)
-        return resp_dict
+        pass 
 
     def render_response(self, data, as_json=False):
         if as_json is True:
@@ -437,7 +372,7 @@ class Nse(AbstractBaseExchange):
         url = self.get_bhavcopy_url(d)
         filename = self.get_bhavcopy_filename(d)
         # response = requests.get(url, headers=self.headers)
-        response = self.opener.open(Request(url, None, self.headers))
+        response = "self.opener.open(Request(url, None, self.headers))"
         zip_file_handle = io.BytesIO(response.read())
         zf = zipfile.ZipFile(zip_file_handle)
         try:
@@ -445,10 +380,30 @@ class Nse(AbstractBaseExchange):
         except KeyError:
             result = zf.read(zf.filelist[0].filename)
         return zf.read(filename).decode("utf-8")
-
+    
     def download_index_copy(self, d):
         """returns index copy file"""
         pass
+
+    def create_session(self):
+        home_url = "https://nseindia.com"
+        self._session = requests.Session()
+        self._session.headers.update(self.nse_headers())
+        self._session.get(home_url)
+        self._session_init_time = dt.now()
+        
+    
+    def fetch(self, url):
+        time_diff = dt.now() - self._session_init_time
+        if time_diff.seconds < self.session_refresh_interval:
+            print("time diff is ", time_diff.seconds)
+            return self._session.get(url)
+        else:
+            print("time diff is ", time_diff.seconds)
+            print("re-initing the session because of expiry")
+            self.create_session()
+            return self._session.get(url)
+
 
     def __str__(self):
         """
@@ -460,7 +415,8 @@ class Nse(AbstractBaseExchange):
 
 if __name__ == "__main__":
     n = Nse()
-    data = n.download_bhavcopy("14th Dec")
+    # data = n.download_bhavcopy("14th Dec")
+    n.get_quote('reliance')
 
 # TODO: get_most_active()
 # TODO: get_top_volume()
