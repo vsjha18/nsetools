@@ -229,22 +229,7 @@ class Nse(AbstractBaseExchange):
                      for item in resp_dict['data']]
         return self.render_response(resp_list, as_json)
 
-    def get_index_list(self, as_json=False):
-        """ get list of indices and codes
-        params:
-            as_json: True | False
-        returns: a list | json of index codes
-        """
-
-        url = self.index_url
-        req = "Request(url, None, self.headers)"
-        # raises URLError or HTTPError
-        resp = self.opener.open(req)
-        resp = byte_adaptor(resp)
-        resp_list = json.load(resp)['data']
-        index_list = [str(item['name']) for item in resp_list]
-        return self.render_response(index_list, as_json)
-
+    
     def get_active_monthly(self, as_json=False):
         return self._get_json_response_from_url(self.active_equity_monthly_url, as_json)
 
@@ -278,39 +263,38 @@ class Nse(AbstractBaseExchange):
         res_list = [self.clean_server_response(item)
                     for item in res_dict['data']]
         return self.render_response(res_list, as_json)
-
-    def is_valid_index(self, code):
+    
+    def get_index_list(self):
+        """ get list of indices and codes
+        returns: a list | json of index codes
         """
-        returns: True | Flase , based on whether code is valid
-        """
-        index_list = self.get_index_list()
-        return True if code.upper() in index_list else False
-
-    def get_index_quote(self, code, as_json=False):
+        return [ i['indexSymbol'] for i in self.get_all_index_quote()]
+    
+    def get_index_quote(self, code):
         """
         params:
             code : string index code
-            as_json: True|False
         returns:
-            a dict | json quote for the given index
+            dict 
         """
-        url = self.index_url
-        if self.is_valid_index(code):
-            req = "Request(url, None, self.headers)"
-            # raises HTTPError and URLError
-            resp = self.opener.open(req)
-            resp = byte_adaptor(resp)
-            resp_list = json.load(resp)['data']
-            # this is list of dictionaries
-            resp_list = [self.clean_server_response(item)
-                         for item in resp_list]
-            # search the right list element to return
-            search_flag = False
-            for item in resp_list:
-                if item['name'] == code.upper():
-                    search_flag = True
-                    break
-            return self.render_response(item, as_json) if search_flag else None
+        url = "https://www.nseindia.com/api/allIndices"
+        all_index_quote = self.get_all_index_quote()
+        index_list = [ i['indexSymbol'] for i in all_index_quote]
+        code = code.upper()
+        if code in index_list:
+            return list(filter(lambda idx: idx['indexSymbol'] == code, all_index_quote))[0]
+        else:
+            raise Exception('Wrong index code')
+    
+    def get_all_index_quote(self):
+        """
+        Gets information of all indices and one go
+        returns:
+            list of dicts
+        """
+        url = "https://www.nseindia.com/api/allIndices"
+        res = self.fetch(url)
+        return res.json()['data']
 
     def nse_headers(self):
         """
