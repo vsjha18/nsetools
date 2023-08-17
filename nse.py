@@ -48,7 +48,7 @@ class Nse(AbstractBaseExchange):
         self.session_refresh_interval = session_refresh_interval 
         self.create_session()
         self.get_quote_url = "https://www.nseindia.com/get-quotes/equity?symbol={code}"
-        self.stocks_csv_url = 'http://www1.nseindia.com/content/equities/EQUITY_L.csv'
+        self.stocks_csv_url = 'https://archives.nseindia.com/content/equities/EQUITY_L.csv'
         self.top_gainer_url = 'http://www1.nseindia.com/live_market/dynaContent/live_analysis/gainers/niftyGainers1.json'
         self.top_loser_url = 'http://www1.nseindia.com/live_market/dynaContent/live_analysis/losers/niftyLosers1.json'
         self.top_fno_gainer_url\
