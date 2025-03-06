@@ -37,13 +37,13 @@ For complete documenation, please refer http://nsetools.readthedocs.io
 
 setup(
     name="nsetools",
-    version="1.0.11",
+    version="1.0.12",
     author="Vivek Jha",
     author_email="vsjha18@gmail.com",
     description="Python library for extracting realtime data from National Stock Exchange",
     license="MIT",
     keywords="nse quote market",
-    install_requires=['six', 'dateutils'],
+    install_requires=['six', 'dateutils', 'requests'],
     url="http://vsjha18.github.com/nsetools",
     packages=find_packages(),
     long_description=readme,
