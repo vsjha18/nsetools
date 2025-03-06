@@ -43,7 +43,7 @@ class Nse(AbstractBaseExchange):
     """
     __CODECACHE__ = None
 
-    def __init__(self, session_refresh_interval=300):
+    def __init__(self, session_refresh_interval=120):
         # URL list
         self.session_refresh_interval = session_refresh_interval 
         self.create_session()
@@ -144,7 +144,8 @@ class Nse(AbstractBaseExchange):
         code = code.upper()
         # TODO: implement if the code is valid
         res = self.fetch(f"https://www.nseindia.com/api/quote-equity?symbol={code}")
-        return res.json()['priceInfo'] if all_data is False else res.json()
+        res = res.json()['priceInfo'] if all_data is False else res.json()
+        return self.cast_intfloat_string_values_to_intfloat(res)
     
     def get_top_gainers(self, as_json=False):
         """
@@ -212,58 +213,57 @@ class Nse(AbstractBaseExchange):
                     for item in res_dict['data']]
         return self.render_response(res_list, as_json)
 
-    def get_advances_declines(self, as_json=False):
+    def get_advances_declines(self, code='nifty 50'):
         """
         :return: a list of dictionaries with advance decline data
         :raises: URLError, HTTPError
         """
-        url = self.advances_declines_url
-        req = "Request(url, None, self.headers)"
-        # raises URLError or HTTPError
-        resp = self.opener.open(req)
-        # for py3 compat covert byte file like object to
-        # string file like object
-        resp = byte_adaptor(resp)
-        resp_dict = json.load(resp)
-        resp_list = [self.clean_server_response(item)
-                     for item in resp_dict['data']]
-        return self.render_response(resp_list, as_json)
+        # fixing this
+        code = code.upper()
+        code = ' '.join(code.split())
+        url = f"https://www.nseindia.com/api/equity-stockIndices?index={code}"
+        response = self.fetch(url).json()['advance']
+        return self.cast_intfloat_string_values_to_intfloat(response)
+    
+    def cast_intfloat_string_values_to_intfloat(self, d):
+        d = d.copy()
+        for keys in d:
+            if type(d[keys]) == str:
+                try:
+                    d[keys] = int(d[keys])
+                except:
+                    try:
+                        d[keys] = float(d[keys])
+                    except:
+                        # given string value is neither string nor float ..
+                        # do nothing in such cases
+                        pass 
+        return d
 
     
     def get_active_monthly(self, as_json=False):
-        return self._get_json_response_from_url(self.active_equity_monthly_url, as_json)
+        pass 
 
     def get_year_high(self, as_json=False):
-        return self._get_json_response_from_url(self.year_high_url, as_json)
+        pass
 
     def get_year_low(self, as_json=False):
-        return self._get_json_response_from_url(self.year_low_url, as_json)
+        pass
     
     def get_preopen_nifty(self, as_json=False):
-        return self._get_json_response_from_url(self.preopen_nifty_url, as_json)
+        pass
 
     def get_preopen_niftybank(self, as_json=False):
-        return self._get_json_response_from_url(self.preopen_niftybank_url, as_json)
+        pass
 
     def get_preopen_fno(self, as_json=False):
-        return self._get_json_response_from_url(self.preopen_fno_url, as_json)
+        pass 
 
     def _get_json_response_from_url(self, url, as_json):
         """
         :return: a list of dictionaries containing the response got back from url
         """
-        req = "Request(url, None, self.headers)"
-        # this can raise HTTPError and URLError
-        res = self.opener.open(req)
-        # for py3 compat covert byte file like object to
-        # string file like object
-        res = byte_adaptor(res)
-        res_dict = json.load(res)
-        # clean the output and make appropriate type conversions
-        res_list = [self.clean_server_response(item)
-                    for item in res_dict['data']]
-        return self.render_response(res_list, as_json)
-    
+        pass 
     def get_index_list(self):
         """ get list of indices and codes
         returns: a list | json of index codes
@@ -281,8 +281,10 @@ class Nse(AbstractBaseExchange):
         all_index_quote = self.get_all_index_quote()
         index_list = [ i['indexSymbol'] for i in all_index_quote]
         code = code.upper()
+        code = ' '.join(code.split())
         if code in index_list:
-            return list(filter(lambda idx: idx['indexSymbol'] == code, all_index_quote))[0]
+            response = list(filter(lambda idx: idx['indexSymbol'] == code, all_index_quote))[0]
+            return self.cast_intfloat_string_values_to_intfloat(response)
         else:
             raise Exception('Wrong index code')
     
@@ -326,13 +328,6 @@ class Nse(AbstractBaseExchange):
 
         # change all the keys from unicode to string
         pass 
-
-    def render_response(self, data, as_json=False):
-        if as_json is True:
-            return json.dumps(data)
-        else:
-            return data
-
     def get_bhavcopy_url(self, d):
         """take date and return bhavcopy url"""
         d = mkdate(d)
