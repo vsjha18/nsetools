@@ -1,5 +1,9 @@
 # Commands 
 
+## Setup Dev Environment 
+
+```
+pip install ipdb ipython pytest requests dateutils six
 ## Run Tests 
 ```bash
 nosetests --with-coverage --cover-package nsetools.nse --cover-branch
@@ -24,6 +28,11 @@ Follow these instructions for building.
 * move setup.py one level up.
 * run command from there.
 * change version in `setup.py` and `__init__.py`
+
+```bash
+pip install requests dateutils wheel twine setuptools
+```
+
 * Command to build 
 
 ```bash
