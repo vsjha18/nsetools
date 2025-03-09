@@ -12,7 +12,7 @@ QUOTE_EQUITY_URL = f"{NSE_MAIN}/get-quotes/equity?symbol=%s"
 QUOTE_API_URL = f"{NSE_MAIN}/api/quote-equity?symbol=%s"
 
 # Stock list URLs
-STOCKS_CSV_URL = f"{NSE_LEGACY}/content/equities/EQUITY_L.csv"
+STOCKS_CSV_URL = f"https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv"
 
 # Market movers URLs
 TOP_GAINERS_URL = f"{NSE_MAIN}/api/live-analysis-variations?index=gainers"
@@ -21,10 +21,8 @@ TOP_FNO_GAINER_URL = f"{NSE_LEGACY}/live_market/dynaContent/live_analysis/gainer
 TOP_FNO_LOSER_URL = f"{NSE_LEGACY}/live_market/dynaContent/live_analysis/losers/fnoLosers1.json"
 
 # Index URLs
-ADVANCES_DECLINES_URL = f"{NSE_LEGACY}/common/json/indicesAdvanceDeclines.json"
-INDEX_URL = f"{NSE_LEGACY}/homepage/Indices1.json"
 ALL_INDICES_URL = f"{NSE_MAIN}/api/allIndices"
-EQUITY_STOCK_INDICES_URL = f"{NSE_MAIN}/api/equity-stockIndices?index=%s"
+
 
 # Historical data URLs
 BHAVCOPY_BASE_URL = f"{NSE_LEGACY}/content/historical/EQUITIES/%s/%s/cm%s%s%sbhav.csv.zip"
