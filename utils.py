@@ -60,3 +60,19 @@ def js_adaptor(buffer):
     buffer = re.sub('NaN', '"NaN"', buffer)
     return buffer
 
+def cast_intfloat_string_values_to_intfloat(d):
+        d = d.copy()
+        for keys in d:
+            if type(d[keys]) == str:
+                try:
+                    d[keys] = int(d[keys])
+                except:
+                    try:
+                        d[keys] = float(d[keys])
+                    except:
+                        # given string value is neither string nor float ..
+                        # do nothing in such cases
+                        pass 
+        return d
+
+

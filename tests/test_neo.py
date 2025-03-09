@@ -1,10 +1,10 @@
 import sys 
 import os 
 import unittest
-from unittest.mock import patch, Mock
 
 sys.path.append(os.environ.get('VIRTUAL_ENV'))
 from nsetools import Nse
+from nsetools.utils import cast_intfloat_string_values_to_intfloat
 
 class TestIndexAPIs(unittest.TestCase):
     def setUp(self):
@@ -136,13 +136,9 @@ class TestStockAPIs(unittest.TestCase):
 
 class TestMisc(unittest.TestCase):
     def setUp(self):
-        self.nse = Nse()
+        pass 
     
     def test_cast_intfloat_string_values_to_intfloat(self):
         sample = {'a': 'bangalore', 'b': '1', 'c': '100.21', 'd': True}
-        resp = self.nse.cast_intfloat_string_values_to_intfloat(sample)
+        resp = cast_intfloat_string_values_to_intfloat(sample)
         self.assertDictEqual(resp, {'a': 'bangalore', 'b': 1, 'c': 100.21, 'd': True})
-if __name__ == '__main__':
-    import os
-    os.system("nose2 nsetools -v")
-
