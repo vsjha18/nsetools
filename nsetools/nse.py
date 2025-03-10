@@ -75,32 +75,42 @@ class Nse(AbstractBaseExchange):
         res = res.json()['priceInfo'] if all_data is False else res.json()
         return cast_intfloat_string_values_to_intfloat(res)
     
-    def get_top_gainers(self, index=None):
+    def _get_top_gainers_losers(self, direction, index):
         """
+        :param direction: one of gainers or losers
+        :param index: one of NIFTY, BANKNIFTY, NIFTYNEXT50, SecGtr20, SecLwr20, FNO, ALL
+        :return: a list of dictionaries containing top gainers or losers of the day for all indices
+        """
+        index = index or 'NIFTY'  # Default to NIFTY if None
+        index = index.upper()
+        index = {
+            "NIFTY": "NIFTY",
+            "BANKNIFTY": "BANKNIFTY",
+            "NIFTYNEXT50": "NIFTYNEXT50",
+            "SECGTR20": "SecGtr20",
+            "SECLWR20": "SecLwr20",
+            "FNO": "FOSec",
+            "ALL": "allSec"
+        }.get(index)
+        if index is None:
+            raise ValueError("Index must be one of NIFTY, BANKNIFTY, NIFTYNEXT50, SecGtr20, SecLwr20, FNO, ALL")
+        url = urls.TOP_GAINERS_URL if direction == 'gainers' else urls.TOP_LOSERS_URL
+        res = self.session.fetch(url)
+        return cast_intfloat_string_values_to_intfloat(res.json())[index]['data']
+    
+    def get_top_gainers(self, index="NIFTY"):
+        """
+        :param index: one of NIFTY, BANKNIFTY, NIFTYNEXT50, SecGtr20, SecLwr20, FNO, ALL
         :return: a list of dictionaries containing top gainers of the day for all indices
         """
-        url = urls.TOP_GAINERS_URL
-        res = self.session.fetch(url)
-        res_dict = res.json()
-        if index is None:
-            return cast_intfloat_string_values_to_intfloat(res_dict)
-        else:
-            res_dict = res_dict[index]
-            return res_dict['data']
+        return self._get_top_gainers_losers('gainers', index)
 
-
-    def get_top_losers(self, index=None):
+    def get_top_losers(self, index="NIFTY"):  # Changed from None to "NIFTY"
         """
+        :param index: one of NIFTY, BANKNIFTY, NIFTYNEXT50, SecGtr20, SecLwr20, FNO, ALL
         :return: a list of dictionaries containing top losers of the day for all indices
         """
-        url = urls.TOP_LOSERS_URL
-        res = self.session.fetch(url)
-        res_dict = res.json()
-        if index is None:
-            return cast_intfloat_string_values_to_intfloat(res_dict)
-        else:
-            res_dict = res_dict[index]
-            return res_dict['data']
+        return self._get_top_gainers_losers('losers', index)  # Changed from 'gainers' to 'losers'
     
     def get_advances_declines(self, code='nifty 50'):
         """

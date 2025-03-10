@@ -92,6 +92,77 @@ class TestIndexAPIs(unittest.TestCase):
         bank_ad = self.nse.get_advances_declines('nifty bank')
         self.assertLessEqual(bank_ad['advances'] + bank_ad['declines'], 12)  # NIFTY Bank has 12 stocks
 
+    def test_get_top_gainers_losers_internal(self):
+        """Test internal _get_top_gainers_losers method"""
+        # Test gainers for different indices
+        gainers_nifty = self.nse._get_top_gainers_losers('gainers', 'NIFTY')
+        gainers_banknifty = self.nse._get_top_gainers_losers('gainers', 'BANKNIFTY')
+        gainers_all = self.nse._get_top_gainers_losers('gainers', 'ALL')
+
+        # Verify structure and types
+        for gainers in [gainers_nifty, gainers_banknifty, gainers_all]:
+            self.assertIsInstance(gainers, list)
+            if len(gainers) > 0:  # Only check if we have data
+                self.assertIsInstance(gainers[0], dict)
+                # Check essential fields in first entry
+                sample = gainers[0]
+                self.assertIn('symbol', sample)
+                self.assertIn('ltp', sample)  # changed from lastPrice
+                self.assertIn('net_price', sample)  # changed from change
+                self.assertIn('perChange', sample)  # changed from pChange
+                # Verify numeric fields
+                self.assertIsInstance(sample['ltp'], (int, float))
+                self.assertIsInstance(sample['net_price'], (int, float))
+                self.assertIsInstance(sample['perChange'], (int, float))
+
+        # Test invalid index
+        with self.assertRaises(ValueError):
+            self.nse._get_top_gainers_losers('gainers', 'INVALID')
+
+    def test_get_top_gainers(self):
+        """Test get_top_gainers public method"""
+        # Test default parameter (NIFTY)
+        gainers_default = self.nse.get_top_gainers()
+        self.assertIsInstance(gainers_default, list)
+        
+        # Test with explicit index
+        gainers_banknifty = self.nse.get_top_gainers('BANKNIFTY')
+        self.assertIsInstance(gainers_banknifty, list)
+        
+        # Test with ALL
+        gainers_all = self.nse.get_top_gainers('ALL')
+        self.assertIsInstance(gainers_all, list)
+
+        # Verify common structure if data exists
+        if len(gainers_default) > 0:
+            sample = gainers_default[0]
+            self.assertIsInstance(sample, dict)
+            self.assertIn('symbol', sample)
+            self.assertIn('ltp', sample)  # changed from lastPrice
+            self.assertTrue(sample['net_price'] > 0)  # changed from change
+
+    def test_get_top_losers(self):
+        """Test get_top_losers public method"""
+        # Test default parameter
+        losers_default = self.nse.get_top_losers()
+        self.assertIsInstance(losers_default, list)
+        
+        # Test with explicit index
+        losers_fno = self.nse.get_top_losers('FNO')
+        self.assertIsInstance(losers_fno, list)
+        
+        # Test NIFTYNEXT50
+        losers_next50 = self.nse.get_top_losers('NIFTYNEXT50')
+        self.assertIsInstance(losers_next50, list)
+
+        # Verify common structure if data exists
+        if len(losers_default) > 0:
+            sample = losers_default[0]
+            self.assertIsInstance(sample, dict)
+            self.assertIn('symbol', sample)
+            self.assertIn('ltp', sample)  # changed from lastPrice
+            self.assertTrue(sample['net_price'] < 0)  # changed from change
+
 class TestStockAPIs(unittest.TestCase):
     def setUp(self):
         self.nse = Nse()
