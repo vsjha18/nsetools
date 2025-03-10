@@ -3,23 +3,24 @@
 ## Setup Dev Environment 
 
 ```
-pip install ipdb ipython pytest requests dateutils six
+pip install ipdb ipython pytest pytest-cov requests dateutils six 
+
 ## Run Tests 
+
 ```bash
-nosetests --with-coverage --cover-package nsetools.nse --cover-branch
-python setup.py sdist upload -r pypi
+cd $VIRTUAL_ENV/nsetools
+pytest --cov=nsetools --cov-report=term -v
 ```
 
-## Test Locally 
+## Test Build Locally 
 
-* Install setuptools, wheel, twine will be needed for upload.
-* `python setup.py bdist_wheel --verbose`
-* Things will be found in the dist folder at the same level as setup tools.
-
-Clean up the environment before installing the package.
+Make a new virtual env, if using existing virtual env remove all extensions on each iteration using this command and use the next command to install the package from path
 
 ```bash
-pip uninstall -y certifi charset-normalizer dateutils idna nsetools python-dateutil pytz requests six urllib3
+pip freeze | xargs pip uninstall -y
+pip install /path/to/your/package.whl
+OR
+pip install /path/to/your/package.tar.gz
 ```
 
 ## Publishing

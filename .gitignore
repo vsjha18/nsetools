@@ -1,0 +1,42 @@
+# Ignore Python bytecode files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore virtual environment directories
+venv/
+env/
+*.env
+*.venv
+
+# Ignore pytest coverage reports
+.coverage
+nosetests.xml
+coverage.xml
+*.coveragerc
+
+# Ignore pyenv files
+.python-version
+
+# Ignore local development setup
+*.swp
+*.swo
+
+# Ignore build directories
+build/
+dist/
+*.egg-info/
+
+# Ignore configuration files for IDEs
+.vscode/
+.idea/
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore logs and temporary files
+*.log
+*.bak
+*.tmp
+
