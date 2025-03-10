@@ -4,8 +4,11 @@
 
 ```
 pip install ipdb ipython pytest pytest-cov requests dateutils six 
+```
 
-## Run Tests 
+> To see coverage install covergae gutters extension and follow Makefile
+
+### Run Tests 
 
 ```bash
 cd $VIRTUAL_ENV/nsetools
