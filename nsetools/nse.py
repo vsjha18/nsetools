@@ -41,6 +41,10 @@ class Nse(AbstractBaseExchange):
     def __init__(self, session_refresh_interval=120):
         self.session_refresh_interval = session_refresh_interval 
         self.session = Session(session_refresh_interval)
+
+    #############################
+    ###      STOCKS APIS      ###
+    #############################
     
     def get_stock_codes(self):
         """ returns a list of stock codes traded in NSE
@@ -75,28 +79,43 @@ class Nse(AbstractBaseExchange):
         res = res.json()['priceInfo'] if all_data is False else res.json()
         return cast_intfloat_string_values_to_intfloat(res)
     
-    def _get_top_gainers_losers(self, direction, index):
+    #############################
+    ###       INDEX APIS      ###
+    #############################
+    
+    def get_index_quote(self, code):
         """
-        :param direction: one of gainers or losers
-        :param index: one of NIFTY, BANKNIFTY, NIFTYNEXT50, SecGtr20, SecLwr20, FNO, ALL
-        :return: a list of dictionaries containing top gainers or losers of the day for all indices
+        params:
+            code : string index code
+        returns:
+            dict 
         """
-        index = index or 'NIFTY'  # Default to NIFTY if None
-        index = index.upper()
-        index = {
-            "NIFTY": "NIFTY",
-            "BANKNIFTY": "BANKNIFTY",
-            "NIFTYNEXT50": "NIFTYNEXT50",
-            "SECGTR20": "SecGtr20",
-            "SECLWR20": "SecLwr20",
-            "FNO": "FOSec",
-            "ALL": "allSec"
-        }.get(index)
-        if index is None:
-            raise ValueError("Index must be one of NIFTY, BANKNIFTY, NIFTYNEXT50, SecGtr20, SecLwr20, FNO, ALL")
-        url = urls.TOP_GAINERS_URL if direction == 'gainers' else urls.TOP_LOSERS_URL
+        url = urls.ALL_INDICES_URL
+        all_index_quote = self.get_all_index_quote()
+        index_list = [ i['indexSymbol'] for i in all_index_quote]
+        code = code.upper()
+        code = ' '.join(code.split())
+        if code in index_list:
+            response = list(filter(lambda idx: idx['indexSymbol'] == code, all_index_quote))[0]
+            return cast_intfloat_string_values_to_intfloat(response)
+        else:
+            raise Exception('Wrong index code')
+    
+    def get_index_list(self):
+        """ get list of indices and codes
+        returns: a list | json of index codes
+        """
+        return [ i['indexSymbol'] for i in self.get_all_index_quote()]
+    
+    def get_all_index_quote(self):
+        """
+        Gets information of all indices and one go
+        returns:
+            list of dicts
+        """
+        url = urls.ALL_INDICES_URL
         res = self.session.fetch(url)
-        return cast_intfloat_string_values_to_intfloat(res.json())[index]['data']
+        return res.json()['data']
     
     def get_top_gainers(self, index="NIFTY"):
         """
@@ -121,43 +140,50 @@ class Nse(AbstractBaseExchange):
         code = code.upper()
         index_quote = self.get_index_quote(code)
         return {'advances': index_quote['advances'], 'declines': index_quote['declines']}
-        
     
-
-    def get_index_list(self):
-        """ get list of indices and codes
-        returns: a list | json of index codes
+    def get_stocks_in_index(self, index="NIFTY 50"):
         """
-        return [ i['indexSymbol'] for i in self.get_all_index_quote()]
-    
-    def get_index_quote(self, code):
+        :param index: valid index name from api get_index_list
+        :return: list of stock codes
         """
-        params:
-            code : string index code
-        returns:
-            dict 
-        """
-        url = urls.ALL_INDICES_URL
-        all_index_quote = self.get_all_index_quote()
-        index_list = [ i['indexSymbol'] for i in all_index_quote]
-        code = code.upper()
-        code = ' '.join(code.split())
-        if code in index_list:
-            response = list(filter(lambda idx: idx['indexSymbol'] == code, all_index_quote))[0]
-            return cast_intfloat_string_values_to_intfloat(response)
-        else:
-            raise Exception('Wrong index code')
-    
-    def get_all_index_quote(self):
-        """
-        Gets information of all indices and one go
-        returns:
-            list of dicts
-        """
-        url = urls.ALL_INDICES_URL
+        index = index.upper()
+        url = urls.STOCKS_IN_INDEX_URL % index
         res = self.session.fetch(url)
-        return res.json()['data']
+        res_dict = res.json()
+        return  [stock['symbol'] for stock in res_dict['data']][1:]  
 
+    def _get_top_gainers_losers(self, direction, index):
+        """
+        :param direction: one of gainers or losers
+        :param index: one of NIFTY, BANKNIFTY, NIFTYNEXT50, SecGtr20, SecLwr20, FNO, ALL
+        :return: a list of dictionaries containing top gainers or losers of the day for all indices
+        IMP: This API has one abnormality that it actually takes NIFTY, BANKNIFTY, NIFTYNEXT50 etc.
+        as index names, but these are not same as formal index symbols returned by get_index_list
+        But I want users to have consistent experience hence I am mapping these formal ones to 
+        the ones that this API expects. Since this API only supports six options, so it is possible
+        map.
+        """
+        index = index or 'NIFTY'  # Default to NIFTY if None
+        index = index.upper()
+        index = {
+            "NIFTY": "NIFTY",
+            "NIFTY 50": "NIFTY",
+            "NIFTY BANK": "BANKNIFTY",
+            "BANKNIFTY": "BANKNIFTY",
+            "NIFTYNEXT50": "NIFTYNEXT50",
+            "NIFTY NEXT 50": "NIFTYNEXT50",
+            "SECGTR20": "SecGtr20",
+            "SECLWR20": "SecLwr20",
+            "FNO": "FOSec",
+            "ALL": "allSec"
+        }.get(index)
+        if index is None:
+            raise ValueError("Index must be one of NIFTY 50, NIFTY BANK, NIFTY NEXT 50, SecGtr20, SecLwr20, FNO, ALL")
+        url = urls.TOP_GAINERS_URL if direction == 'gainers' else urls.TOP_LOSERS_URL
+        res = self.session.fetch(url)
+        return cast_intfloat_string_values_to_intfloat(res.json())[index]['data']
+
+    
     def __str__(self):
         """
         string representation of object

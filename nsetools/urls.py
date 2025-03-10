@@ -22,6 +22,7 @@ TOP_FNO_LOSER_URL = f"{NSE_LEGACY}/live_market/dynaContent/live_analysis/losers/
 
 # Index URLs
 ALL_INDICES_URL = f"{NSE_MAIN}/api/allIndices"
+STOCKS_IN_INDEX_URL = f"{NSE_MAIN}/api/equity-stockIndices?index=%s"
 
 
 # Historical data URLs
