@@ -10,6 +10,8 @@ pip install ipdb ipython pytest pytest-cov requests dateutils six
 ```bash
 cd $VIRTUAL_ENV/nsetools
 pytest --cov=nsetools --cov-report=term -v
+# or if are specific on a test module
+pytest --cov=nsetools --cov-report=term tests/test_session.py -v
 ```
 
 ## Test Build Locally 
