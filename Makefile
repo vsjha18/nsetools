@@ -8,6 +8,9 @@ PYTEST = pytest
 test:
 	$(PYTEST) --cov=nsetools --cov-report=term -v
 
+cov:
+	$(PYTEST) --cov=nsetools --cov-report=xml -v
+
 # Clean up pycache files
 clean:
 	find . -type d -name "__pycache__" -exec rm -r {} +
