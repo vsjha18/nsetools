@@ -197,6 +197,54 @@ class Nse(AbstractBaseExchange):
         res = self.session.fetch(url)
         return cast_intfloat_string_values_to_intfloat(res.json())[index]['data']
 
+    #############################
+    ###    DERIVATIVE APIS    ###
+    #############################
+
+    def get_future_quote(self, code, expiry_date=None):
+        """
+        :param code: stock code
+        :return: dict
+        """
+        url = urls.QUOTE_DRIVATIVE_URL % code
+        res = self.session.fetch(url)
+        res_dict = res.json()
+        # list containing all options and futures data
+        data = res_dict['stocks']
+        # filter out only future data
+        future_data = [s for s in data if s['metadata']['instrumentType'] == "Stock Futures"]
+        # future data is very convoluted, so flatten-out the desired data
+        # !! there is bug in spelling of the key 'dailyvolatility', it is not camel cased
+        # fixing that in my code for uniformity
+        filtered_data = [
+            {
+                'expiryDate': record['metadata']['expiryDate'],
+                'openPrice': record['metadata']['openPrice'],
+                'highPrice': record['metadata']['highPrice'],
+                'lowPrice': record['metadata']['lowPrice'],
+                'closePrice': record['metadata']['closePrice'],
+                'prevClose': record['metadata']['prevClose'],
+                'lastPrice': record['metadata']['lastPrice'],
+                'change': record['metadata']['change'],
+                'pChange': record['metadata']['pChange'],
+                'numberOfContractsTraded': record['metadata']['numberOfContractsTraded'],
+                'totalTurnover': record['metadata']['totalTurnover'],
+                'underlyingValue': record['underlyingValue'],
+                'tradedVolume': record['marketDeptOrderBook']['tradeInfo']['tradedVolume'],
+                'openInterest': record['marketDeptOrderBook']['tradeInfo']['openInterest'],
+                'changeInOpenInterest': record['marketDeptOrderBook']['tradeInfo']['changeinOpenInterest'],
+                'pchangeinOpenInterest': record['marketDeptOrderBook']['tradeInfo']['pchangeinOpenInterest'],
+                'marketLot': record['marketDeptOrderBook']['tradeInfo']['marketLot'],
+                'dailyVolatility': record['marketDeptOrderBook']['otherInfo']['dailyvolatility'],
+                'annualisedVolatility': record['marketDeptOrderBook']['otherInfo']['annualisedVolatility']
+            }
+            for record in future_data
+        ]
+        # if expiry_date is provided, filter out data for that expiry date
+        if expiry_date:
+            # pick only the first record, there should be only one record for a given expiry date
+            filtered_data = [record for record in filtered_data if record['expiryDate'] == expiry_date][0]
+        return cast_intfloat_string_values_to_intfloat(filtered_data)
     
     def __str__(self):
         """
