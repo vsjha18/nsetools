@@ -79,6 +79,20 @@ class Nse(AbstractBaseExchange):
         res = res.json()['priceInfo'] if all_data is False else res.json()
         return cast_intfloat_string_values_to_intfloat(res)
     
+    def get_52_week_high(self):
+        """
+        :return: list of dictionaries containing stocks on 52 week high data
+        """
+        res = self.session.fetch(urls.FIFTYTWO_WEEK_HIGH_URL)
+        return cast_intfloat_string_values_to_intfloat(res.json())['data']
+    
+    def get_52_week_low(self):
+        """
+        :return: list of dictionaries containing stocks on 52 week low data
+        """
+        res = self.session.fetch(urls.FIFTYTWO_WEEK_LOW_URL)
+        return cast_intfloat_string_values_to_intfloat(res.json())['data']
+    
     #############################
     ###       INDEX APIS      ###
     #############################

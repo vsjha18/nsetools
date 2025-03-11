@@ -19,6 +19,8 @@ TOP_GAINERS_URL = f"{NSE_MAIN}/api/live-analysis-variations?index=gainers"
 TOP_LOSERS_URL = f"{NSE_MAIN}/api/live-analysis-variations?index=loosers"
 TOP_FNO_GAINER_URL = f"{NSE_LEGACY}/live_market/dynaContent/live_analysis/gainers/fnoGainers1.json"
 TOP_FNO_LOSER_URL = f"{NSE_LEGACY}/live_market/dynaContent/live_analysis/losers/fnoLosers1.json"
+FIFTYTWO_WEEK_HIGH_URL = f"{NSE_MAIN}/api/live-analysis-data-52weekhighstock"
+FIFTYTWO_WEEK_LOW_URL = f"{NSE_MAIN}/api/live-analysis-data-52weeklowstock"
 
 # Index URLs
 ALL_INDICES_URL = f"{NSE_MAIN}/api/allIndices"

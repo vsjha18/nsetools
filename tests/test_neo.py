@@ -238,6 +238,38 @@ class TestStockAPIs(unittest.TestCase):
         with self.assertRaises(AttributeError):          # None case should raise AttributeError
             self.nse.is_valid_code(None)
 
+    def test_get_52_week_high(self):
+        """Test to get 52 week high data from NSE"""
+        data = self.nse.get_52_week_high()
+        self.assertIsInstance(data, list)
+        if len(data) > 0:
+            record = data[0]
+            self.assertIsInstance(record, dict)
+            required_fields = ['symbol', 'series', 'comapnyName', 'new52WHL', 
+                             'prev52WHL', 'prevHLDate', 'ltp', 'prevClose', 
+                             'change', 'pChange']
+            for field in required_fields:
+                self.assertIn(field, record)
+            self.assertIsInstance(record['symbol'], str)
+            self.assertIsInstance(record['new52WHL'], (int, float))
+            self.assertIsInstance(record['pChange'], (int, float))
+
+    def test_get_52_week_low(self):
+        """Test to get 52 week low data from NSE"""
+        data = self.nse.get_52_week_low()
+        self.assertIsInstance(data, list)
+        if len(data) > 0:
+            record = data[0]
+            self.assertIsInstance(record, dict)
+            required_fields = ['symbol', 'series', 'comapnyName', 'new52WHL', 
+                             'prev52WHL', 'prevHLDate', 'ltp', 'prevClose', 
+                             'change', 'pChange']
+            for field in required_fields:
+                self.assertIn(field, record)
+            self.assertIsInstance(record['symbol'], str)
+            self.assertIsInstance(record['new52WHL'], (int, float))
+            self.assertIsInstance(record['pChange'], (int, float))
+
 class TestMisc(unittest.TestCase):
     def setUp(self):
         pass 
