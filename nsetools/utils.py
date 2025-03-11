@@ -60,29 +60,37 @@ def js_adaptor(buffer):
     buffer = re.sub('NaN', '"NaN"', buffer)
     return buffer
 
-def cast_intfloat_string_values_to_intfloat(data):
+def cast_intfloat_string_values_to_intfloat(data, round_digits=2):
     if isinstance(data, dict):
         data = data.copy()
-        for key in data:
-            if isinstance(data[key], str):
+        for key, value in data.items():
+            if isinstance(value, str):
                 try:
-                    data[key] = int(data[key])
+                    data[key] = int(value)
                 except ValueError:
                     try:
-                        data[key] = float(data[key])
+                        data[key] = round(float(value), round_digits)
                     except ValueError:
-                        pass  # given string value is neither int nor float
+                        pass
+            elif isinstance(value, (dict, list)):
+                data[key] = cast_intfloat_string_values_to_intfloat(value, round_digits)
+            elif isinstance(value, float):
+                data[key] = round(value, round_digits)
     elif isinstance(data, list):
         data = data[:]
-        for i in range(len(data)):
-            if isinstance(data[i], str):
+        for i, value in enumerate(data):
+            if isinstance(value, str):
                 try:
-                    data[i] = int(data[i])
+                    data[i] = int(value)
                 except ValueError:
                     try:
-                        data[i] = float(data[i])
+                        data[i] = round(float(value), round_digits)
                     except ValueError:
-                        pass  # given string value is neither int nor float
+                        pass
+            elif isinstance(value, (dict, list)):
+                data[i] = cast_intfloat_string_values_to_intfloat(value, round_digits)
+            elif isinstance(value, float):
+                data[i] = round(value, round_digits)
     return data
 
 
