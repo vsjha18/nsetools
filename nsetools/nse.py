@@ -206,7 +206,7 @@ class Nse(AbstractBaseExchange):
         :param code: stock code
         :return: dict
         """
-        url = urls.QUOTE_DRIVATIVE_URL % code
+        url = urls.QUOTE_DRIVATIVE_URL % code.upper()
         res = self.session.fetch(url)
         res_dict = res.json()
         # list containing all options and futures data
