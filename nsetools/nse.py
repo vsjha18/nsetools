@@ -219,12 +219,13 @@ class Nse(AbstractBaseExchange):
         filtered_data = [
             {
                 'expiryDate': record['metadata']['expiryDate'],
+                'lastPrice': record['metadata']['lastPrice'],
+                'premium': record['metadata']['lastPrice'] - record['underlyingValue'],
                 'openPrice': record['metadata']['openPrice'],
                 'highPrice': record['metadata']['highPrice'],
                 'lowPrice': record['metadata']['lowPrice'],
                 'closePrice': record['metadata']['closePrice'],
                 'prevClose': record['metadata']['prevClose'],
-                'lastPrice': record['metadata']['lastPrice'],
                 'change': record['metadata']['change'],
                 'pChange': record['metadata']['pChange'],
                 'numberOfContractsTraded': record['metadata']['numberOfContractsTraded'],
