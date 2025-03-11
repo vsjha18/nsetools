@@ -30,19 +30,25 @@ class TestSession(unittest.TestCase):
 
     def test_session_refresh(self):
         """Test if session refreshes after interval"""
+        # Create session with very short interval
+        self.session = Session(session_refresh_interval=1)
+        
         initial_time = self.session._session_init_time
-        initial_session_id = id(self.session._session)
+        initial_session = self.session._session
         
+        # First request
         response = self.session.fetch(urls.NSE_HOME)
         self.assertEqual(response.status_code, 200)
         
-        time.sleep(3)  # Wait longer than refresh interval
+        # Wait longer than refresh interval
+        time.sleep(2)
         
-        response = self.session.fetch(urls.NSE_HOME)
+        # Force session refresh with a different URL
+        response = self.session.fetch(urls.NSE_MAIN)
         self.assertEqual(response.status_code, 200)
         
-        # Verify session object was recreated
-        self.assertNotEqual(id(self.session._session), initial_session_id)
+        # Verify session was recreated
+        self.assertIsNot(self.session._session, initial_session)
         
         # Verify timestamp was updated
         self.assertNotEqual(initial_time, self.session._session_init_time)
@@ -58,6 +64,46 @@ class TestSession(unittest.TestCase):
         
         self.assertEqual(response1.status_code, 200)
         self.assertEqual(response2.status_code, 200)
+
+    def test_cache_hit(self):
+        """Test if responses are cached and reused"""
+        # First request should hit network
+        response1 = self.session.fetch(urls.NSE_HOME)
+        self.assertEqual(response1.status_code, 200)
+        
+        # Second request should hit cache
+        response2 = self.session.fetch(urls.NSE_HOME)
+        self.assertEqual(response2.status_code, 200)
+        self.assertEqual(response1, response2)  # Same response object
+        
+        # Both responses should be in cache
+        self.assertIn(urls.NSE_HOME, Session.__CACHE__)
+
+    def test_cache_expiry(self):
+        """Test if cache expires after timeout"""
+        self.session.cache_timeout = 2  # Set short timeout for testing
+        
+        # First request
+        response1 = self.session.fetch(urls.NSE_HOME)
+        self.assertEqual(response1.status_code, 200)
+        
+        # Wait for cache to expire
+        time.sleep(3)
+        
+        # Second request should hit network again
+        response2 = self.session.fetch(urls.NSE_HOME)
+        self.assertEqual(response2.status_code, 200)
+        self.assertNotEqual(id(response1), id(response2))  # Different response objects
+
+    def test_cache_flush(self):
+        """Test if cache flush clears all cached responses"""
+        # Cache a response
+        response = self.session.fetch(urls.NSE_HOME)
+        self.assertIn(urls.NSE_HOME, Session.__CACHE__)
+        
+        # Flush cache
+        self.session.flush()
+        self.assertEqual(len(Session.__CACHE__), 0)
 
 if __name__ == '__main__':
     unittest.main()

@@ -166,7 +166,7 @@ class TestIndexAPIs(unittest.TestCase):
     def test_get_stocks_in_index(self):
         """Test getting list of stocks in an index"""
         # Test with default parameter (NIFTY 50)
-        stocks = self.nse.get_index_stocks()
+        stocks = self.nse.get_stocks_in_index()
         self.assertIsInstance(stocks, list)
         self.assertEqual(len(stocks), 50)  # NIFTY 50 should have 50 stocks
         
@@ -176,7 +176,7 @@ class TestIndexAPIs(unittest.TestCase):
             self.assertIn(stock, stocks)
             
         # Test with NIFTY BANK
-        bank_stocks = self.nse.get_index_stocks('NIFTY BANK')
+        bank_stocks = self.nse.get_stocks_in_index('NIFTY BANK')
         self.assertIsInstance(bank_stocks, list)
         self.assertEqual(len(bank_stocks), 12)  # NIFTY BANK has 12 stocks
         
@@ -186,12 +186,12 @@ class TestIndexAPIs(unittest.TestCase):
             self.assertIn(bank, bank_stocks)
             
         # Test with lowercase input
-        lower_case_stocks = self.nse.get_index_stocks('nifty 50')
+        lower_case_stocks = self.nse.get_stocks_in_index('nifty 50')
         self.assertEqual(stocks, lower_case_stocks)  # Should be case insensitive
         
         # Test with invalid index
         with self.assertRaises(Exception):
-            self.nse.get_index_stocks('INVALID_INDEX')
+            self.nse.get_stocks_in_index('INVALID_INDEX')
 
 class TestStockAPIs(unittest.TestCase):
     def setUp(self):
