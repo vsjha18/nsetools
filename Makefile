@@ -4,6 +4,25 @@
 PYTHON = python3
 PYTEST = pytest
 
+# Default target
+.DEFAULT_GOAL := help
+
+# Help target
+help:
+	@echo "NSETools Makefile commands:"
+	@echo "-------------------------"
+	@echo "make dev       : Install all development dependencies"
+	@echo "make test      : Run tests with coverage report in terminal"
+	@echo "make cov       : Generate coverage XML report"
+	@echo "make clean     : Remove Python cache files"
+	@echo "make pristine  : Remove all installed packages from virtualenv"
+	@echo "-------------------------"
+
+# Install packages for development
+dev:
+	pip install --upgrade pip
+	pip install requests six dateutils ipython pytest pytest-cov 
+
 # Target to run the tests
 test:
 	$(PYTEST) --cov=nsetools --cov-report=term -v
@@ -17,10 +36,5 @@ clean:
 
 # Remove all installed packages in the venv (pristine)
 pristine:
-	$(PYTHON) -m pip freeze | xargs $(PYTHON) -m pip uninstall -y
-
-# Install dependencies from requirements.txt
-install:
-	$(PYTHON) -m pip install --upgrade pip
-	$(PYTHON) -m pip install -r requirements.txt
+	pip freeze | cut -d = -f 1 | grep -v "^pip$" | xargs pip uninstall -y
 
