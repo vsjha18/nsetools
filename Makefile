@@ -21,7 +21,7 @@ help:
 # Install packages for development
 dev:
 	pip install --upgrade pip
-	pip install requests six dateutils ipython pytest pytest-cov 
+	pip install requests six dateutils ipython pytest pytest-cov build setuptools wheel twine
 
 # Target to run the tests
 test:
@@ -37,4 +37,7 @@ clean:
 # Remove all installed packages in the venv (pristine)
 pristine:
 	pip freeze | cut -d = -f 1 | grep -v "^pip$" | xargs pip uninstall -y
+
+build:
+	python -m build
 
