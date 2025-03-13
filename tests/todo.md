@@ -26,3 +26,9 @@ Gets info on all the indices
 * pandas integration 
 * live prompt 
 * rich integration 
+
+# 2025
+
+* There is API for listing all the stocks and its respective prices in the single view, no need to interate on all stocks of an index - `https://www.nseindia.com/api/equity-stockIndices?index=NIFTY%20NEXT%2050`
+
+
