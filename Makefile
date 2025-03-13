@@ -16,6 +16,7 @@ help:
 	@echo "make cov       : Generate coverage XML report"
 	@echo "make clean     : Remove Python cache files"
 	@echo "make pristine  : Remove all installed packages from virtualenv"
+	@echo "make build     : Build the package"
 	@echo "-------------------------"
 
 # Install packages for development
