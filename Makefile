@@ -22,7 +22,8 @@ help:
 # Install packages for development
 dev:
 	pip install --upgrade pip
-	pip install requests six dateutils ipython pytest pytest-cov build setuptools wheel twine
+	pip install ipython pytest pytest-cov build setuptools wheel twine
+	pip install -e .
 
 # Target to run the tests
 test:
@@ -34,10 +35,11 @@ cov:
 # Clean up pycache files
 clean:
 	find . -type d -name "__pycache__" -exec rm -r {} +
+	find . -type d -name ".pytest_cache" -exec rm -r {} +
 
 # Remove all installed packages in the venv (pristine)
 pristine:
-	pip freeze | cut -d = -f 1 | grep -v "^pip$$" | xargs pip uninstall -y
+	pip list --disable-pip-version-check | awk 'NR>2 {print $$1}' | grep -v "^pip$$" | xargs -r pip uninstall -y
 
 build:
 	python -m build
