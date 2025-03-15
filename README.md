@@ -2,6 +2,38 @@
 
 Python library for extracting data from National Stock Exchange (India)
 
+## Table of Contents
+
+- [Disclaimer](#disclaimer)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Reference](#api-reference)
+  - [Stock APIs](#stock-apis)
+    - [Get Stock Codes](#get-stock-codes)
+    - [Get Stock Quote](#get-stock-quote)
+    - [Check Valid Stock Code](#check-valid-stock-code)
+    - [52 Week High/Low](#52-week-highlow)
+  - [Index APIs](#index-apis)
+    - [Get Index Quote](#get-index-quote)
+    - [Get Index List](#get-index-list)
+    - [Get All Index Quotes](#get-all-index-quotes)
+    - [Top Gainers & Losers](#top-gainers--losers)
+    - [Advances & Declines](#advances--declines)
+    - [Stocks in Index](#stocks-in-index)
+  - [Derivatives APIs](#derivatives-apis)
+    - [Get Future Quote](#get-future-quote)
+  - [Session Management](#session-management)
+- [Response Formats](#response-formats)
+- [Response Examples](#response-examples)
+  - [Stock Quote Response](#stock-quote-response)
+  - [Index Quote Response](#index-quote-response)
+- [Setting up Dev Environment](#setting-up-dev-environment)
+  - [Clone and Install](#clone-the-repo-and-install-dependencies)
+  - [Running Tests](#running-tests)
+  - [Make Utilities](#other-make-utilities)
+- [License](#license)
+- [Updates](#updates)
+
 ## DISCLAIMER
 
 - This library is intended **only for educational and informational purposes**. It does not provide financial, trading, or investment advice. Users should verify data independently before making any financial decisions.  
@@ -163,20 +195,33 @@ All APIs return either Python dictionaries or lists containing the requested dat
 }
 ```
 
-## Error Handling
+## Setting up Dev Environment
 
-The library raises appropriate exceptions for:
-- Invalid stock codes
-- Invalid index names
-- Network errors
-- API failures
+### Clone the repo and install dependencies
+
+```bash
+python -m venv nsetools-dev # skip this if you already have a virtual environment
+cd <virtual-env-path>
+source bin/activate
+git clone https://github.com/vsjha18/nsetools.git
+cd nsetools
+make dev # package will be installed in dev mode and all the dependencies will be installed
+```
+
+### Running Tests
+
+```bash
+make test
+```
+
+### Other `make` Utilities 
+
+Read the Makefile and find your way
 
 ## License
 
 MIT License - see LICENSE file for details.
 
-
-Updates
-=========
+## Updates
 
 To stay updated please subscribe to google group https://groups.google.com/forum/#!forum/nsetools
