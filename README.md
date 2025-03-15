@@ -42,6 +42,8 @@ Python library for extracting data from National Stock Exchange (India)
 - Users are responsible for ensuring their use complies with applicable laws, regulations, and the terms of service of the data provider. The author assumes **no liability for any misuse or consequences** arising from the use of this tool.  
 - This software is provided **"as is"**, without any warranties, express or implied. The author is **not liable** for any errors, inaccuracies, disruptions, or losses resulting from its use.  
 
+[Back to Top](#nsetools)
+
 ## Installation
 
 ```bash
@@ -50,6 +52,7 @@ pip install nsetools
 
 Currently prefer cloning the repo because, pip installable version is lagging the documentation and features. Update the PYTHONPATH to point to src directory.
 
+[Back to Top](#nsetools)
 
 ## Usage
 
@@ -57,6 +60,8 @@ Currently prefer cloning the repo because, pip installable version is lagging th
 from nsetools import Nse
 nse = Nse()
 ```
+
+[Back to Top](#nsetools)
 
 ## API Reference
 
@@ -92,6 +97,8 @@ nse = Nse()
    nse.get_52_week_low()
    ```
    Get stocks that hit 52-week high or low.
+
+[Back to Top](#nsetools)
 
 ### Index APIs
 
@@ -142,6 +149,8 @@ nse = Nse()
    - `index`: Optional, defaults to "NIFTY 50"
    - Use `get_index_list()` to get valid index names
 
+[Back to Top](#nsetools)
+
 ### Derivatives APIs
 
 1. **Get Future Quote**
@@ -153,6 +162,8 @@ nse = Nse()
    - `expiry_date`: Optional, format: 'DD-Mon-YYYY' (e.g., '25-Jan-2024')
    - Returns all expiries if expiry_date is None
 
+[Back to Top](#nsetools)
+
 ### Session Management
 
 The Nse class accepts an optional parameter for session management:
@@ -160,9 +171,13 @@ The Nse class accepts an optional parameter for session management:
 nse = Nse(session_refresh_interval=120)  # Time in seconds, defaults to 120
 ```
 
+[Back to Top](#nsetools)
+
 ## Response Formats
 
 All APIs return either Python dictionaries or lists containing the requested data. Numeric values are automatically converted to appropriate Python types (int/float).
+
+[Back to Top](#nsetools)
 
 ## Response Examples
 
@@ -195,6 +210,8 @@ All APIs return either Python dictionaries or lists containing the requested dat
 }
 ```
 
+[Back to Top](#nsetools)
+
 ## Setting up Dev Environment
 
 ### Clone the repo and install dependencies
@@ -208,19 +225,27 @@ cd nsetools
 make dev # package will be installed in dev mode and all the dependencies will be installed
 ```
 
+[Back to Top](#nsetools)
+
 ### Running Tests
 
 ```bash
 make test
 ```
 
+[Back to Top](#nsetools)
+
 ### Other `make` Utilities 
 
 Read the Makefile and find your way
 
+[Back to Top](#nsetools)
+
 ## License
 
 MIT License - see LICENSE file for details.
+
+[Back to Top](#nsetools)
 
 ## Updates
 
