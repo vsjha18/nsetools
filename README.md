@@ -22,7 +22,6 @@ Python library for extracting data from National Stock Exchange (India)
     - [Stocks in Index](#stocks-in-index)
   - [Derivatives APIs](#derivatives-apis)
     - [Get Future Quote](#get-future-quote)
-  - [Session Management](#session-management)
 - [Response Formats](#response-formats)
 - [Response Examples](#response-examples)
   - [Stock Quote Response](#stock-quote-response)
@@ -161,15 +160,6 @@ nse = Nse()
    - `code`: Stock symbol (e.g., 'RELIANCE')
    - `expiry_date`: Optional, format: 'DD-Mon-YYYY' (e.g., '25-Jan-2024')
    - Returns all expiries if expiry_date is None
-
-[Back to Top](#nsetools)
-
-### Session Management
-
-The Nse class accepts an optional parameter for session management:
-```python
-nse = Nse(session_refresh_interval=120)  # Time in seconds, defaults to 120
-```
 
 [Back to Top](#nsetools)
 
