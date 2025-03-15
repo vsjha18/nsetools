@@ -75,6 +75,28 @@ nse = Nse()
 2. **Get Stock Quote**
    ```python
    nse.get_quote(code, all_data=False)
+   {'lastPrice': 1246.65,
+    'change': -10.4,
+    'pChange': -0.83,
+    'previousClose': 1257.05,
+    'open': 1260.05,
+    'close': 1247.9,
+    'vwap': 1254.22,
+    'stockIndClosePrice': 0,
+    'lowerCP': 1131.35,
+    'upperCP': 1382.75,
+    'pPriceBand': 'No Band',
+    'basePrice': 1257.05,
+    'intraDayHighLow': {'min': 1243.85, 'max': 1264.15, 'value': 1246.65},
+    'weekHighLow': {'min': 1156,
+    'minDate': '03-Mar-2025',
+    'max': 1608.8,
+    'maxDate': '08-Jul-2024',
+    'value': 1246.65},
+    'iNavValue': None,
+    'checkINAV': False,
+    'tickSize': 0.05,
+    'ieq': ''}
    ```
    - `code`: Stock symbol (e.g., 'RELIANCE')
    - `all_data`: Boolean, defaults to False. If True, returns complete response including market depth
