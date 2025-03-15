@@ -1,3 +1,12 @@
+DISCLAIMER
+==========
+
+- This library is intended **only for educational and informational purposes**. It does not provide financial, trading, or investment advice. Users should verify data independently before making any financial decisions.  
+- It **only retrieves publicly available data** from the official website without requiring authentication, login credentials, or bypassing any security measures. It does **not** scrape private, restricted, or real-time tick-by-tick data.  
+- This project is **not affiliated with, endorsed by, or associated with the National Stock Exchange of India (NSE)** or any other financial institution. NSE retains all rights over its proprietary data, trademarks, and services.  
+- Users are responsible for ensuring their use complies with applicable laws, regulations, and the terms of service of the data provider. The author assumes **no liability for any misuse or consequences** arising from the use of this tool.  
+- This software is provided **"as is"**, without any warranties, express or implied. The author is **not liable** for any errors, inaccuracies, disruptions, or losses resulting from its use.  
+
 Project Page
 =============
 http://nsetools.readthedocs.io
