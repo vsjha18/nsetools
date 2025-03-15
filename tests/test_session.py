@@ -4,7 +4,7 @@ import time
 import sys
 import os
 from datetime import datetime as dt
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+# sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from nsetools.ua import Session
 from nsetools import urls
 

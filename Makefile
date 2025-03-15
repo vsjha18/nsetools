@@ -37,7 +37,7 @@ clean:
 
 # Remove all installed packages in the venv (pristine)
 pristine:
-	pip freeze | cut -d = -f 1 | grep -v "^pip$" | xargs pip uninstall -y
+	pip freeze | cut -d = -f 1 | grep -v "^pip$$" | xargs pip uninstall -y
 
 build:
 	python -m build

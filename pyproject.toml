@@ -20,7 +20,8 @@ dependencies = [
 urls = { Homepage = "http://vsjha18.github.com/nsetools" }
 
 [tool.setuptools.packages.find]
-where = ["."]
+where = ["src"]
+exclude = ["docs*", "tests*", "exp*", "nsetools.egg-info"]
 
 [tool.setuptools]
 include-package-data = true
