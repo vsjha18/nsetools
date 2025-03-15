@@ -1,3 +1,7 @@
+# NSETools
+
+Python library for extracting data from National Stock Exchange (India)
+
 DISCLAIMER
 ==========
 
@@ -7,42 +11,171 @@ DISCLAIMER
 - Users are responsible for ensuring their use complies with applicable laws, regulations, and the terms of service of the data provider. The author assumes **no liability for any misuse or consequences** arising from the use of this tool.  
 - This software is provided **"as is"**, without any warranties, express or implied. The author is **not liable** for any errors, inaccuracies, disruptions, or losses resulting from its use.  
 
-Project Page
-=============
-http://nsetools.readthedocs.io
+
+## Installation
+
+```bash
+pip install nsetools
+```
+
+## Usage
+
+```python
+from nsetools import Nse
+nse = Nse()
+```
+
+## API Reference
+
+### Stock APIs
+
+1. **Get Stock Codes**
+   ```python
+   nse.get_stock_codes()
+   ```
+   Returns a list of stock codes traded in NSE.
+
+2. **Get Stock Quote**
+   ```python
+   nse.get_quote(code, all_data=False)
+   ```
+   - `code`: Stock symbol (e.g., 'RELIANCE')
+   - `all_data`: Boolean, defaults to False. If True, returns complete response including market depth
+   ```python
+   # Examples
+   nse.get_quote('RELIANCE')  # Basic quote
+   nse.get_quote('RELIANCE', all_data=True)  # Detailed quote
+   ```
+
+3. **Check Valid Stock Code**
+   ```python
+   nse.is_valid_code('RELIANCE')
+   ```
+   Validates if given stock code exists.
+
+4. **52 Week High/Low**
+   ```python
+   nse.get_52_week_high()
+   nse.get_52_week_low()
+   ```
+   Get stocks that hit 52-week high or low.
+
+### Index APIs
+
+1. **Get Index Quote**
+   ```python
+   nse.get_index_quote('NIFTY 50')
+   ```
+   Get quote for a specific index.
+
+2. **Get Index List**
+   ```python
+   nse.get_index_list()
+   ```
+   Returns list of all available indices.
+
+3. **Get All Index Quotes**
+   ```python
+   nse.get_all_index_quote()
+   ```
+   Get quotes for all indices at once.
+
+4. **Top Gainers & Losers**
+   ```python
+   nse.get_top_gainers(index="NIFTY")
+   nse.get_top_losers(index="NIFTY")
+   ```
+   - `index`: Optional, defaults to "NIFTY"
+   - Supported values:
+     - "NIFTY" or "NIFTY 50"
+     - "BANKNIFTY" or "NIFTY BANK"
+     - "NIFTYNEXT50" or "NIFTY NEXT 50"
+     - "SECGTR20" (Securities > ₹20)
+     - "SECLWR20" (Securities < ₹20)
+     - "FNO" (Futures & Options)
+     - "ALL" (All Securities)
+
+5. **Advances & Declines**
+   ```python
+   nse.get_advances_declines(code='nifty 50')
+   ```
+   - `code`: Optional, defaults to 'nifty 50'
+   - Returns dict with 'advances' and 'declines' keys
+
+6. **Stocks in Index**
+   ```python
+   nse.get_stocks_in_index(index="NIFTY 50")
+   ```
+   - `index`: Optional, defaults to "NIFTY 50"
+   - Use `get_index_list()` to get valid index names
+
+### Derivatives APIs
+
+1. **Get Future Quote**
+   ```python
+   nse.get_future_quote('RELIANCE')
+   nse.get_future_quote('RELIANCE', expiry_date='25-Jan-2024')  # For specific expiry
+   ```
+   - `code`: Stock symbol (e.g., 'RELIANCE')
+   - `expiry_date`: Optional, format: 'DD-Mon-YYYY' (e.g., '25-Jan-2024')
+   - Returns all expiries if expiry_date is None
+
+### Session Management
+
+The Nse class accepts an optional parameter for session management:
+```python
+nse = Nse(session_refresh_interval=120)  # Time in seconds, defaults to 120
+```
+
+## Response Formats
+
+All APIs return either Python dictionaries or lists containing the requested data. Numeric values are automatically converted to appropriate Python types (int/float).
+
+## Response Examples
+
+### Stock Quote Response
+```python
+{
+    'priceInfo': {
+        'lastPrice': 2500.0,
+        'change': 50.0,
+        'pChange': 2.04,
+        'open': 2460.0,
+        'high': 2520.0,
+        'low': 2455.0,
+        'close': 2450.0,
+        # ... additional fields when all_data=True
+    }
+}
+```
+
+### Index Quote Response
+```python
+{
+    'indexSymbol': 'NIFTY 50',
+    'lastPrice': 19500.0,
+    'change': 100.0,
+    'pChange': 0.52,
+    'advances': 35,
+    'declines': 15,
+    # ... other fields
+}
+```
+
+## Error Handling
+
+The library raises appropriate exceptions for:
+- Invalid stock codes
+- Invalid index names
+- Network errors
+- API failures
+
+## License
+
+MIT License - see LICENSE file for details.
+
 
 Updates
 =========
 
 To stay updated please subscribe to google group https://groups.google.com/forum/#!forum/nsetools
-
-nsetools
-========
-
-Python library for extracting realtime data from National Stock Exchange (India)
-
-Introduction.
-============
-
-nsetools is a library for collecting real time data from National Stock Exchange (India). It can be used in various types of projects which requires getting live quotes for a given stock or index or build large data sets for further data analytics. You can also build cli applications which can provide you live market details at a blazing fast speeds, much faster that the browsers. The accuracy of data is only as correct as provided on www.nseindia.com.
-
-Main Features:
-=============
-
-* Getting live quotes for stocks using stock codes.
-* Return data in both json and python dict and list formats.
-* Getting quotes for all the indices traded in NSE, e.g CNX NIFTY, BANKNIFTY etc.
-* Getting list of top losers.
-* Getting list of top gainers.
-* Helper APIs to check whether a given stock code or index code is correct.
-* Getting list of all indices and stocks.
-* Cent percent unittest coverage.
-
-Dependencies
-=============
-To keep it simple and supported on most of the platforms, it uses only core python libraries, hence there are no external dependencies. It can be used out of box and absolutely not set up is required except an internet connection.
-
-Detailed Documenation 
-=====================
-
-For complete documenation, please refer http://nsetools.readthedocs.io
