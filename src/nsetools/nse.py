@@ -164,7 +164,18 @@ class Nse(AbstractBaseExchange):
         url = urls.STOCKS_IN_INDEX_URL % index
         res = self.session.fetch(url)
         res_dict = res.json()
-        return  [stock['symbol'] for stock in res_dict['data']][1:]  
+        return  [stock['symbol'] for stock in res_dict['data']][1:]
+    
+    def get_stock_quote_in_index(self, index="NIFTY 50"):
+        """
+        :param index: valid index name from api get_index_list
+        :return: list of stock quotes
+        """
+        index = index.upper()
+        url = urls.QUOTE_API_URL
+        res = self.session.fetch(url)
+        res_dict = res.json()
+        return  [stock['symbol'] for stock in res_dict['data']][1:]
 
     def _get_top_gainers_losers(self, direction, index):
         """
