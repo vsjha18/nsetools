@@ -145,14 +145,14 @@ class Nse(AbstractBaseExchange):
         """
         return self._get_top_gainers_losers('losers', index)  # Changed from 'gainers' to 'losers'
     
-    def get_advances_declines(self, code='nifty 50'):
+    def get_advances_declines(self, index='nifty 50'):
         """
         :return: a list of dictionaries with advance decline data
         :raises: URLError, HTTPError
         """
         # fixing this
-        code = code.upper()
-        index_quote = self.get_index_quote(code)
+        index = index.upper()
+        index_quote = self.get_index_quote(index)
         return {'advances': index_quote['advances'], 'declines': index_quote['declines']}
     
     def get_stocks_in_index(self, index="NIFTY 50"):
