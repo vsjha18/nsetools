@@ -70,10 +70,14 @@ nse = Nse()
    ```python
    nse.get_stock_codes()
    ```
-   Returns list of stock codes traded in NSE.
+   Gets a list of stock codes traded in NSE.
+
+   **Returns:**
+   - `list`: List of strings containing stock symbols traded on NSE
+
+   **Example:**
    ```python
-   >>> codes = nse.get_stock_codes()
-   >>> print(codes[:5])
+   >>> nse.get_stock_codes()
    ['20MICRONS', '3IINFOTECH', '3MINDIA', '3PLAND', '63MOONS']
    ```
 
@@ -81,9 +85,20 @@ nse = Nse()
    ```python
    nse.get_quote(code, all_data=False)
    ```
-   Gets real-time or delayed quote data for a given stock.
-   - `code`: NSE stock symbol (e.g., 'RELIANCE')
-   - `all_data`: If True returns complete quote data, if False returns only price info
+   Gets quote data for a given stock from NSE.
+
+   **Arguments:**
+   - `code` (str): NSE stock symbol/code for which quote is to be fetched
+   - `all_data` (bool, optional): If True returns complete quote data, if False returns only price info. Defaults to False.
+
+   **Returns:**
+   - `dict`: Dictionary containing quote data
+
+   **Raises:**
+   - `requests.exceptions.RequestException`: If there is an error in HTTP request
+   - `ValueError`: If the response JSON is invalid
+
+   **Example:**
    ```python
    >>> nse.get_quote('abb')
    {
@@ -115,14 +130,20 @@ nse = Nse()
 
 3. **Check Valid Stock Code**
    ```python
-   nse.is_valid_code('RELIANCE')
+   nse.is_valid_code(code)
    ```
-   Validates if given stock code exists.
+   Validates whether the provided stock code exists in the list of valid stock codes from NSE.
+
+   **Arguments:**
+   - `code` (str): Stock code/symbol to validate
+
+   **Returns:**
+   - `bool`: True if code is valid, False otherwise
+
+   **Example:**
    ```python
    >>> nse.is_valid_code("INFY")
    True
-   >>> nse.is_valid_code("INVALID")
-   False
    ```
 
 4. **52 Week High/Low**
@@ -130,22 +151,29 @@ nse = Nse()
    nse.get_52_week_high()
    nse.get_52_week_low()
    ```
-   Get stocks that hit 52-week high or low.
+   Retrieves list of stocks that have hit their 52-week high/low prices on NSE.
+
+   **Returns:**
+   - `list[dict]`: List of dictionaries containing stock details
+
+   **Example:**
    ```python
    >>> nse.get_52_week_high()
-   [{
-       'symbol': 'AVANTIFEED',
-       'series': 'EQ',
-       'companyName': 'Avanti Feeds Limited',
-       'new52WHL': 899,
-       'prev52WHL': 849.9,
-       'prevHLDate': '13-Mar-2025',
-       'ltp': 887,
-       'prevClose': 842.55,
-       'change': 44.45,
-       'pChange': 5.28
-   },
-   {...}]
+   [
+       {
+           'symbol': 'AVANTIFEED',
+           'series': 'EQ',
+           'companyName': 'Avanti Feeds Limited',
+           'new52WHL': 899,
+           'prev52WHL': 849.9,
+           'prevHLDate': '13-Mar-2025',
+           'ltp': 887,
+           'prevClose': 842.55,
+           'change': 44.45,
+           'pChange': 5.28
+       },
+       {...}
+   ]
 
    >>> nse.get_52_week_low()  # Similar structure as 52-week high
    ```
@@ -158,7 +186,18 @@ nse = Nse()
    ```python
    nse.get_index_quote(index="NIFTY 50")
    ```
-   Gets detailed quote information for a given index.
+   Retrieves detailed quote information for a given index code from NSE.
+
+   **Arguments:**
+   - `index` (str): The index code/symbol (e.g., "NIFTY 50", "BANKNIFTY")
+
+   **Returns:**
+   - `dict`: Dictionary containing index quote details
+
+   **Raises:**
+   - `Exception`: If provided index code is invalid
+
+   **Example:**
    ```python
    >>> nse.get_index_quote("NIFTY 50")
    {
