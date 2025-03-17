@@ -221,6 +221,11 @@ nse = Nse()
    nse.get_index_list()
    ```
    Gets list of all NSE index symbols.
+
+   **Returns:**
+   - `list[str]`: List of index symbols (e.g., ['NIFTY 50', 'NIFTY BANK', ...])
+
+   **Example:**
    ```python
    >>> nse.get_index_list()
    ['NIFTY 50', 'NIFTY NEXT 50', 'NIFTY 100', 'NIFTY 200', 
@@ -260,6 +265,22 @@ nse = Nse()
    nse.get_top_losers(index="NIFTY")
    ```
    Gets real-time data for stocks with highest gains/losses.
+
+   **Arguments:**
+   - `index` (str, optional): Index name for filtering. Defaults to "NIFTY".
+     Valid values:
+     - "NIFTY" or "NIFTY 50"
+     - "BANKNIFTY" or "NIFTY BANK"
+     - "NIFTYNEXT50" or "NIFTY NEXT 50"
+     - "SECGTR20" (Securities > ₹20)
+     - "SECLWR20" (Securities < ₹20)
+     - "FNO" (Futures & Options)
+     - "ALL" (All Securities)
+
+   **Returns:**
+   - `list[dict]`: List of dictionaries
+
+   **Example:**
    ```python
    >>> gainers = nse.get_top_gainers()
    >>> gainers[0]  # Sample gainer
@@ -301,6 +322,17 @@ nse = Nse()
    nse.get_advances_declines(index='nifty 50')
    ```
    Gets number of advancing and declining stocks in an index.
+
+   **Arguments:**
+   - `index` (str, optional): Name of the index. Defaults to 'nifty 50'
+     Valid values include 'NIFTY 50', 'NIFTY BANK', etc.
+
+   **Returns:**
+   - `dict`: Dictionary containing:
+     - `advances`: Number of advancing stocks
+     - `declines`: Number of declining stocks
+
+   **Example:**
    ```python
    >>> nse.get_advances_declines("NIFTY BANK")
    {'advances': 7, 'declines': 4}
