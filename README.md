@@ -94,6 +94,7 @@ nse = Nse()
        'open': 5160,
        'close': 5187.65,
        'vwap': 5162.91,
+       'stockIndClosePrice': 0,  # Added missing field
        'lowerCP': 4606.7,
        'upperCP': 5630.4,
        'pPriceBand': 'No Band',
@@ -159,13 +160,26 @@ nse = Nse()
    ```
    Gets detailed quote information for a given index.
    ```python
+   >>> nse.get_index_quote("NIFTY 50")
    {
        'key': 'BROAD MARKET INDICES',
-       'index': 'NIFTY 50', 
+       'index': 'NIFTY 50',
+       'indexSymbol': 'NIFTY 50', 
        'last': 22508.75,
        'variation': 111.55,
        'percentChange': 0.5,
-       # ... additional fields
+       'open': 22353.15,
+       'high': 22577.0,
+       'low': 22353.15,
+       'previousClose': 22397.2,
+       'yearHigh': 26277.35,
+       'yearLow': 21281.45,
+       'pe': 26.45,
+       'pb': 4.01,
+       'dy': 1.2,
+       'advances': 35,
+       'declines': 15,
+       'unchanged': 0
    }
    ```
 
@@ -174,12 +188,38 @@ nse = Nse()
    nse.get_index_list()
    ```
    Gets list of all NSE index symbols.
+   ```python
+   >>> nse.get_index_list()
+   ['NIFTY 50', 'NIFTY NEXT 50', 'NIFTY 100', 'NIFTY 200', 
+    'NIFTY MIDCAP 50', 'NIFTY BANK', 'NIFTY AUTO', 'NIFTY IT',
+    'NIFTY FMCG', 'NIFTY PHARMA', ...]
+   ```
 
 3. **Get All Index Quotes**
    ```python
    nse.get_all_index_quote()
    ```
-   Gets quotes and information for all available indices in a single API call.
+   Gets quotes for all indices in a single call.
+   ```python
+   >>> nse.get_all_index_quote()
+   [
+       {
+           'key': 'BROAD MARKET INDICES',
+           'index': 'NIFTY 50',
+           'indexSymbol': 'NIFTY 50', 
+           'last': 22508.75,
+           'variation': 111.55,
+           'percentChange': 0.5,
+           # ... other fields
+       },
+       {
+           'index': 'NIFTY BANK',
+           'indexSymbol': 'NIFTY BANK',
+           # ... other fields
+       },
+       # ... other indices
+   ]
+   ```
 
 4. **Top Gainers & Losers**
    ```python
@@ -187,7 +227,41 @@ nse = Nse()
    nse.get_top_losers(index="NIFTY")
    ```
    Gets real-time data for stocks with highest gains/losses.
-   - Supported indices: NIFTY (default), BANKNIFTY, NIFTYNEXT50, SecGtr20, SecLwr20, FNO, ALL
+   ```python
+   >>> gainers = nse.get_top_gainers()
+   >>> gainers[0]  # Sample gainer
+   {
+       'symbol': 'DRREDDY',
+       'series': 'EQ',
+       'openPrice': 1107.9,
+       'highPrice': 1154.1,
+       'lowPrice': 1101.5,
+       'ltp': 1151.5,
+       'previousPrice': 1107.95,
+       'net_price': 43.55,
+       'tradedQuantity': 2714559,
+       'turnoverInLakhs': 31016.01,
+       'lastCorpAnnouncement': 'Annual General Meeting',
+       'lastCorpAnnouncementDate': '28-Jul-2024',
+       'perChange': 3.93
+   }
+
+   >>> losers = nse.get_top_losers()  # Added losers example
+   >>> losers[0]  # Sample loser
+   {
+       'symbol': 'TATAMOTORS',
+       'series': 'EQ',
+       'openPrice': 375.0,
+       'highPrice': 375.0,
+       'lowPrice': 365.2,
+       'ltp': 367.8,
+       'previousPrice': 374.35,
+       'net_price': -6.55,
+       'tradedQuantity': 3714559,
+       'turnoverInLakhs': 41016.01,
+       'perChange': -1.75
+   }
+   ```
 
 5. **Advances & Declines**
    ```python
@@ -207,6 +281,35 @@ nse = Nse()
    - `get_stocks_in_index`: Gets list of stock symbols in an index
    - `get_stock_quote_in_index`: Gets detailed quotes for all stocks in an index
      - `include_index`: If True, includes index quote in results
+   Example responses:
+   ```python
+   >>> nse.get_stocks_in_index("NIFTY BANK")
+   ['AUBANK', 'AXISBANK', 'BANDHANBNK', 'FEDERALBNK', 'HDFCBANK', 
+    'ICICIBANK', 'IDFCFIRSTB', 'INDUSINDBK', 'KOTAKBANK', 'PNB', 
+    'SBIN', 'YESBANK']
+
+   >>> quotes = nse.get_stock_quote_in_index("NIFTY BANK", include_index=True)
+   >>> quotes[0]  # Index quote
+   {
+       'priority': 1,
+       'symbol': 'NIFTY BANK',
+       'identifier': 'NIFTYBANK',
+       'open': 44821.3,
+       'dayHigh': 45065.85,
+       'dayLow': 44752.95,
+       'lastPrice': 44991.95,
+       'previousClose': 44745.95,
+       'change': 246.0,
+       'pChange': 0.55,
+       'totalTradedVolume': 0,
+       'totalTradedValue': 0.0,
+       'lastUpdateTime': '23-Mar-2024 15:30:00',
+       'yearHigh': 48636.65,
+       'yearLow': 40563.65,
+       'perChange365d': 9.8,
+       'perChange30d': 0.62
+   }
+   ```
 
 [Back to Top](#nsetools)
 
@@ -222,12 +325,33 @@ nse = Nse()
    - Returns data for all expiries if expiry_date is None
    ```python
    >>> nse.get_future_quote('RELIANCE')
-   [{'expiryDate': '27-Mar-2025',
-     'lastPrice': 1246,
-     'premium': 4.45,
-     'openInterest': 257812,
-     # ... additional fields
+   [{
+       'expiryDate': '27-Mar-2025',
+       'lastPrice': 1246,
+       'premium': 4.45,
+       'openPrice': 1245.25,
+       'highPrice': 1260.85,
+       'lowPrice': 1236.2,
+       'closePrice': 1247.9,
+       'prevClose': 1244.8,
+       'change': 1.2,
+       'pChange': 0.10,
+       'numberOfContractsTraded': 257812,
+       'totalTurnover': 3214.56,
+       'openInterest': 257812,
+       'changeInOpenInterest': 7144,
+       'pchangeinOpenInterest': 2.85,
+       'marketLot': 500,
+       'dailyVolatility': 14.2,
+       'annualisedVolatility': 22.4
    }]
+
+   >>> # With specific expiry date
+   >>> nse.get_future_quote('RELIANCE', expiry_date='27-Mar-2025')
+   {  # Returns single dictionary instead of list
+      'expiryDate': '27-Mar-2025',
+      # ... same fields as above
+   }
    ```
 
 [Back to Top](#nsetools)
