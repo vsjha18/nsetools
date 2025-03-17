@@ -189,6 +189,44 @@ class TestIndexAPIs(unittest.TestCase):
         with self.assertRaises(Exception):
             self.nse.get_stocks_in_index('INVALID_INDEX')
 
+    def test_get_stock_quote_in_index(self):
+        """Test getting stock quotes in an index"""
+        # Test with default parameter (NIFTY 50)
+        quotes = self.nse.get_stock_quote_in_index()
+        
+        # Check basic structure
+        self.assertIsInstance(quotes, list)
+        self.assertEqual(len(quotes), 50)  # NIFTY 50 should have 50 quotes
+        
+        # Check structure of a single quote
+        sample_quote = quotes[0]
+        essential_fields = [
+            'priority', 'symbol', 'identifier', 'series', 
+            'open', 'dayHigh', 'dayLow', 'lastPrice',
+            'previousClose', 'change', 'pChange',
+            'totalTradedVolume', 'totalTradedValue'
+        ]
+        for field in essential_fields:
+            self.assertIn(field, sample_quote)
+        
+        # Verify data types
+        self.assertEqual(sample_quote['priority'], 0)  # Should always be 0
+        self.assertIsInstance(sample_quote['symbol'], str)
+        self.assertIsInstance(sample_quote['open'], (int, float))
+        self.assertIsInstance(sample_quote['totalTradedVolume'], (int, float))
+        self.assertIsInstance(sample_quote['pChange'], (int, float))
+        
+        # Test with NIFTY BANK
+        bank_quotes = self.nse.get_stock_quote_in_index('NIFTY BANK')
+        self.assertEqual(len(bank_quotes), 12)  # NIFTY BANK has 12 stocks
+        
+        # Test with lowercase input
+        lower_case_quotes = self.nse.get_stock_quote_in_index('nifty 50')
+        self.assertEqual(len(quotes), len(lower_case_quotes))  # Should be case insensitive
+        
+        # Test with invalid index
+        with self.assertRaises(Exception):
+            self.nse.get_stock_quote_in_index('INVALID_INDEX')
 
 if __name__ == '__main__':
     unittest.main()

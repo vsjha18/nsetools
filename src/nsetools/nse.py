@@ -169,13 +169,14 @@ class Nse(AbstractBaseExchange):
     def get_stock_quote_in_index(self, index="NIFTY 50"):
         """
         :param index: valid index name from api get_index_list
-        :return: list of stock quotes
+        :return: list of stock quotes in that index
         """
         index = index.upper()
-        url = urls.QUOTE_API_URL
+        url = urls.STOCKS_IN_INDEX_URL % index
         res = self.session.fetch(url)
         res_dict = res.json()
-        return  [stock['symbol'] for stock in res_dict['data']][1:]
+        res_dict = cast_intfloat_string_values_to_intfloat(res_dict)
+        return  [record for record in res_dict['data'] if record['priority'] == 0]
 
     def _get_top_gainers_losers(self, direction, index):
         """
