@@ -19,7 +19,8 @@ Python library for extracting data from National Stock Exchange (India)
     - [Get All Index Quotes](#3-get-all-index-quotes)
     - [Top Gainers & Losers](#4-top-gainers--losers)
     - [Advances & Declines](#5-advances--declines)
-    - [Stocks in Index](#6-stocks-in-index)
+    - [Get Stocks in Index](#6-get-stocks-in-index)
+    - [Get Stock Quotes in Index](#7-get-stock-quotes-in-index)
   - [Derivatives APIs](#derivatives-apis)
     - [Get Future Quote](#1-get-future-quote)
 - [Response Formats](#response-formats)
@@ -93,10 +94,6 @@ nse = Nse()
 
    **Returns:**
    - `dict`: Dictionary containing quote data
-
-   **Raises:**
-   - `requests.exceptions.RequestException`: If there is an error in HTTP request
-   - `ValueError`: If the response JSON is invalid
 
    **Example:**
    ```python
@@ -193,9 +190,6 @@ nse = Nse()
 
    **Returns:**
    - `dict`: Dictionary containing index quote details
-
-   **Raises:**
-   - `Exception`: If provided index code is invalid
 
    **Example:**
    ```python
@@ -312,23 +306,43 @@ nse = Nse()
    {'advances': 7, 'declines': 4}
    ```
 
-6. **Stocks in Index**
+6. **Get Stocks in Index**
    ```python
    nse.get_stocks_in_index(index="NIFTY 50")
-   nse.get_stock_quote_in_index(index="NIFTY 50", include_index=False)
    ```
-   - `get_stocks_in_index`: Gets list of stock symbols in an index
-   - `get_stock_quote_in_index`: Gets detailed quotes for all stocks in an index
-     - `include_index`: If True, includes index quote in results
-   Example responses:
+   Gets list of stock symbols that are constituents of a given index.
+
+   **Arguments:**
+   - `index` (str, optional): Name of the NSE index. Defaults to "NIFTY 50".
+
+   **Returns:**
+   - `list`: List of stock symbols that are part of the specified index
+
+   **Example:**
    ```python
    >>> nse.get_stocks_in_index("NIFTY BANK")
    ['AUBANK', 'AXISBANK', 'BANDHANBNK', 'FEDERALBNK', 'HDFCBANK', 
     'ICICIBANK', 'IDFCFIRSTB', 'INDUSINDBK', 'KOTAKBANK', 'PNB', 
     'SBIN', 'YESBANK']
+   ```
 
+7. **Get Stock Quotes in Index**
+   ```python
+   nse.get_stock_quote_in_index(index="NIFTY 50", include_index=False)
+   ```
+   Gets detailed real-time quotes for all stocks in a given index.
+
+   **Arguments:**
+   - `index` (str, optional): The name of the index. Defaults to "NIFTY 50"
+   - `include_index` (bool, optional): Whether to include index quote in results. Defaults to False
+
+   **Returns:**
+   - `list`: List of dictionaries containing quote data for each stock
+
+   **Example:**
+   ```python
    >>> quotes = nse.get_stock_quote_in_index("NIFTY BANK", include_index=True)
-   >>> quotes[0]  # Index quote
+   >>> quotes[0]  # Index quote when include_index=True
    {
        'priority': 1,
        'symbol': 'NIFTY BANK',
@@ -347,6 +361,27 @@ nse = Nse()
        'yearLow': 40563.65,
        'perChange365d': 9.8,
        'perChange30d': 0.62
+   }
+
+   >>> # Stock quote example (either with include_index=True or False)
+   >>> quotes[1] if include_index else quotes[0]  # First stock quote
+   {
+       'priority': 0,
+       'symbol': 'HDFCBANK',
+       'identifier': 'HDFCBANKEQN',
+       'series': 'EQ',
+       'open': 1460.0,
+       'dayHigh': 1469.8,
+       'dayLow': 1451.2,
+       'lastPrice': 1465.9,
+       'previousClose': 1453.35,
+       'change': 12.55,
+       'pChange': 0.86,
+       'totalTradedVolume': 5841960,
+       'totalTradedValue': 8557023518.4,
+       'lastUpdateTime': '23-Mar-2024 15:30:00',
+       'yearHigh': 1757.8,
+       'yearLow': 1427.05
    }
    ```
 
