@@ -191,14 +191,27 @@ class TestIndexAPIs(unittest.TestCase):
 
     def test_get_stock_quote_in_index(self):
         """Test getting stock quotes in an index"""
-        # Test with default parameter (NIFTY 50)
+        # Test with default parameter (NIFTY 50, include_index=False)
         quotes = self.nse.get_stock_quote_in_index()
-        
-        # Check basic structure
         self.assertIsInstance(quotes, list)
         self.assertEqual(len(quotes), 50)  # NIFTY 50 should have 50 quotes
         
-        # Check structure of a single quote
+        # Test with include_index=True
+        quotes_with_index = self.nse.get_stock_quote_in_index(include_index=True)
+        self.assertEqual(len(quotes_with_index), 51)  # 50 stocks + 1 index
+        
+        # Verify index record
+        index_record = quotes_with_index[0]
+        self.assertEqual(index_record['priority'], 1)  # Index has priority 1
+        self.assertEqual(index_record['symbol'], 'NIFTY 50')
+        
+        # Verify stock records
+        stock_records = quotes_with_index[1:]
+        self.assertEqual(len(stock_records), 50)
+        for quote in stock_records:
+            self.assertEqual(quote['priority'], 0)  # Stocks have priority 0
+        
+        # Rest of basic validation
         sample_quote = quotes[0]
         essential_fields = [
             'priority', 'symbol', 'identifier', 'series', 
@@ -210,21 +223,24 @@ class TestIndexAPIs(unittest.TestCase):
             self.assertIn(field, sample_quote)
         
         # Verify data types
-        self.assertEqual(sample_quote['priority'], 0)  # Should always be 0
+        self.assertEqual(sample_quote['priority'], 0)
         self.assertIsInstance(sample_quote['symbol'], str)
         self.assertIsInstance(sample_quote['open'], (int, float))
         self.assertIsInstance(sample_quote['totalTradedVolume'], (int, float))
         self.assertIsInstance(sample_quote['pChange'], (int, float))
         
-        # Test with NIFTY BANK
+        # Test NIFTY BANK with both include_index True and False
         bank_quotes = self.nse.get_stock_quote_in_index('NIFTY BANK')
-        self.assertEqual(len(bank_quotes), 12)  # NIFTY BANK has 12 stocks
+        self.assertEqual(len(bank_quotes), 12)
         
-        # Test with lowercase input
+        bank_quotes_with_index = self.nse.get_stock_quote_in_index('NIFTY BANK', include_index=True)
+        self.assertEqual(len(bank_quotes_with_index), 13)  # 12 stocks + 1 index
+        
+        # Test case insensitivity
         lower_case_quotes = self.nse.get_stock_quote_in_index('nifty 50')
-        self.assertEqual(len(quotes), len(lower_case_quotes))  # Should be case insensitive
+        self.assertEqual(len(quotes), len(lower_case_quotes))
         
-        # Test with invalid index
+        # Test invalid index
         with self.assertRaises(Exception):
             self.nse.get_stock_quote_in_index('INVALID_INDEX')
 

@@ -166,17 +166,21 @@ class Nse(AbstractBaseExchange):
         res_dict = res.json()
         return  [stock['symbol'] for stock in res_dict['data']][1:]
     
-    def get_stock_quote_in_index(self, index="NIFTY 50"):
+    def get_stock_quote_in_index(self, index="NIFTY 50", include_index=False):
         """
         :param index: valid index name from api get_index_list
-        :return: list of stock quotes in that index
+        :param include_index: bool, if True includes index quote in result list as first record
+        :return: list of stock quote details for stocks in given index
         """
         index = index.upper()
         url = urls.STOCKS_IN_INDEX_URL % index
         res = self.session.fetch(url)
         res_dict = res.json()
         res_dict = cast_intfloat_string_values_to_intfloat(res_dict)
-        return  [record for record in res_dict['data'] if record['priority'] == 0]
+        if include_index is False:
+            return  [record for record in res_dict['data'] if record['priority'] == 0]
+        else:
+            return res_dict['data']
 
     def _get_top_gainers_losers(self, direction, index):
         """
