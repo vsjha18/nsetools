@@ -61,6 +61,24 @@ def js_adaptor(buffer):
     return buffer
 
 def cast_intfloat_string_values_to_intfloat(data, round_digits=2):
+    """Recursively converts string representations of numbers to integers or floats in nested data structures.
+    This function traverses through dictionaries and lists, converting string values that represent
+    numbers into their corresponding numeric types (int or float). For float values, it rounds to
+    the specified number of decimal places.
+    Args:
+        data (Union[dict, list]): The input data structure containing values to be converted.
+            Can be either a dictionary or a list, potentially nested.
+        round_digits (int, optional): Number of decimal places to round float values to.
+            Defaults to 2.
+    Returns:
+        Union[dict, list]: A new data structure of the same type as input, with string
+            representations of numbers converted to their numeric types.
+    Example:
+        >>> data = {'a': '1', 'b': '2.5', 'c': 'text', 'd': {'e': '3.14'}}
+        >>> cast_intfloat_string_values_to_intfloat(data)
+        {'a': 1, 'b': 2.5, 'c': 'text', 'd': {'e': 3.14}}
+    """
+
     if isinstance(data, dict):
         data = data.copy()
         for key, value in data.items():

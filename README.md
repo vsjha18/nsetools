@@ -9,19 +9,19 @@ Python library for extracting data from National Stock Exchange (India)
 - [Usage](#usage)
 - [API Reference](#api-reference)
   - [Stock APIs](#stock-apis)
-    - [Get Stock Codes](#get-stock-codes)
-    - [Get Stock Quote](#get-stock-quote)
-    - [Check Valid Stock Code](#check-valid-stock-code)
-    - [52 Week High/Low](#52-week-highlow)
+    - [Get Stock Codes](#1-get-stock-codes)
+    - [Get Stock Quote](#2-get-stock-quote)
+    - [Check Valid Stock Code](#3-check-valid-stock-code)
+    - [52 Week High/Low](#4-52-week-highlow)
   - [Index APIs](#index-apis)
-    - [Get Index Quote](#get-index-quote)
-    - [Get Index List](#get-index-list)
-    - [Get All Index Quotes](#get-all-index-quotes)
-    - [Top Gainers & Losers](#top-gainers--losers)
-    - [Advances & Declines](#advances--declines)
-    - [Stocks in Index](#stocks-in-index)
+    - [Get Index Quote](#1-get-index-quote)
+    - [Get Index List](#2-get-index-list)
+    - [Get All Index Quotes](#3-get-all-index-quotes)
+    - [Top Gainers & Losers](#4-top-gainers--losers)
+    - [Advances & Declines](#5-advances--declines)
+    - [Stocks in Index](#6-stocks-in-index)
   - [Derivatives APIs](#derivatives-apis)
-    - [Get Future Quote](#get-future-quote)
+    - [Get Future Quote](#1-get-future-quote)
 - [Response Formats](#response-formats)
 - [Response Examples](#response-examples)
   - [Stock Quote Response](#stock-quote-response)
@@ -70,40 +70,46 @@ nse = Nse()
    ```python
    nse.get_stock_codes()
    ```
-   Returns a list of stock codes traded in NSE.
+   Returns list of stock codes traded in NSE.
+   ```python
+   >>> codes = nse.get_stock_codes()
+   >>> print(codes[:5])
+   ['20MICRONS', '3IINFOTECH', '3MINDIA', '3PLAND', '63MOONS']
+   ```
 
 2. **Get Stock Quote**
    ```python
    nse.get_quote(code, all_data=False)
-   {'lastPrice': 1246.65,
-    'change': -10.4,
-    'pChange': -0.83,
-    'previousClose': 1257.05,
-    'open': 1260.05,
-    'close': 1247.9,
-    'vwap': 1254.22,
-    'stockIndClosePrice': 0,
-    'lowerCP': 1131.35,
-    'upperCP': 1382.75,
-    'pPriceBand': 'No Band',
-    'basePrice': 1257.05,
-    'intraDayHighLow': {'min': 1243.85, 'max': 1264.15, 'value': 1246.65},
-    'weekHighLow': {'min': 1156,
-    'minDate': '03-Mar-2025',
-    'max': 1608.8,
-    'maxDate': '08-Jul-2024',
-    'value': 1246.65},
-    'iNavValue': None,
-    'checkINAV': False,
-    'tickSize': 0.05,
-    'ieq': ''}
    ```
-   - `code`: Stock symbol (e.g., 'RELIANCE')
-   - `all_data`: Boolean, defaults to False. If True, returns complete response including market depth
+   Gets real-time or delayed quote data for a given stock.
+   - `code`: NSE stock symbol (e.g., 'RELIANCE')
+   - `all_data`: If True returns complete quote data, if False returns only price info
    ```python
-   # Examples
-   nse.get_quote('RELIANCE')  # Basic quote
-   nse.get_quote('RELIANCE', all_data=True)  # Detailed quote
+   >>> nse.get_quote('abb')
+   {
+       'lastPrice': 5189.1,
+       'change': 70.55,
+       'pChange': 1.38,
+       'previousClose': 5118.55,
+       'open': 5160,
+       'close': 5187.65,
+       'vwap': 5162.91,
+       'lowerCP': 4606.7,
+       'upperCP': 5630.4,
+       'pPriceBand': 'No Band',
+       'basePrice': 5118.55,
+       'intraDayHighLow': {'min': 5101, 'max': 5218.45, 'value': 5189.1},
+       'weekHighLow': {'min': 4890}
+   }
+
+   >>> nse.get_quote('abb', all_data=True)  # Returns additional market depth data
+   {
+       'priceInfo': { ... },
+       'securityInfo': { ... },
+       'marketDeptOrderBook': { ... },
+       'tradingInfo': { ... },
+       'industryInfo': { ... }
+   }
    ```
 
 3. **Check Valid Stock Code**
@@ -111,6 +117,12 @@ nse = Nse()
    nse.is_valid_code('RELIANCE')
    ```
    Validates if given stock code exists.
+   ```python
+   >>> nse.is_valid_code("INFY")
+   True
+   >>> nse.is_valid_code("INVALID")
+   False
+   ```
 
 4. **52 Week High/Low**
    ```python
@@ -118,6 +130,24 @@ nse = Nse()
    nse.get_52_week_low()
    ```
    Get stocks that hit 52-week high or low.
+   ```python
+   >>> nse.get_52_week_high()
+   [{
+       'symbol': 'AVANTIFEED',
+       'series': 'EQ',
+       'companyName': 'Avanti Feeds Limited',
+       'new52WHL': 899,
+       'prev52WHL': 849.9,
+       'prevHLDate': '13-Mar-2025',
+       'ltp': 887,
+       'prevClose': 842.55,
+       'change': 44.45,
+       'pChange': 5.28
+   },
+   {...}]
+
+   >>> nse.get_52_week_low()  # Similar structure as 52-week high
+   ```
 
 [Back to Top](#nsetools)
 
@@ -125,50 +155,58 @@ nse = Nse()
 
 1. **Get Index Quote**
    ```python
-   nse.get_index_quote('NIFTY 50')
+   nse.get_index_quote(index="NIFTY 50")
    ```
-   Get quote for a specific index.
+   Gets detailed quote information for a given index.
+   ```python
+   {
+       'key': 'BROAD MARKET INDICES',
+       'index': 'NIFTY 50', 
+       'last': 22508.75,
+       'variation': 111.55,
+       'percentChange': 0.5,
+       # ... additional fields
+   }
+   ```
 
 2. **Get Index List**
    ```python
    nse.get_index_list()
    ```
-   Returns list of all available indices.
+   Gets list of all NSE index symbols.
 
 3. **Get All Index Quotes**
    ```python
    nse.get_all_index_quote()
    ```
-   Get quotes for all indices at once.
+   Gets quotes and information for all available indices in a single API call.
 
 4. **Top Gainers & Losers**
    ```python
    nse.get_top_gainers(index="NIFTY")
    nse.get_top_losers(index="NIFTY")
    ```
-   - `index`: Optional, defaults to "NIFTY"
-   - Supported values:
-     - "NIFTY" or "NIFTY 50"
-     - "BANKNIFTY" or "NIFTY BANK"
-     - "NIFTYNEXT50" or "NIFTY NEXT 50"
-     - "SECGTR20" (Securities > ₹20)
-     - "SECLWR20" (Securities < ₹20)
-     - "FNO" (Futures & Options)
-     - "ALL" (All Securities)
+   Gets real-time data for stocks with highest gains/losses.
+   - Supported indices: NIFTY (default), BANKNIFTY, NIFTYNEXT50, SecGtr20, SecLwr20, FNO, ALL
 
 5. **Advances & Declines**
    ```python
-   nse.get_advances_declines(code='nifty 50')
+   nse.get_advances_declines(index='nifty 50')
    ```
-   - `code`: Optional, defaults to 'nifty 50'
-   - Returns dict with 'advances' and 'declines' keys
+   Gets number of advancing and declining stocks in an index.
+   ```python
+   >>> nse.get_advances_declines("NIFTY BANK")
+   {'advances': 7, 'declines': 4}
+   ```
 
 6. **Stocks in Index**
    ```python
    nse.get_stocks_in_index(index="NIFTY 50")
+   nse.get_stock_quote_in_index(index="NIFTY 50", include_index=False)
    ```
-   - `index`: Optional, defaults to "NIFTY 50"
-   - Use `get_index_list()` to get valid index names
+   - `get_stocks_in_index`: Gets list of stock symbols in an index
+   - `get_stock_quote_in_index`: Gets detailed quotes for all stocks in an index
+     - `include_index`: If True, includes index quote in results
 
 [Back to Top](#nsetools)
 
@@ -176,12 +214,21 @@ nse = Nse()
 
 1. **Get Future Quote**
    ```python
-   nse.get_future_quote('RELIANCE')
-   nse.get_future_quote('RELIANCE', expiry_date='25-Jan-2024')  # For specific expiry
+   nse.get_future_quote(code, expiry_date=None)
    ```
-   - `code`: Stock symbol (e.g., 'RELIANCE')
-   - `expiry_date`: Optional, format: 'DD-Mon-YYYY' (e.g., '25-Jan-2024')
-   - Returns all expiries if expiry_date is None
+   Gets futures trading data for a stock.
+   - `code`: Stock code for futures data
+   - `expiry_date`: Optional expiry date (format: 'DD-Mon-YYYY')
+   - Returns data for all expiries if expiry_date is None
+   ```python
+   >>> nse.get_future_quote('RELIANCE')
+   [{'expiryDate': '27-Mar-2025',
+     'lastPrice': 1246,
+     'premium': 4.45,
+     'openInterest': 257812,
+     # ... additional fields
+   }]
+   ```
 
 [Back to Top](#nsetools)
 
