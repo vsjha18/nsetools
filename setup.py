@@ -37,7 +37,7 @@ For complete documenation, please refer http://nsetools.readthedocs.io
 
 setup(
     name="nsetools",
-    version="1.0.12",
+    version="2.0.1",
     author="Vivek Jha",
     author_email="vsjha18@gmail.com",
     description="Python library for extracting realtime data from National Stock Exchange",

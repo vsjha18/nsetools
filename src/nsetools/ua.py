@@ -86,18 +86,18 @@ class Session():
         if url in self.__class__.__CACHE__:
             cache_time, response = self.__class__.__CACHE__[url]
             if (dt.now() - cache_time).seconds < self.cache_timeout:
-                print("serving from cache")
+                # print("serving from cache")
                 return response
 
         # Only check session expiry if we need to make a network request
         time_diff = dt.now() - self._session_init_time
         if time_diff.seconds >= self.session_refresh_interval:
-            print("re-initing the session because of expiry")
+            # print("re-initing the session because of expiry")
             self.create_session()
 
         # Add random delay before making request
         sleep_time = random.uniform(0, 0.3)  # Random delay between 0-300ms
-        print(f"Adding random delay of {sleep_time:.3f} seconds")
+        # print(f"Adding random delay of {sleep_time:.3f} seconds")
         sleep(sleep_time)
 
         # Make actual request if not in cache or cache expired

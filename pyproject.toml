@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nsetools"
-version = "1.0.12"
+version = "2.0.1"
 description = "Python library for extracting realtime data from National Stock Exchange"
 readme = "README.md"
 authors = [
