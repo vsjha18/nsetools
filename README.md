@@ -50,8 +50,6 @@ Python library for extracting data from National Stock Exchange (India)
 pip install nsetools
 ```
 
-Currently prefer cloning the repo because, pip installable version is lagging the documentation and features. Update the PYTHONPATH to point to src directory.
-
 [Back to Top](#nsetools)
 
 ## Usage
