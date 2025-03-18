@@ -8,7 +8,7 @@ from time import sleep
 class Session():
     __CACHE__ = {}
 
-    def __init__(self, session_refresh_interval=60, cache_timeout=20):
+    def __init__(self, session_refresh_interval=60, cache_timeout=60):
         """Initialize the class instance with session and cache parameters.
         Args:
             session_refresh_interval (int, optional): Time interval in seconds to refresh session. Defaults to 60.
