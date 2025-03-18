@@ -36,11 +36,16 @@ cov:
 clean:
 	find . -type d -name "__pycache__" -exec rm -r {} +
 	find . -type d -name ".pytest_cache" -exec rm -r {} +
+	rm -rf dist
 
 # Remove all installed packages in the venv (pristine)
 pristine:
 	pip list --disable-pip-version-check | awk 'NR>2 {print $$1}' | grep -v "^pip$$" | xargs -r pip uninstall -y
 
 build:
+	pip install --upgrade pip 
+	pip install twine build setuptools wheel
 	python -m build
 
+publish:
+	@echo "twine upload --username __token__ --password <API-TOKEN> dist/*"
