@@ -24,7 +24,7 @@ FIFTYTWO_WEEK_LOW_URL = f"{NSE_MAIN}/api/live-analysis-data-52weeklowstock"
 
 # Index URLs
 ALL_INDICES_URL = f"{NSE_MAIN}/api/allIndices"
-STOCKS_IN_INDEX_URL = f"{NSE_MAIN}/api/equity-stockIndices?index=%s"
+STOCKS_IN_INDEX_URL = f"{NSE_MAIN}/api/equity-stock-indices?index=%s"
 
 
 # Historical data URLs
